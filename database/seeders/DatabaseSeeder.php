@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             //            'first_name' => 'Demo',
             //            'last_name' => 'User',
-            'name' => 'demo ',
+            'name' => 'Unit Coordinator',
             'email' => 'aru@rcffuta.com',
             'password' => Hash::make('alumnirelations'),
         ]);
