@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Settings\PasswordController;
+use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,16 +16,9 @@ Route::middleware(['guest'])->get('/', function (Request $request) {
         ]);
 });
 
-
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('home');
-
-
-use App\Http\Controllers\Settings\PasswordController;
-use App\Http\Controllers\Settings\ProfileController;
-
-
 
 Route::middleware('auth')->group(function () {
     Route::redirect('settings', '/settings/profile');

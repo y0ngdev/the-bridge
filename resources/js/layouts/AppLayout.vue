@@ -21,7 +21,7 @@ const isOpen = usePage().props.sidebarOpen;
     <SidebarProvider :default-open="isOpen">
         <AppSidebar />
         <SidebarInset>
-            <SiteHeader />
+            <SiteHeader :breadcrumbs="breadcrumbs" />
             <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
                 <slot />
             </div>

@@ -1,7 +1,17 @@
 <script setup lang="ts">
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { Breadcrumb, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { BreadcrumbItemType } from '@/types';
+import { Link } from '@inertiajs/vue3';
+withDefaults(
+    defineProps<{
+        breadcrumbs?: BreadcrumbItemType[];
+    }>(),
+    {
+        breadcrumbs: () => [],
+    },
+);
 </script>
 
 <template>
@@ -11,13 +21,18 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
             <Separator orientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
             <Breadcrumb>
                 <BreadcrumbList>
-                    <BreadcrumbItem class="hidden md:block">
-                        <BreadcrumbLink href="#"> Building Your Application </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator class="hidden md:block" />
-                    <BreadcrumbItem>
-                        <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                    </BreadcrumbItem>
+                    <template v-for="(item, index) in breadcrumbs" :key="index">
+                        <template v-if="index === breadcrumbs.length - 1">
+                            <BreadcrumbPage>{{ item.title }}</BreadcrumbPage>
+                        </template>
+                        <template v-else>
+                            <BreadcrumbLink as-child>
+                                <Link :href="item.href ?? '#'">{{ item.title }}</Link>
+                            </BreadcrumbLink>
+                        </template>
+
+                        <BreadcrumbSeparator class="hidden md:block" v-if="index !== breadcrumbs.length - 1" />
+                    </template>
                 </BreadcrumbList>
             </Breadcrumb>
         </div>
