@@ -13,27 +13,31 @@ import { Cake, Calendar, HardDrive, LayoutGrid, UserCheck, Users } from 'lucide-
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        // href: dashboard(),
+        href: home(),
         icon: LayoutGrid,
     },
     {
         title: 'Tenures',
         // href: tenuresIndex().url,
+        href: home(),
         icon: Calendar,
     },
     {
         title: 'Alumni',
         // href: alumnusIndex().url,
+        href: home(),
         icon: Users,
     },
     {
         title: 'Birthdays',
         // href: birthdays().url,
+        href: home(),
         icon: Cake,
     },
     {
         title: 'Executives',
         // href: executivesIndex().url,
+        href: home(),
         icon: UserCheck,
     },
     {
