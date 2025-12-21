@@ -23,7 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('home');
 
-    Route::resource('tenures', TenureController::class)->except(['show', 'destroy','edit','create']);
+    Route::resource('tenures', TenureController::class)->except(['show', 'destroy','create']);
 
 });
 

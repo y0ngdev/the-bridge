@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Tenure extends Model
 {
-    /** @use HasFactory<\Database\Factories\TenureFactory> */
-    use HasFactory;
+
+    protected $fillable = ['name', 'year'];
+
+//    public function alumni()
+//    {
+//        return $this->hasMany(Alumnus::class);
+//    }
 }
