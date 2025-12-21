@@ -2,10 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Tenure;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+
+//use App\Models\Alumnus;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,19 +19,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $this->seedIfEmpty(User::class, UserSeeder::class);
+        $this->seedIfEmpty(Tenure::class, TenureSeeder::class);
 
-        User::factory()->create([
-            //            'first_name' => 'Demo',
-            //            'last_name' => 'User',
-            'name' => 'Unit Coordinator',
-            'email' => 'aru@rcffuta.com',
-            'password' => Hash::make('alumnirelations'),
-        ]);
+//        Alumnus::factory(40)->create();
+    }
+
+    protected function seedIfEmpty(string $model, string $seeder): void
+    {
+        if ($model::count() === 0) {
+            $this->call($seeder);
+        } else {
+            echo "$model table not empty — skipped $seeder.\n";
+        }
     }
 }

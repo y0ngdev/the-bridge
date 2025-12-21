@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Tenure;
 use Illuminate\Database\Seeder;
 
 class TenureSeeder extends Seeder
@@ -12,6 +12,14 @@ class TenureSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $startYear = 1987;
+        $endYear = 2025;
+
+        for ($year = $startYear; $year <= $endYear; $year++) {
+            Tenure::create([
+                'name' => '',
+                'year' => $year.'-'.($year + 1),
+            ]);
+        }
     }
 }

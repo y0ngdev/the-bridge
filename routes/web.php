@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\TenureController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,9 +17,15 @@ Route::middleware(['guest'])->get('/', function (Request $request) {
         ]);
 });
 
-Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('home');
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route:: get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('home');
+
+    Route::resource('tenures', TenureController::class)->except(['show', 'destroy']);
+});
+
 
 Route::middleware('auth')->group(function () {
     Route::redirect('settings', '/settings/profile');
