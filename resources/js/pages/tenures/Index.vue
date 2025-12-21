@@ -14,8 +14,8 @@ import {
     PaginationPrevious
 } from '@/components/ui/pagination';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { edit, index, store } from '@/actions/App/Http/Controllers/TenureController';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { index, store, update } from '@/actions/App/Http/Controllers/TenureController';
 import {
     Dialog,
     DialogClose,
@@ -32,6 +32,7 @@ import { Plus } from 'lucide-vue-next';
 import InputError from '@/components/InputError.vue';
 import { toast } from 'vue-sonner';
 import { ref } from 'vue';
+import { Edit } from 'lucide-vue-next';
 
 interface Tenure {
     id: number;
@@ -75,6 +76,9 @@ const editForm = useForm({
 });
 const showAddDialog = ref(false);
 const showEditDialog = ref(false);
+
+const editingTenure = ref<Tenure | null>(null);
+
 function handleAddSubmit() {
 
     addForm.post(store().url, {
@@ -83,6 +87,27 @@ function handleAddSubmit() {
             addForm.reset();
             toast.success('Tenure created');
         }
+    });
+}
+
+const openEditDialog = (tenure: Tenure) => {
+    editingTenure.value = tenure;
+    editForm.name = tenure.name;
+    editForm.year = tenure.year;
+
+    showEditDialog.value = true;
+
+};
+
+function handleEditSubmit() {
+
+    if (!editingTenure.value) return;
+    editForm.put(update(editingTenure.value.id).url, {
+        onSuccess: () => {
+            showEditDialog.value = false;
+            editForm.reset();
+            toast.success('Tenure record updated');
+        },
     });
 }
 </script>
@@ -173,9 +198,12 @@ function handleAddSubmit() {
                             </TableCell>
                             <TableCell>{{ tenure.year }}</TableCell>
                             <TableCell class="text-right">
-                                <Link :href="edit(tenure.id).url">
-                                    <Button variant="outline" size="sm">Edit</Button>
-                                </Link>
+
+                                <Button variant="outline" size="sm" @click="openEditDialog(tenure)">
+                                    <Edit class="h-4 w-4" />
+                                    Edit
+                                </Button>
+
                             </TableCell>
                         </TableRow>
                         <TableRow v-if="tenures.data.length === 0">
@@ -223,20 +251,14 @@ function handleAddSubmit() {
             </Pagination>
 
 
-
             <Dialog v-model:open="showEditDialog">
-                <DialogTrigger as-child>
-                    <Button>
-                        <Plus class="h-4 w-4 mr-2" />
-                        Edit Tenure
-                    </Button>
-                </DialogTrigger>
+
                 <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Edit Tenure</DialogTitle>
                         <DialogDescription>Update tenure information</DialogDescription>
                     </DialogHeader>
-                    <form @submit.prevent="handleAddSubmit" class="space-y-4">
+                    <form @submit.prevent="handleEditSubmit" class="space-y-4">
                         <div class="grid grid-cols-1 gap-4">
                             <div class="space-y-2">
 
