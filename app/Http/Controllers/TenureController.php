@@ -18,10 +18,7 @@ class TenureController extends Controller
         ]);
     }
 
-    public function create(): Response
-    {
-        return Inertia::render('tenures/Create');
-    }
+
 
     public function store(StoreTenureRequest $request): RedirectResponse
     {
@@ -31,12 +28,8 @@ class TenureController extends Controller
             ->with('success', 'Tenure created successfully.');
     }
 
-    public function edit(Tenure $tenure): Response
-    {
-        return Inertia::render('tenures/Edit', [
-            'tenure' => $tenure,
-        ]);
-    }
+
+
 
     public function update(UpdateTenureRequest $request, Tenure $tenure): RedirectResponse
     {

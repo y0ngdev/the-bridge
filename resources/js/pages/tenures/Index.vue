@@ -2,14 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Button } from '@/components/ui/button';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
     Pagination,
     PaginationContent,
@@ -18,12 +11,25 @@ import {
     PaginationItem,
     PaginationLast,
     PaginationNext,
-    PaginationPrevious,
+    PaginationPrevious
 } from '@/components/ui/pagination';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/vue3';
-import { index, create, edit } from '@/actions/App/Http/Controllers/TenureController';
-
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { store, edit, index } from '@/actions/App/Http/Controllers/TenureController';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Plus } from 'lucide-vue-next';
+import InputError from '@/components/InputError.vue';
 interface Tenure {
     id: number;
     name: string;
@@ -41,18 +47,37 @@ interface PaginatedTenures {
     prev_page_url: string | null;
 }
 
-const props = defineProps<{
+
+defineProps<{
     tenures: PaginatedTenures;
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
-    { title: 'Tenures', href: index().url },
+    { title: 'Tenures', href: index().url }
 ];
 
 const goToPage = (page: number) => {
     router.get(index().url, { page }, { preserveState: true, preserveScroll: true });
 };
+
+
+
+const addForm =  useForm({
+    name: '',
+    year: '',
+});
+
+function handleAddSubmit() {
+
+    addForm.post(store().url, {
+//         onSuccess: () => {
+
+//             addForm.reset();
+//             toast.success('Alumnus added successfully');
+//         },
+    });
+}
 </script>
 
 <template>
@@ -62,9 +87,67 @@ const goToPage = (page: number) => {
         <div class="px-4 py-6">
             <div class="flex items-center justify-between mb-6">
                 <HeadingSmall title="Tenures" description="Manage tenure records" />
-                <Link :href="create().url">
-                    <Button>Add Tenure</Button>
-                </Link>
+
+                <Dialog>
+                    <DialogTrigger as-child>
+                        <Button>
+                            <Plus class="h-4 w-4 mr-2" />
+                            Add Tenure
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
+                        <DialogHeader>
+                            <DialogTitle>Add New Tenure</DialogTitle>
+                            <DialogDescription>Add a new tenure record</DialogDescription>
+                        </DialogHeader>
+                        <form @submit.prevent="handleAddSubmit" class="space-y-4">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div class="space-y-2">
+
+
+                                    <Label for="name">Tenure Name</Label>
+                                    <Input
+                                        id="name"
+                                        v-model="addForm.name"
+                                        type="text"
+                                        placeholder="e.g., Servants of Christ"
+                                        :class="addForm.errors.name && 'border-destructive'"
+
+                                        required
+                                    />
+
+                                    <InputError :message="addForm.errors.name" />
+                                </div>
+
+                            </div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div class="space-y-2">
+                                    <Label for="year">Year</Label>
+                                    <Input
+                                        id="year"
+                                        v-model="addForm.year"
+                                        type="text"
+                                        placeholder="e.g., 2015-2016"
+                                        :class="addForm.errors.year && 'border-destructive'"
+
+                                        required
+
+                                    />
+                                    <InputError :message="addForm.errors.year" />
+                                </div>
+                            </div>
+
+                            <DialogFooter>
+                                <DialogClose as-child>
+                                    <Button variant="outline" type="button">Cancel</Button>
+                                </DialogClose>
+                                <Button type="submit" :disabled="addForm.processing">
+                                    {{ addForm.processing ?  'Creating...' : 'Create Tenure'}}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
             </div>
 
             <div class="rounded-md border">
@@ -100,7 +183,8 @@ const goToPage = (page: number) => {
             <!-- Pagination -->
             <Pagination
                 v-if="tenures.last_page > 1"
-                v-slot="{ page }"
+
+
                 :total="tenures.last_page * 15"
                 :items-per-page="15"
                 :default-page="tenures.current_page"
@@ -110,7 +194,7 @@ const goToPage = (page: number) => {
                 @update:page="goToPage"
             >
                 <PaginationContent v-slot="{ items }" class="gap-4 ">
-                    <PaginationFirst  />
+                    <PaginationFirst />
                     <PaginationPrevious />
 
                     <template v-for="(item, idx) in items" :key="idx">
@@ -127,7 +211,7 @@ const goToPage = (page: number) => {
                     </template>
 
                     <PaginationNext />
-                    <PaginationLast  />
+                    <PaginationLast />
                 </PaginationContent>
             </Pagination>
         </div>
