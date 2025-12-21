@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import 'vue-sonner/style.css'
 import AppSidebar from '@/components/AppSidebar.vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import 'vue-sonner/style.css';
 
 import type { BreadcrumbItemType } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 
-import { Toaster } from '@/components/ui/sonner'
+import { Toaster } from '@/components/ui/sonner';
 interface Props {
     breadcrumbs?: BreadcrumbItemType[];
 }
@@ -29,5 +29,5 @@ const isOpen = usePage().props.sidebarOpen;
             </div>
         </SidebarInset>
     </SidebarProvider>
-    <Toaster  position="top-right"  rich-colors/>
+    <Toaster position="top-right" rich-colors />
 </template>

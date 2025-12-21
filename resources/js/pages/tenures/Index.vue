@@ -1,21 +1,8 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
-import HeadingSmall from '@/components/HeadingSmall.vue';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationFirst,
-    PaginationItem,
-    PaginationLast,
-    PaginationNext,
-    PaginationPrevious
-} from '@/components/ui/pagination';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm } from '@inertiajs/vue3';
 import { index, store, update } from '@/actions/App/Http/Controllers/TenureController';
+import HeadingSmall from '@/components/HeadingSmall.vue';
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogClose,
@@ -24,15 +11,27 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
+    DialogTrigger,
 } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Plus } from 'lucide-vue-next';
-import InputError from '@/components/InputError.vue';
-import { toast } from 'vue-sonner';
+import { Label } from '@/components/ui/label';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationFirst,
+    PaginationItem,
+    PaginationLast,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { Edit, Plus } from 'lucide-vue-next';
 import { ref } from 'vue';
-import { Edit } from 'lucide-vue-next';
+import { toast } from 'vue-sonner';
 
 interface Tenure {
     id: number;
@@ -51,28 +50,26 @@ interface PaginatedTenures {
     prev_page_url: string | null;
 }
 
-
 defineProps<{
     tenures: PaginatedTenures;
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
-    { title: 'Tenures', href: index().url }
+    { title: 'Tenures', href: index().url },
 ];
 
 const goToPage = (page: number) => {
     router.get(index().url, { page }, { preserveState: true, preserveScroll: true });
 };
 
-
 const addForm = useForm({
     name: '',
-    year: ''
+    year: '',
 });
 const editForm = useForm({
     name: '',
-    year: ''
+    year: '',
 });
 const showAddDialog = ref(false);
 const showEditDialog = ref(false);
@@ -80,13 +77,12 @@ const showEditDialog = ref(false);
 const editingTenure = ref<Tenure | null>(null);
 
 function handleAddSubmit() {
-
     addForm.post(store().url, {
         onSuccess: () => {
             showAddDialog.value = false;
             addForm.reset();
             toast.success('Tenure created');
-        }
+        },
     });
 }
 
@@ -96,11 +92,9 @@ const openEditDialog = (tenure: Tenure) => {
     editForm.year = tenure.year;
 
     showEditDialog.value = true;
-
 };
 
 function handleEditSubmit() {
-
     if (!editingTenure.value) return;
     editForm.put(update(editingTenure.value.id).url, {
         onSuccess: () => {
@@ -117,17 +111,17 @@ function handleEditSubmit() {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="px-4 py-6">
-            <div class="flex items-center justify-between mb-6">
+            <div class="mb-6 flex items-center justify-between">
                 <HeadingSmall title="Tenures" description="Manage tenure records" />
 
                 <Dialog v-model:open="showAddDialog">
                     <DialogTrigger as-child>
                         <Button>
-                            <Plus class="h-4 w-4 mr-2" />
+                            <Plus class="mr-2 h-4 w-4" />
                             Add Tenure
                         </Button>
                     </DialogTrigger>
-                    <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <DialogContent class="max-h-[90vh] max-w-2xl overflow-y-auto">
                         <DialogHeader>
                             <DialogTitle>Add New Tenure</DialogTitle>
                             <DialogDescription>Add a new tenure record</DialogDescription>
@@ -135,8 +129,6 @@ function handleEditSubmit() {
                         <form @submit.prevent="handleAddSubmit" class="space-y-4">
                             <div class="grid grid-cols-1 gap-4">
                                 <div class="space-y-2">
-
-
                                     <Label for="name">Tenure Name</Label>
                                     <Input
                                         id="name"
@@ -144,13 +136,11 @@ function handleEditSubmit() {
                                         type="text"
                                         placeholder="e.g., Servants of Christ"
                                         :class="addForm.errors.name && 'border-destructive'"
-
                                         required
                                     />
 
                                     <InputError :message="addForm.errors.name" />
                                 </div>
-
                             </div>
                             <div class="grid grid-cols-1 gap-4">
                                 <div class="space-y-2">
@@ -161,9 +151,7 @@ function handleEditSubmit() {
                                         type="text"
                                         placeholder="e.g., 2015-2016"
                                         :class="addForm.errors.year && 'border-destructive'"
-
                                         required
-
                                     />
                                     <InputError :message="addForm.errors.year" />
                                 </div>
@@ -198,16 +186,14 @@ function handleEditSubmit() {
                             </TableCell>
                             <TableCell>{{ tenure.year }}</TableCell>
                             <TableCell class="text-right">
-
                                 <Button variant="outline" size="sm" @click="openEditDialog(tenure)">
                                     <Edit class="h-4 w-4" />
                                     Edit
                                 </Button>
-
                             </TableCell>
                         </TableRow>
                         <TableRow v-if="tenures.data.length === 0">
-                            <TableCell colspan="3" class="text-center text-muted-foreground py-8">
+                            <TableCell colspan="3" class="py-8 text-center text-muted-foreground">
                                 No tenures found. Create your first one!
                             </TableCell>
                         </TableRow>
@@ -218,27 +204,21 @@ function handleEditSubmit() {
             <!-- Pagination -->
             <Pagination
                 v-if="tenures.last_page > 1"
-
-
                 :total="tenures.last_page * 15"
                 :items-per-page="15"
                 :default-page="tenures.current_page"
                 :sibling-count="1"
                 show-edges
-                class="mt-4 "
+                class="mt-4"
                 @update:page="goToPage"
             >
-                <PaginationContent v-slot="{ items }" class="gap-4 ">
+                <PaginationContent v-slot="{ items }" class="gap-4">
                     <PaginationFirst />
                     <PaginationPrevious />
 
                     <template v-for="(item, idx) in items" :key="idx">
                         <PaginationItem v-if="item.type === 'page'" :value="item.value" as-child>
-                            <Button
-                                :variant="item.value === tenures.current_page ? 'default' : 'outline'"
-                                size="icon"
-
-                            >
+                            <Button :variant="item.value === tenures.current_page ? 'default' : 'outline'" size="icon">
                                 {{ item.value }}
                             </Button>
                         </PaginationItem>
@@ -250,10 +230,8 @@ function handleEditSubmit() {
                 </PaginationContent>
             </Pagination>
 
-
             <Dialog v-model:open="showEditDialog">
-
-                <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogContent class="max-h-[90vh] max-w-2xl overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Edit Tenure</DialogTitle>
                         <DialogDescription>Update tenure information</DialogDescription>
@@ -261,8 +239,6 @@ function handleEditSubmit() {
                     <form @submit.prevent="handleEditSubmit" class="space-y-4">
                         <div class="grid grid-cols-1 gap-4">
                             <div class="space-y-2">
-
-
                                 <Label for="name">Tenure Name</Label>
                                 <Input
                                     id="name"
@@ -270,13 +246,11 @@ function handleEditSubmit() {
                                     type="text"
                                     placeholder="e.g., Servants of Christ"
                                     :class="editForm.errors.name && 'border-destructive'"
-
                                     required
                                 />
 
                                 <InputError :message="editForm.errors.name" />
                             </div>
-
                         </div>
                         <div class="grid grid-cols-1 gap-4">
                             <div class="space-y-2">
@@ -287,9 +261,7 @@ function handleEditSubmit() {
                                     type="text"
                                     placeholder="e.g., 2015-2016"
                                     :class="editForm.errors.year && 'border-destructive'"
-
                                     required
-
                                 />
                                 <InputError :message="editForm.errors.year" />
                             </div>

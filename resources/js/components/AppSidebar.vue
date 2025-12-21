@@ -1,18 +1,10 @@
 <script setup lang="ts">
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem
-} from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
-import { Link } from '@inertiajs/vue3';
 import { index as tenuresIndex } from '@/routes/tenures';
+import { Link } from '@inertiajs/vue3';
 
 import AppLogo from '@/components/AppLogo.vue';
 import { home } from '@/routes';
@@ -23,37 +15,37 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: home(),
-        icon: LayoutGrid
+        icon: LayoutGrid,
     },
     {
         title: 'Tenures',
         href: tenuresIndex().url,
 
-        icon: Calendar
+        icon: Calendar,
     },
     {
         title: 'Alumni',
         // href: alumnusIndex().url,
         href: home(),
-        icon: Users
+        icon: Users,
     },
     {
         title: 'Birthdays',
         // href: birthdays().url,
         href: home(),
-        icon: Cake
+        icon: Cake,
     },
     {
         title: 'Executives',
         // href: executivesIndex().url,
         href: home(),
-        icon: UserCheck
+        icon: UserCheck,
     },
     {
         title: 'Backup',
         href: '/settings/backup',
-        icon: HardDrive
-    }
+        icon: HardDrive,
+    },
     // {
     //     title: 'Templates',
     //     href: templatesIndex().url,
