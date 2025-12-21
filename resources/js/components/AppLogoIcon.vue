@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue';
 import { Command } from 'lucide-vue-next';
+import type { HTMLAttributes } from 'vue';
 
 defineOptions({
     inheritAttrs: false,
@@ -14,6 +14,5 @@ defineProps<Props>();
 </script>
 
 <template>
-
-    <Command class="size-4"  :class="className" v-bind="$attrs"/>
+    <Command class="size-4" :class="className" v-bind="$attrs" />
 </template>

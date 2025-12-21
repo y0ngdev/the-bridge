@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppSidebar from '@/components/AppSidebar.vue';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import SiteHeader from '@/components/SiteHeader.vue';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 
 import type { BreadcrumbItemType } from '@/types';
 import { usePage } from '@inertiajs/vue3';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-    breadcrumbs: () => []
+    breadcrumbs: () => [],
 });
 
 const isOpen = usePage().props.sidebarOpen;
@@ -24,7 +24,6 @@ const isOpen = usePage().props.sidebarOpen;
             <SiteHeader />
             <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
                 <slot />
-
             </div>
         </SidebarInset>
     </SidebarProvider>

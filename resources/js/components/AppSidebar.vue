@@ -1,59 +1,46 @@
 <script setup lang="ts">
-import type { SidebarProps } from '@/components/ui/sidebar';
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem
-} from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Link } from '@inertiajs/vue3';
 
-import { home } from '@/routes';
 import AppLogo from '@/components/AppLogo.vue';
+import { home } from '@/routes';
+import { NavItem } from '@/types';
 import { Cake, Calendar, HardDrive, LayoutGrid, UserCheck, Users } from 'lucide-vue-next';
-
-const props = withDefaults(defineProps<SidebarProps>(), {
-    variant: 'sidebar'
-});
-
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         // href: dashboard(),
-        icon: LayoutGrid
+        icon: LayoutGrid,
     },
     {
         title: 'Tenures',
         // href: tenuresIndex().url,
-        icon: Calendar
+        icon: Calendar,
     },
     {
         title: 'Alumni',
         // href: alumnusIndex().url,
-        icon: Users
+        icon: Users,
     },
     {
         title: 'Birthdays',
         // href: birthdays().url,
-        icon: Cake
+        icon: Cake,
     },
     {
         title: 'Executives',
         // href: executivesIndex().url,
-        icon: UserCheck
+        icon: UserCheck,
     },
     {
         title: 'Backup',
         href: '/settings/backup',
-        icon: HardDrive
-    }
+        icon: HardDrive,
+    },
     // {
     //     title: 'Templates',
     //     href: templatesIndex().url,
@@ -64,7 +51,8 @@ const mainNavItems: NavItem[] = [
     //     href: campaignsIndex().url,
     //     icon: Send,
     // },
-];</script>
+];
+</script>
 
 <template>
     <Sidebar collapsible="icon" variant="sidebar">
@@ -75,14 +63,12 @@ const mainNavItems: NavItem[] = [
                         <Link :href="home()">
                             <AppLogo />
                         </Link>
-
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarHeader>
         <SidebarContent>
             <NavMain :items="mainNavItems" />
-
         </SidebarContent>
         <SidebarFooter>
             <NavUser />
