@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/pagination';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { store, edit, index } from '@/actions/App/Http/Controllers/TenureController';
+import { edit, index, store } from '@/actions/App/Http/Controllers/TenureController';
 import {
     Dialog,
     DialogClose,
@@ -24,12 +24,15 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog'
+    DialogTrigger
+} from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Plus } from 'lucide-vue-next';
 import InputError from '@/components/InputError.vue';
+import { toast } from 'vue-sonner';
+import { ref } from 'vue';
+
 interface Tenure {
     id: number;
     name: string;
@@ -62,20 +65,24 @@ const goToPage = (page: number) => {
 };
 
 
-
-const addForm =  useForm({
+const addForm = useForm({
     name: '',
-    year: '',
+    year: ''
 });
-
+const editForm = useForm({
+    name: '',
+    year: ''
+});
+const showAddDialog = ref(false);
+const showEditDialog = ref(false);
 function handleAddSubmit() {
 
     addForm.post(store().url, {
-//         onSuccess: () => {
-
-//             addForm.reset();
-//             toast.success('Alumnus added successfully');
-//         },
+        onSuccess: () => {
+            showAddDialog.value = false;
+            addForm.reset();
+            toast.success('Tenure created');
+        }
     });
 }
 </script>
@@ -88,7 +95,7 @@ function handleAddSubmit() {
             <div class="flex items-center justify-between mb-6">
                 <HeadingSmall title="Tenures" description="Manage tenure records" />
 
-                <Dialog>
+                <Dialog v-model:open="showAddDialog">
                     <DialogTrigger as-child>
                         <Button>
                             <Plus class="h-4 w-4 mr-2" />
@@ -142,7 +149,7 @@ function handleAddSubmit() {
                                     <Button variant="outline" type="button">Cancel</Button>
                                 </DialogClose>
                                 <Button type="submit" :disabled="addForm.processing">
-                                    {{ addForm.processing ?  'Creating...' : 'Create Tenure'}}
+                                    {{ addForm.processing ? 'Creating...' : 'Create Tenure' }}
                                 </Button>
                             </DialogFooter>
                         </form>
@@ -214,6 +221,69 @@ function handleAddSubmit() {
                     <PaginationLast />
                 </PaginationContent>
             </Pagination>
+
+
+
+            <Dialog v-model:open="showEditDialog">
+                <DialogTrigger as-child>
+                    <Button>
+                        <Plus class="h-4 w-4 mr-2" />
+                        Edit Tenure
+                    </Button>
+                </DialogTrigger>
+                <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>Edit Tenure</DialogTitle>
+                        <DialogDescription>Update tenure information</DialogDescription>
+                    </DialogHeader>
+                    <form @submit.prevent="handleAddSubmit" class="space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="space-y-2">
+
+
+                                <Label for="name">Tenure Name</Label>
+                                <Input
+                                    id="name"
+                                    v-model="editForm.name"
+                                    type="text"
+                                    placeholder="e.g., Servants of Christ"
+                                    :class="editForm.errors.name && 'border-destructive'"
+
+                                    required
+                                />
+
+                                <InputError :message="editForm.errors.name" />
+                            </div>
+
+                        </div>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="space-y-2">
+                                <Label for="year">Year</Label>
+                                <Input
+                                    id="year"
+                                    v-model="editForm.year"
+                                    type="text"
+                                    placeholder="e.g., 2015-2016"
+                                    :class="editForm.errors.year && 'border-destructive'"
+
+                                    required
+
+                                />
+                                <InputError :message="editForm.errors.year" />
+                            </div>
+                        </div>
+
+                        <DialogFooter>
+                            <DialogClose as-child>
+                                <Button variant="outline" type="button">Cancel</Button>
+                            </DialogClose>
+                            <Button type="submit" :disabled="editForm.processing">
+                                {{ editForm.processing ? 'Updating...' : 'Update record' }}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
     </AppLayout>
 </template>
