@@ -18,8 +18,6 @@ class TenureController extends Controller
         ]);
     }
 
-
-
     public function store(StoreTenureRequest $request): RedirectResponse
     {
         Tenure::create($request->validated());
@@ -27,9 +25,6 @@ class TenureController extends Controller
         return redirect()->route('tenures.index')
             ->with('success', 'Tenure created successfully.');
     }
-
-
-
 
     public function update(UpdateTenureRequest $request, Tenure $tenure): RedirectResponse
     {

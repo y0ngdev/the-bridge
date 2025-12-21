@@ -19,14 +19,13 @@ Route::middleware(['guest'])->get('/', function (Request $request) {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route:: get('/dashboard', function () {
+    Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('home');
 
-    Route::resource('tenures', TenureController::class)->except(['show', 'destroy','edit','create']);
+    Route::resource('tenures', TenureController::class)->except(['show', 'destroy', 'edit', 'create']);
 
 });
-
 
 Route::middleware('auth')->group(function () {
     Route::redirect('settings', '/settings/profile');
