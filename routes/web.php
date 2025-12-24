@@ -28,6 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('alumni/birthdays', [AlumnusController::class, 'birthdays'])->name('alumni.birthdays');
     Route::get('alumni/distribution', [AlumnusController::class, 'distribution'])->name('alumni.distribution');
+    Route::get('alumni/executives', [AlumnusController::class, 'executives'])->name('alumni.executives');
     Route::get('alumni/export', [AlumnusController::class, 'export'])->name('alumni.export');
     Route::post('alumni/import', [AlumnusController::class, 'importStore'])->name('alumni.import.store');
     Route::resource('alumni', AlumnusController::class);

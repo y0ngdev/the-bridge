@@ -4,7 +4,7 @@ import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { index as tenuresIndex } from '@/routes/tenures';
 import { index as alumnusIndex } from '@/routes/alumni';
-import { birthdays, distribution } from '@/routes/alumni';
+import { birthdays, distribution, executives } from '@/routes/alumni';
 import { Link } from '@inertiajs/vue3';
 import AppLogo from '@/components/AppLogo.vue';
 import { home } from '@/routes';
@@ -41,8 +41,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Executives',
-        // href: executivesIndex().url,
-        href: home(),
+        href: executives().url,
         icon: UserCheck,
     },
     {

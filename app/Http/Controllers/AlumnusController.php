@@ -216,6 +216,39 @@ class AlumnusController extends Controller
         ]);
     }
 
+    public function executives(): Response
+    {
+        // Get all alumni with current exco office positions
+        $executives = Alumnus::with('tenure')
+            ->whereNotNull('current_exco_office')
+            ->orderBy('current_exco_office')
+            ->get();
+
+        // Group executives by position category
+        $centralExco = $executives->filter(fn($a) => in_array($a->current_exco_office, [
+            'President',
+            'Vice President',
+            'General Secretary',
+            'Financial Secretary',
+            'Prayer Secretary',
+            'Bible Study Secretary',
+        ]));
+
+        $coordinators = $executives->filter(fn($a) => str_contains($a->current_exco_office ?? '', 'Coordinator'));
+
+        $otherPositions = $executives->filter(
+            fn($a) =>
+            !$centralExco->contains($a) && !$coordinators->contains($a)
+        );
+
+        return Inertia::render('alumni/Executives', [
+            'centralExco' => $centralExco->values(),
+            'coordinators' => $coordinators->values(),
+            'otherPositions' => $otherPositions->values(),
+            'totalCount' => $executives->count(),
+        ]);
+    }
+
     public function importStore(\App\Http\Requests\ImportAlumnusRequest $request): RedirectResponse
     {
         Excel::import(new AlumnusImport($request->tenure_id), $request->file('file'));
