@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Department;
 use App\Enums\NigerianState;
 use App\Enums\PastExcoOffice;
 use App\Enums\Unit;
 use App\Exports\AlumnusExport;
 use App\Imports\AlumnusImport;
 use App\Models\Alumnus;
+use App\Models\Department;
 use App\Models\Tenure;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -56,10 +56,10 @@ class AlumnusController extends Controller
         return Inertia::render('alumni/Index', [
             'alumni' => $query->latest()->paginate()->withQueryString(),
             'tenures' => Tenure::orderBy('year', 'desc')->get(['id', 'year']),
-            'units' => collect(Unit::cases())->map(fn($u) => ['value' => $u->value, 'label' => $u->value]),
-            'states' => collect(NigerianState::cases())->map(fn($s) => ['value' => $s->value, 'label' => $s->value]),
-            'pastExcoOffices' => collect(PastExcoOffice::cases())->map(fn($p) => ['value' => $p->value, 'label' => $p->value]),
-            'departments' => collect(Department::cases())->map(fn($d) => ['value' => $d->value, 'label' => $d->label()]),
+            'units' => collect(Unit::cases())->map(fn ($u) => ['value' => $u->value, 'label' => $u->value]),
+            'states' => collect(NigerianState::cases())->map(fn ($s) => ['value' => $s->value, 'label' => $s->value]),
+            'pastExcoOffices' => collect(PastExcoOffice::cases())->map(fn ($p) => ['value' => $p->value, 'label' => $p->value]),
+            'departments' => Department::options(),
             'filters' => $request->only(['search', 'tenure_id', 'unit', 'state', 'gender']),
         ]);
     }
@@ -68,7 +68,7 @@ class AlumnusController extends Controller
     {
         return Inertia::render('alumni/Show', [
             'alumnus' => $alumnus->load('tenure'),
-            'departments' => collect(Department::cases())->map(fn($d) => ['value' => $d->value, 'label' => $d->label()]),
+            'departments' => Department::options(),
         ]);
     }
 
@@ -129,7 +129,7 @@ class AlumnusController extends Controller
                 $filename .= "-{$tenure->year}-tenure";
             }
         }
-        $filename .= '-' . now()->format('Y-m-d') . '.xlsx';
+        $filename .= '-'.now()->format('Y-m-d').'.xlsx';
 
         return Excel::download(new AlumnusExport($fields, $filters), $filename);
     }
@@ -166,7 +166,7 @@ class AlumnusController extends Controller
             'today' => $todayBirthdays,
             'thisWeek' => $thisWeek,
             'thisMonth' => $thisMonth,
-            'allByMonth' => $allAlumni->groupBy(fn($alumnus) => $alumnus->birth_date->format('F')),
+            'allByMonth' => $allAlumni->groupBy(fn ($alumnus) => $alumnus->birth_date->format('F')),
         ]);
     }
 
@@ -204,14 +204,14 @@ class AlumnusController extends Controller
             ->groupBy('state')
             ->orderBy('state')
             ->get()
-            ->mapWithKeys(fn($item) => [$item->state->value => $item->count]);
+            ->mapWithKeys(fn ($item) => [$item->state->value => $item->count]);
 
         return Inertia::render('alumni/Distribution', [
             'alumni' => $query->latest()->paginate(20)->withQueryString(),
             'stateDistribution' => $stateDistribution,
-            'units' => collect(Unit::cases())->map(fn($u) => ['value' => $u->value, 'label' => $u->value]),
-            'states' => collect(NigerianState::cases())->map(fn($s) => ['value' => $s->value, 'label' => $s->value]),
-            'tenures' => Tenure::orderBy('year', 'desc')->get()->map(fn($t) => ['value' => $t->id, 'label' => $t->year]),
+            'units' => collect(Unit::cases())->map(fn ($u) => ['value' => $u->value, 'label' => $u->value]),
+            'states' => collect(NigerianState::cases())->map(fn ($s) => ['value' => $s->value, 'label' => $s->value]),
+            'tenures' => Tenure::orderBy('year', 'desc')->get()->map(fn ($t) => ['value' => $t->id, 'label' => $t->year]),
             'filters' => $request->only(['state', 'unit', 'tenure_id', 'search']),
         ]);
     }
@@ -225,7 +225,7 @@ class AlumnusController extends Controller
             ->get();
 
         // Group executives by position category
-        $centralExco = $executives->filter(fn($a) => in_array($a->current_exco_office, [
+        $centralExco = $executives->filter(fn ($a) => in_array($a->current_exco_office, [
             'President',
             'Vice President',
             'General Secretary',
@@ -234,11 +234,10 @@ class AlumnusController extends Controller
             'Bible Study Secretary',
         ]));
 
-        $coordinators = $executives->filter(fn($a) => str_contains($a->current_exco_office ?? '', 'Coordinator'));
+        $coordinators = $executives->filter(fn ($a) => str_contains($a->current_exco_office ?? '', 'Coordinator'));
 
         $otherPositions = $executives->filter(
-            fn($a) =>
-            !$centralExco->contains($a) && !$coordinators->contains($a)
+            fn ($a) => ! $centralExco->contains($a) && ! $coordinators->contains($a)
         );
 
         return Inertia::render('alumni/Executives', [
@@ -262,7 +261,7 @@ class AlumnusController extends Controller
      */
     private function parseBirthDate(?string $value): ?Carbon
     {
-        if (!$value) {
+        if (! $value) {
             return null;
         }
 

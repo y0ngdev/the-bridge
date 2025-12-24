@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
 use App\Models\Tenure;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
 
         $this->seedIfEmpty(User::class, UserSeeder::class);
         $this->seedIfEmpty(Tenure::class, TenureSeeder::class);
+        $this->seedIfEmpty(Department::class, DepartmentSeeder::class);
 
         Alumnus::factory(40)->create();
     }

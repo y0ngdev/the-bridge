@@ -20,7 +20,6 @@ class Alumnus extends Model
             'phones' => 'array',
             'is_futa_staff' => 'boolean',
             'birth_date' => 'datetime:Y-m-d',
-            'department' => \App\Enums\Department::class,
             'unit' => Unit::class,
             'state' => NigerianState::class,
         ];

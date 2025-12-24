@@ -3,13 +3,14 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { index as tenuresIndex } from '@/routes/tenures';
+import { index as departmentsIndex } from '@/routes/departments';
 import { index as alumnusIndex } from '@/routes/alumni';
 import { birthdays, distribution, executives } from '@/routes/alumni';
 import { Link } from '@inertiajs/vue3';
 import AppLogo from '@/components/AppLogo.vue';
 import { home } from '@/routes';
 import { NavItem } from '@/types';
-import { Cake, Calendar, HardDrive, LayoutGrid, MapPin, UserCheck, Users } from 'lucide-vue-next';
+import { Building2, Cake, Calendar, HardDrive, LayoutGrid, MapPin, UserCheck, Users } from 'lucide-vue-next';
 
 const mainNavItems: NavItem[] = [
     {
@@ -22,6 +23,11 @@ const mainNavItems: NavItem[] = [
         href: tenuresIndex().url,
 
         icon: Calendar,
+    },
+    {
+        title: 'Departments',
+        href: departmentsIndex().url,
+        icon: Building2,
     },
     {
         title: 'Alumni',

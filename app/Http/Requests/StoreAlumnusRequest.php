@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Department;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
 class StoreAlumnusRequest extends FormRequest
 {
@@ -27,7 +25,7 @@ class StoreAlumnusRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phones' => 'nullable|array',
-            'department' => ['nullable', new Enum(Department::class)],
+            'department' => 'nullable|string|exists:departments,code',
             'gender' => 'nullable|string|in:M,F',
             'birth_date' => 'nullable|string|max:50',
             'tenure_id' => 'required|exists:tenures,id',

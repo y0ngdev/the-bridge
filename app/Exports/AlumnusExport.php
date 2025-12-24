@@ -42,19 +42,19 @@ class AlumnusExport implements FromCollection, WithHeadings, WithMapping
         $query = Alumnus::with('tenure');
 
         // Apply filters
-        if (! empty($this->filters['tenure_id'])) {
+        if (!empty($this->filters['tenure_id'])) {
             $query->where('tenure_id', $this->filters['tenure_id']);
         }
 
-        if (! empty($this->filters['unit'])) {
+        if (!empty($this->filters['unit'])) {
             $query->where('unit', $this->filters['unit']);
         }
 
-        if (! empty($this->filters['state'])) {
+        if (!empty($this->filters['state'])) {
             $query->where('state', $this->filters['state']);
         }
 
-        if (! empty($this->filters['gender'])) {
+        if (!empty($this->filters['gender'])) {
             $query->whereRaw('LOWER(gender) = ?', [strtolower($this->filters['gender'])]);
         }
 
@@ -77,7 +77,7 @@ class AlumnusExport implements FromCollection, WithHeadings, WithMapping
     {
         $row = [];
         foreach ($this->fields as $field) {
-            if (! isset($this->availableFields[$field])) {
+            if (!isset($this->availableFields[$field])) {
                 continue;
             }
 
@@ -86,7 +86,7 @@ class AlumnusExport implements FromCollection, WithHeadings, WithMapping
                 'birth_date' => $alumnus->birth_date?->format('d M'),
                 'tenure' => $alumnus->tenure?->year,
                 'unit' => $alumnus->unit instanceof \App\Enums\Unit ? $alumnus->unit->value : $alumnus->unit,
-                'department' => $alumnus->department instanceof \App\Enums\Department ? $alumnus->department->label() : $alumnus->department,
+                'department' => $alumnus->department,
                 'state' => $alumnus->state instanceof \App\Enums\NigerianState ? $alumnus->state->value : $alumnus->state,
                 'is_futa_staff' => $alumnus->is_futa_staff ? 'Yes' : 'No',
                 default => $alumnus->{$field},

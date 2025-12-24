@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Enums\Department;
 use App\Models\Alumnus;
+use App\Models\Department;
 use App\Models\Tenure;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,7 +17,7 @@ class AlumnusFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'phones' => [$this->faker->phoneNumber()],
-            'department' => $this->faker->randomElement(Department::cases()),
+            'department' => Department::inRandomOrder()->first()?->code,
             'gender' => $this->faker->randomElement(['M', 'F']),
             'state' => $this->faker->randomElement(\App\Enums\NigerianState::cases()),
             'unit' => $this->faker->randomElement(\App\Enums\Unit::cases()),

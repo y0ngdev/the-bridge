@@ -25,6 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
 
     Route::resource('tenures', TenureController::class)->except(['show', 'destroy', 'edit', 'create']);
+    Route::resource('departments', \App\Http\Controllers\DepartmentController::class)->except(['show', 'edit', 'create']);
 
     Route::get('alumni/birthdays', [AlumnusController::class, 'birthdays'])->name('alumni.birthdays');
     Route::get('alumni/distribution', [AlumnusController::class, 'distribution'])->name('alumni.distribution');
