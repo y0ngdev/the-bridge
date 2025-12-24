@@ -53,7 +53,15 @@ const props = defineProps<{
         tenure: string;
         initials: string;
     }>;
+    my_stats?: {
+        total: number;
+        this_month: number;
+        success_rate: number;
+        by_type: Array<{ type: string; count: number }>;
+    };
 }>();
+
+import LogActivityChart from '@/components/LogActivityChart.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: home().url },
@@ -133,6 +141,57 @@ const statConfigs = computed((): Stat[] => [
                             <p class="text-xs text-muted-foreground">
                                 {{ stat.description }}
                             </p>
+                        </CardContent>
+                    </Card>
+                </div>
+            </Deferred>
+
+            <Deferred data="my_stats">
+                <template #fallback>
+                    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                        <Card class="col-span-3">
+                            <CardHeader><Skeleton class="h-6 w-48" /></CardHeader>
+                            <CardContent class="grid gap-4 grid-cols-3">
+                                <Skeleton v-for="i in 3" :key="i" class="h-24 w-full" />
+                            </CardContent>
+                        </Card>
+                         <Card class="col-span-4">
+                            <CardHeader><Skeleton class="h-6 w-48" /></CardHeader>
+                            <CardContent><Skeleton class="h-[200px]" /></CardContent>
+                        </Card>
+                    </div>
+                </template>
+                <div v-if="my_stats" class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                    <!-- KPI Cards -->
+                    <Card class="col-span-3">
+                        <CardHeader>
+                            <CardTitle>My Communication Performance</CardTitle>
+                            <CardDescription>Your personal outreach statistics.</CardDescription>
+                        </CardHeader>
+                        <CardContent class="grid gap-4 grid-cols-3">
+                            <div class="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-lg border text-center">
+                                <span class="text-3xl font-bold">{{ my_stats.total }}</span>
+                                <span class="text-xs text-muted-foreground mt-1">Total Logs</span>
+                            </div>
+                            <div class="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-lg border text-center">
+                                <span class="text-3xl font-bold">{{ my_stats.this_month }}</span>
+                                <span class="text-xs text-muted-foreground mt-1">This Month</span>
+                            </div>
+                             <div class="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-lg border text-center">
+                                <span class="text-3xl font-bold text-green-600">{{ my_stats.success_rate }}%</span>
+                                <span class="text-xs text-muted-foreground mt-1">Success Rate</span>
+                            </div>
+                        </CardContent>
+                    </Card>
+                    
+                    <!-- Chart -->
+                    <Card class="col-span-4">
+                        <CardHeader>
+                            <CardTitle>Activity by Type</CardTitle>
+                            <CardDescription>Breakdown of your communication methods.</CardDescription>
+                        </CardHeader>
+                        <CardContent class="pl-2">
+                            <LogActivityChart :data="my_stats.by_type" />
                         </CardContent>
                     </Card>
                 </div>

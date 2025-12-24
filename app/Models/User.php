@@ -66,4 +66,11 @@ class User extends Authenticatable
 
         return Storage::disk('public')->url($this->avatar);
     }
+    /**
+     * Get the communication logs created by the user.
+     */
+    public function communicationLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CommunicationLog::class);
+    }
 }

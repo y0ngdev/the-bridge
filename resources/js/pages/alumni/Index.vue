@@ -31,7 +31,8 @@ import {
 import { type BreadcrumbItem, type Tenure, type EnumOption, type Alumnus, type SimplePaginatedResponse } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { index, store, update, destroy, show, importStore } from '@/actions/App/Http/Controllers/AlumnusController';
-import { Plus, Edit, Trash2, Check, ChevronsUpDown, Eye, Download, Upload, Info, X } from 'lucide-vue-next';
+import { Plus, Edit, Trash2, Check, ChevronsUpDown, Eye, Download, Upload, Info, X, MessageSquarePlus } from 'lucide-vue-next';
+import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
 import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 
@@ -62,7 +63,9 @@ const showAddDialog = ref(false);
 const showEditDialog = ref(false);
 const showExportDialog = ref(false);
 const showImportDialog = ref(false);
+const showLogDialog = ref(false);
 const editingAlumnus = ref<Alumnus | null>(null);
+const selectedAlumnusForLog = ref<Alumnus | null>(null);
 
 const openTenureCombobox = ref(false);
 const openUnitCombobox = ref(false);
@@ -278,6 +281,11 @@ function handleDelete(alumnus: Alumnus) {
             toast.success('Alumnus deleted successfully');
         },
     });
+}
+
+function openLogDialog(alumnus: Alumnus) {
+    selectedAlumnusForLog.value = alumnus;
+    showLogDialog.value = true;
 }
 </script>
 
@@ -749,6 +757,9 @@ function handleDelete(alumnus: Alumnus) {
                                             <Eye class="h-4 w-4" />
                                         </Button>
                                     </Link>
+                                    <Button variant="ghost" size="icon" @click="openLogDialog(alumnus)" title="Log Interaction">
+                                        <MessageSquarePlus class="h-4 w-4 text-blue-600" />
+                                    </Button>
                                     <Button variant="ghost" size="icon" @click="openEditDialog(alumnus)">
                                         <Edit class="h-4 w-4" />
                                     </Button>
@@ -797,6 +808,20 @@ function handleDelete(alumnus: Alumnus) {
         </div>
 
         <!-- Edit Dialog -->
+        <Dialog v-model:open="showLogDialog">
+            <DialogContent class="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Log Interaction</DialogTitle>
+                    <DialogDescription>Log a communication with {{ selectedAlumnusForLog?.name }}</DialogDescription>
+                </DialogHeader>
+                <CommunicationLogForm 
+                    v-if="selectedAlumnusForLog" 
+                    :alumnus-id="selectedAlumnusForLog.id" 
+                    @success="showLogDialog = false" 
+                />
+            </DialogContent>
+        </Dialog>
+
         <Dialog v-model:open="showEditDialog">
             <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>

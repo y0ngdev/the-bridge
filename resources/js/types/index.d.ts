@@ -87,6 +87,7 @@ export interface Alumnus {
     current_exco_office: string | null;
     is_futa_staff: boolean;
     tenure?: Tenure | null;
+    communication_logs?: CommunicationLog[];
 }
 
 /** Minimal Alumnus for list views - subset of fields */
@@ -108,7 +109,25 @@ export interface BirthdayAlumnus {
     email: string | null;
     phones: string[] | null;
     dept: string | null;
+    dept: string | null;
     location: string | null;
+}
+
+// ============================================
+// Communication Log Types
+// ============================================
+
+export interface CommunicationLog {
+    id: number;
+    alumnus_id: number;
+    user_id: number;
+    type: string; // Enum
+    outcome: string; // Enum
+    notes: string | null;
+    occurred_at: string;
+    created_at: string;
+    updated_at: string;
+    user?: User;
 }
 
 // ============================================

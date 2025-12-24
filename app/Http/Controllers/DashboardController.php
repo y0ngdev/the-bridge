@@ -71,13 +71,31 @@ class DashboardController extends Controller
                 ];
             });
 
+        // Personal Communication Log Stats
+        $user = auth()->user();
+        $myLogsQuery = $user->communicationLogs();
+        $totalLogs = $myLogsQuery->count();
+        $successfulLogs = $myLogsQuery->clone()->where('outcome', 'successful')->count();
+
+        $my_stats = [
+            'total' => $totalLogs,
+            'this_month' => $myLogsQuery->clone()->whereMonth('occurred_at', $today->month)->whereYear('occurred_at', $today->year)->count(),
+            'success_rate' => $totalLogs > 0 ? round(($successfulLogs / $totalLogs) * 100) : 0,
+            'by_type' => $myLogsQuery->clone()
+                ->selectRaw('type, count(*) as count')
+                ->groupBy('type')
+                ->get()
+                ->map(fn($item) => ['type' => $item->type->label(), 'count' => $item->count]),
+        ];
+
         return Inertia::render('Dashboard', [
-            'stats' => Inertia::defer(fn () => $stats),
-            'gender_distribution' => Inertia::defer(fn () => $gender_distribution),
-            'state_distribution' => Inertia::defer(fn () => $state_distribution),
-            'unit_distribution' => Inertia::defer(fn () => $unit_distribution),
-            'state_unit_breakdown' => Inertia::defer(fn () => $state_unit_breakdown),
-            'recent_alumni' => Inertia::defer(fn () => $recent_alumni),
+            'stats' => Inertia::defer(fn() => $stats),
+            'gender_distribution' => Inertia::defer(fn() => $gender_distribution),
+            'state_distribution' => Inertia::defer(fn() => $state_distribution),
+            'unit_distribution' => Inertia::defer(fn() => $unit_distribution),
+            'state_unit_breakdown' => Inertia::defer(fn() => $state_unit_breakdown),
+            'recent_alumni' => Inertia::defer(fn() => $recent_alumni),
+            'my_stats' => Inertia::defer(fn() => $my_stats),
         ]);
     }
 

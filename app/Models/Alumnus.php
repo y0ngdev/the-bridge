@@ -37,4 +37,11 @@ class Alumnus extends Model
     //    {
     //        return $this->hasMany(AlumniExecutive::class);
     //    }
+    /**
+     * Get the communication logs for the alumnus.
+     */
+    public function communicationLogs(): HasMany
+    {
+        return $this->hasMany(CommunicationLog::class)->orderByDesc('occurred_at');
+    }
 }

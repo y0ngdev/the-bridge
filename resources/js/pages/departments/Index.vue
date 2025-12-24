@@ -55,18 +55,18 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 // Search
 const searchQuery = ref(props.filters.search || '');
-const selectedSchool = ref(props.filters.school || '');
+const selectedSchool = ref(props.filters.school || 'ALL');
 
 function applyFilters() {
     router.get(index().url, {
         search: searchQuery.value || undefined,
-        school: selectedSchool.value || undefined,
+        school: (selectedSchool.value === 'ALL' || !selectedSchool.value) ? undefined : selectedSchool.value,
     }, { preserveState: true });
 }
 
 function clearFilters() {
     searchQuery.value = '';
-    selectedSchool.value = '';
+    selectedSchool.value = 'ALL';
     router.get(index().url);
 }
 
@@ -227,7 +227,7 @@ const totalSchools = computed(() => props.schools.length);
                                 <SelectValue placeholder="All Schools" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">All Schools</SelectItem>
+                                <SelectItem value="ALL">All Schools</SelectItem>
                                 <SelectItem v-for="school in schools" :key="school" :value="school">
                                     {{ school }}
                                 </SelectItem>

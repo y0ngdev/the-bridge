@@ -33,6 +33,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('alumni/export', [AlumnusController::class, 'export'])->name('alumni.export');
     Route::post('alumni/import', [AlumnusController::class, 'importStore'])->name('alumni.import.store');
     Route::resource('alumni', AlumnusController::class);
+    Route::post('alumni/{alumnus}/communications', [\App\Http\Controllers\CommunicationLogController::class, 'store'])->name('alumni.communications.store');
+    Route::delete('communications/{log}', [\App\Http\Controllers\CommunicationLogController::class, 'destroy'])->name('communications.destroy');
 
 });
 

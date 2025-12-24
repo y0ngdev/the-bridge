@@ -6,7 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { type BreadcrumbItem, type Alumnus, type EnumOption } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { index, show } from '@/actions/App/Http/Controllers/AlumnusController';
-import { ArrowLeft, Edit, Mail, Phone, MapPin, Calendar, Building, User, Briefcase, GraduationCap } from 'lucide-vue-next';
+import { destroy as destroyLog } from '@/actions/App/Http/Controllers/CommunicationLogController';
+import { ArrowLeft, Edit, Mail, Phone, MapPin, Calendar, Building, User, Briefcase, GraduationCap, History, Trash2 } from 'lucide-vue-next';
+import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps<{
     alumnus: Alumnus;
@@ -157,6 +160,64 @@ function formatDate(date: string | null): string {
                         </div>
                     </CardContent>
                 </Card>
+
+                <!-- Communication Logs -->
+                <div class="md:col-span-2 grid gap-6 md:grid-cols-3">
+                    <div class="md:col-span-1">
+                        <CommunicationLogForm :alumnus-id="alumnus.id" />
+                    </div>
+                    
+                    <Card class="md:col-span-2">
+                        <CardHeader>
+                            <CardTitle class="text-lg flex items-center gap-2">
+                                <History class="h-5 w-5" />
+                                Communication History
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div v-if="alumnus.communication_logs && alumnus.communication_logs.length > 0" class="space-y-6">
+                                <div v-for="log in alumnus.communication_logs" :key="log.id" class="relative pl-6 pb-6 border-l last:pb-0 last:border-0 border-muted-foreground/30">
+                                    <div class="absolute top-0 left-0 -translate-x-1/2 w-3 h-3 rounded-full border bg-background" 
+                                        :class="{
+                                            'border-green-500 bg-green-500': log.outcome === 'successful',
+                                            'border-yellow-500 bg-yellow-500': ['pending', 'scheduled_callback'].includes(log.outcome),
+                                            'border-red-500 bg-red-500': ['no_answer', 'wrong_number', 'busy'].includes(log.outcome),
+                                            'border-blue-500 bg-blue-500': log.outcome === 'voicemail',
+                                        }"
+                                    ></div>
+                                    
+                                    <div class="flex flex-col gap-1 -mt-1.5">
+                                        <div class="flex items-center justify-between">
+                                            <p class="font-medium text-sm flex items-center gap-2 capitalize">
+                                                {{ log.type }} 
+                                                <span class="text-muted-foreground font-normal">• {{ new Date(log.occurred_at).toLocaleString() }}</span>
+                                            </p>
+                                            <Button variant="ghost" size="icon" class="h-6 w-6 text-destructive" @click="router.delete(destroyLog(log.id).url)">
+                                                <Trash2 class="h-3 w-3" />
+                                            </Button>
+                                        </div>
+                                        <p class="text-xs font-semibold uppercase tracking-wider" 
+                                            :class="{
+                                                'text-green-600': log.outcome === 'successful',
+                                                'text-yellow-600': ['pending', 'scheduled_callback'].includes(log.outcome),
+                                                'text-red-600': ['no_answer', 'wrong_number', 'busy'].includes(log.outcome),
+                                                'text-blue-600': log.outcome === 'voicemail',
+                                            }"
+                                        >
+                                            {{ log.outcome.replace('_', ' ') }}
+                                        </p>
+                                        <p v-if="log.notes" class="text-sm text-muted-foreground mt-1">{{ log.notes }}</p>
+                                        <p class="text-xs text-muted-foreground mt-1">Logged by {{ log.user?.name || 'Unknown' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else class="text-center py-8 text-muted-foreground">
+                                <History class="h-8 w-8 mx-auto mb-2 opacity-50" />
+                                <p>No communication logs yet.</p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         </div>
     </AppLayout>
