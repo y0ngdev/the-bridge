@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('alumni', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('name');
             $table->string('email')->nullable()->unique();
             $table->json('phones')->nullable();
             $table->string('department')->nullable();
-            $table->enum('gender', ['M', 'F']);
+            $table->enum('gender', ['M', 'F'])->nullable();
 
             $table->boolean('is_futa_staff')->default(false);
             $table->date('birth_date')->nullable();

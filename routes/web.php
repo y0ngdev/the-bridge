@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlumnusController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\TenureController;
@@ -9,21 +10,27 @@ use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
 Route::middleware(['guest'])->get('/', function (Request $request) {
-    return Inertia::render('Welcome',
+    return Inertia::render(
+        'Welcome',
         [
             'canResetPassword' => Features::enabled(Features::resetPasswords()),
             'canRegister' => Features::enabled(Features::registration()),
             'status' => $request->session()->get('status'),
-        ]);
+        ]
+    );
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('home');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
 
     Route::resource('tenures', TenureController::class)->except(['show', 'destroy', 'edit', 'create']);
+
+    Route::get('alumni/birthdays', [AlumnusController::class, 'birthdays'])->name('alumni.birthdays');
+    Route::get('alumni/distribution', [AlumnusController::class, 'distribution'])->name('alumni.distribution');
+    Route::get('alumni/export', [AlumnusController::class, 'export'])->name('alumni.export');
+    Route::post('alumni/import', [AlumnusController::class, 'importStore'])->name('alumni.import.store');
+    Route::resource('alumni', AlumnusController::class);
 
 });
 

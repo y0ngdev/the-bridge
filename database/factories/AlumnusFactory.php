@@ -2,22 +2,29 @@
 
 namespace Database\Factories;
 
+use App\Enums\Department;
+use App\Models\Alumnus;
+use App\Models\Tenure;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Alumnus>
- */
 class AlumnusFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Alumnus::class;
+
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'phones' => [$this->faker->phoneNumber()],
+            'department' => $this->faker->randomElement(Department::cases()),
+            'gender' => $this->faker->randomElement(['M', 'F']),
+            'state' => $this->faker->randomElement(\App\Enums\NigerianState::cases()),
+            'unit' => $this->faker->randomElement(\App\Enums\Unit::cases()),
+            'address' => $this->faker->address(),
+            'is_futa_staff' => $this->faker->boolean(20),
+            'birth_date' => $this->faker->date(),
+            'tenure_id' => Tenure::inRandomOrder()->first()->id,
         ];
     }
 }

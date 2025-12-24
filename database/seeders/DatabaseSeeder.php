@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-// use App\Models\Alumnus;
+use App\Models\Alumnus;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->seedIfEmpty(User::class, UserSeeder::class);
         $this->seedIfEmpty(Tenure::class, TenureSeeder::class);
 
-        //        Alumnus::factory(40)->create();
+        Alumnus::factory(40)->create();
     }
 
     protected function seedIfEmpty(string $model, string $seeder): void

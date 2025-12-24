@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { index as tenuresIndex } from '@/routes/tenures';
+import { index as alumnusIndex } from '@/routes/alumni';
+import { birthdays, distribution } from '@/routes/alumni';
 import { Link } from '@inertiajs/vue3';
-
 import AppLogo from '@/components/AppLogo.vue';
 import { home } from '@/routes';
 import { NavItem } from '@/types';
-import { Cake, Calendar, HardDrive, LayoutGrid, UserCheck, Users } from 'lucide-vue-next';
+import { Cake, Calendar, HardDrive, LayoutGrid, MapPin, UserCheck, Users } from 'lucide-vue-next';
 
 const mainNavItems: NavItem[] = [
     {
@@ -25,15 +25,19 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Alumni',
-        // href: alumnusIndex().url,
-        href: home(),
+        href: alumnusIndex().url,
         icon: Users,
     },
     {
         title: 'Birthdays',
-        // href: birthdays().url,
-        href: home(),
+        href: birthdays().url,
+
         icon: Cake,
+    },
+    {
+        title: 'Distribution',
+        href: distribution().url,
+        icon: MapPin,
     },
     {
         title: 'Executives',
