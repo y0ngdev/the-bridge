@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import { edit } from '@/routes/profile';
-// import { send } from '@/routes/verification';
-import { Form, Head, Link, usePage } from '@inertiajs/vue3';
+import { Form, Head, Link, router, usePage } from '@inertiajs/vue3';
 
-// import DeleteUser from '@/components/DeleteUser.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/SettingsLayout.vue';
 import { type BreadcrumbItem } from '@/types';
+import { Camera, Trash2 } from 'lucide-vue-next';
+import { ref, computed } from 'vue';
+import { toast } from 'vue-sonner';
 
 interface Props {
     mustVerifyEmail: boolean;
@@ -29,7 +31,73 @@ const breadcrumbItems: BreadcrumbItem[] = [
 ];
 
 const page = usePage();
-const user = page.props.auth.user;
+const user = computed(() => page.props.auth.user);
+
+// Avatar upload
+const avatarInput = ref<HTMLInputElement | null>(null);
+const uploading = ref(false);
+const avatarError = ref<string | null>(null);
+
+function getInitials(name: string): string {
+    return name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+}
+
+function selectAvatar() {
+    avatarInput.value?.click();
+}
+
+function handleAvatarChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+    
+    if (!file) return;
+    
+    // Validate file type
+    if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
+        avatarError.value = 'Please select an image file (JPEG, PNG, GIF, or WebP)';
+        return;
+    }
+    
+    // Validate file size (2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        avatarError.value = 'Image must be less than 2MB';
+        return;
+    }
+    
+    avatarError.value = null;
+    uploading.value = true;
+    
+    const formData = new FormData();
+    formData.append('avatar', file);
+    
+    router.post(ProfileController.updateAvatar().url, formData, {
+        forceFormData: true,
+        onSuccess: () => {
+            toast.success('Profile photo updated!');
+            uploading.value = false;
+            if (avatarInput.value) {
+                avatarInput.value.value = '';
+            }
+        },
+        onError: (errors) => {
+            avatarError.value = errors.avatar || 'Failed to upload photo';
+            uploading.value = false;
+        },
+    });
+}
+
+function removeAvatar() {
+    router.delete(ProfileController.destroyAvatar().url, {
+        onSuccess: () => {
+            toast.success('Profile photo removed!');
+        },
+    });
+}
 </script>
 
 <template>
@@ -37,6 +105,66 @@ const user = page.props.auth.user;
         <Head title="Profile settings" />
 
         <SettingsLayout>
+            <!-- Avatar Section -->
+            <div class="flex flex-col space-y-6 mb-8">
+                <HeadingSmall title="Profile photo" description="Upload a photo for your profile" />
+                
+                <div class="flex items-center gap-6">
+                    <div class="relative group">
+                        <Avatar class="h-24 w-24 text-lg">
+                            <AvatarImage :src="user.avatar_url" :alt="user.name" />
+                            <AvatarFallback>{{ getInitials(user.name) }}</AvatarFallback>
+                        </Avatar>
+                        <button 
+                            @click="selectAvatar"
+                            class="absolute inset-0 flex items-center justify-center bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            :disabled="uploading"
+                        >
+                            <Camera class="h-6 w-6" />
+                        </button>
+                    </div>
+                    
+                    <div class="flex flex-col gap-2">
+                        <div class="flex gap-2">
+                            <Button 
+                                variant="outline" 
+                                size="sm"
+                                @click="selectAvatar"
+                                :disabled="uploading"
+                            >
+                                <Camera class="mr-2 h-4 w-4" />
+                                {{ uploading ? 'Uploading...' : 'Upload photo' }}
+                            </Button>
+                            <Button 
+                                v-if="user.avatar_url"
+                                variant="outline" 
+                                size="sm"
+                                class="text-destructive hover:text-destructive"
+                                @click="removeAvatar"
+                            >
+                                <Trash2 class="mr-2 h-4 w-4" />
+                                Remove
+                            </Button>
+                        </div>
+                        <p class="text-xs text-muted-foreground">
+                            JPG, PNG, GIF or WebP. Max 2MB.
+                        </p>
+                        <InputError v-if="avatarError" :message="avatarError" />
+                    </div>
+                    
+                    <input
+                        ref="avatarInput"
+                        type="file"
+                        accept="image/jpeg,image/png,image/gif,image/webp"
+                        class="hidden"
+                        @change="handleAvatarChange"
+                    />
+                </div>
+            </div>
+            
+            <hr class="my-6" />
+            
+            <!-- Profile Info Section -->
             <div class="flex flex-col space-y-6">
                 <HeadingSmall title="Profile information" description="Update your name and email address" />
 
@@ -101,8 +229,6 @@ const user = page.props.auth.user;
                     </div>
                 </Form>
             </div>
-
-<!--            <DeleteUser />-->
         </SettingsLayout>
     </AppLayout>
 </template>
