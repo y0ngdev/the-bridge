@@ -28,47 +28,14 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Tenure, type EnumOption, type Alumnus, type SimplePaginatedResponse } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { index, store, update, destroy, show, importStore } from '@/actions/App/Http/Controllers/AlumnusController';
 import { Plus, Edit, Trash2, Check, ChevronsUpDown, Eye, Download, Upload, Info, X } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 
-interface Tenure {
-    id: number;
-    year: string;
-}
-
-interface EnumOption {
-    value: string;
-    label: string;
-}
-
-interface Alumnus {
-    id: number;
-    name: string;
-    email: string | null;
-    phones: string[] | null;
-    department: string | null;
-    gender: string | null;
-    birth_date: string | null;
-    tenure_id: number | null;
-    unit: string | null;
-    state: string | null;
-    address: string | null;
-    past_exco_office: string | null;
-    current_exco_office: string | null;
-    is_futa_staff: boolean;
-    tenure?: Tenure | null;
-}
-
-interface PaginatedAlumni {
-    data: Alumnus[];
-    links: Array<{ url: string | null; label: string; active: boolean }>;
-    current_page: number;
-    last_page: number;
-}
+type PaginatedAlumni = SimplePaginatedResponse<Alumnus>;
 
 const props = defineProps<{
     alumni: PaginatedAlumni;

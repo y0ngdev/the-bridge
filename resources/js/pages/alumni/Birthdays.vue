@@ -13,27 +13,17 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type BirthdayAlumnus } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { birthdays, index } from '@/actions/App/Http/Controllers/AlumnusController';
 import { Cake, Mail, Phone, PartyPopper, ChevronDown, ChevronUp } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 
-interface Alumnus {
-    id: number;
-    name: string;
-    birth_date: string;
-    email: string | null;
-    phones: string[] | null;
-    dept: string | null;
-    location: string | null;
-}
-
 const props = defineProps<{
-    today: Alumnus[];
-    thisWeek: Alumnus[];
-    thisMonth: Alumnus[];
-    allByMonth: Record<string, Alumnus[]>;
+    today: BirthdayAlumnus[];
+    thisWeek: BirthdayAlumnus[];
+    thisMonth: BirthdayAlumnus[];
+    allByMonth: Record<string, BirthdayAlumnus[]>;
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [

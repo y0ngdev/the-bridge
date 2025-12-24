@@ -17,60 +17,14 @@ import {
 } from '@/components/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Tenure, type EnumOption, type AlumnusSummary, type PaginatedResponse } from '@/types';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { distribution, show } from '@/actions/App/Http/Controllers/AlumnusController';
 import { MapPin, Search, Download, Eye, Filter, Check } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 import { toast } from 'vue-sonner';
 
-interface Tenure {
-    id: number;
-    year: string;
-}
-
-interface EnumOption {
-    value: string;
-    label: string;
-}
-
-interface Alumnus {
-    id: number;
-    name: string;
-    email: string | null;
-    phones: string[] | null;
-    state: string | null;
-    unit: string | null;
-    tenure: Tenure | null;
-}
-
-interface PaginationLinks {
-    first: string | null;
-    last: string | null;
-    prev: string | null;
-    next: string | null;
-}
-
-interface PaginationMeta {
-    current_page: number;
-    from: number;
-    last_page: number;
-    links: Array<{
-        url: string | null;
-        label: string;
-        active: boolean;
-    }>;
-    path: string;
-    per_page: number;
-    to: number;
-    total: number;
-}
-
-interface PaginatedAlumni {
-    data: Alumnus[];
-    links: PaginationLinks;
-    meta: PaginationMeta;
-}
+type PaginatedAlumni = PaginatedResponse<AlumnusSummary>;
 
 const props = defineProps<{
     alumni: PaginatedAlumni;
@@ -199,8 +153,6 @@ const handleExport = () => {
     if (selectedState.value) params.append('state', selectedState.value);
     if (selectedUnit.value) params.append('unit', selectedUnit.value);
     if (selectedTenure.value) params.append('tenure_id', String(selectedTenure.value));
-
-    console.log('Export URL:', `/alumni/export?${params.toString()}`);
 
     // Redirect to export endpoint
     window.location.href = `/alumni/export?${params.toString()}`;

@@ -1,6 +1,10 @@
 import { InertiaLinkProps } from '@inertiajs/vue3';
 import type { LucideIcon } from 'lucide-vue-next';
 
+// ============================================
+// Auth & User Types
+// ============================================
+
 export interface Auth {
     user: User;
 }
@@ -15,6 +19,10 @@ export interface User {
     updated_at: string;
 }
 
+// ============================================
+// Navigation Types
+// ============================================
+
 export interface BreadcrumbItem {
     title: string;
     href: string;
@@ -27,6 +35,10 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+// ============================================
+// App Page Props
+// ============================================
+
 export type AppPageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     name: string;
     quote: { message: string; author: string };
@@ -34,14 +46,119 @@ export type AppPageProps<T extends Record<string, unknown> = Record<string, unkn
     sidebarOpen: boolean;
 };
 
-export interface User {
+// ============================================
+// Tenure Types
+// ============================================
+
+export interface Tenure {
     id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    email_verified_at: string | null;
-    created_at: string;
-    updated_at: string;
+    name?: string;
+    year: string;
 }
 
+// ============================================
+// Enum Option Type
+// ============================================
+
+export interface EnumOption {
+    value: string;
+    label: string;
+}
+
+// ============================================
+// Alumnus Types
+// ============================================
+
+/** Full Alumnus - all fields */
+export interface Alumnus {
+    id: number;
+    name: string;
+    email: string | null;
+    phones: string[] | null;
+    department: string | null;
+    gender: string | null;
+    birth_date: string | null;
+    tenure_id: number | null;
+    unit: string | null;
+    state: string | null;
+    address: string | null;
+    past_exco_office: string | null;
+    current_exco_office: string | null;
+    is_futa_staff: boolean;
+    tenure?: Tenure | null;
+}
+
+/** Minimal Alumnus for list views - subset of fields */
+export interface AlumnusSummary {
+    id: number;
+    name: string;
+    email: string | null;
+    phones: string[] | null;
+    state: string | null;
+    unit: string | null;
+    tenure: Tenure | null;
+}
+
+/** Birthday Alumnus - different structure for birthday page */
+export interface BirthdayAlumnus {
+    id: number;
+    name: string;
+    birth_date: string;
+    email: string | null;
+    phones: string[] | null;
+    dept: string | null;
+    location: string | null;
+}
+
+// ============================================
+// Pagination Types
+// ============================================
+
+/** Single pagination link */
+export interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+/** Pagination links (Laravel API Resource style) */
+export interface PaginationLinks {
+    first: string | null;
+    last: string | null;
+    prev: string | null;
+    next: string | null;
+}
+
+/** Pagination meta (Laravel API Resource style) */
+export interface PaginationMeta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    links: PaginationLink[];
+    path: string;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
+/** Paginated response with links & meta (Laravel API Resource style) */
+export interface PaginatedResponse<T> {
+    data: T[];
+    links: PaginationLinks;
+    meta: PaginationMeta;
+}
+
+/** Simple paginated response (Laravel paginate() style) */
+export interface SimplePaginatedResponse<T> {
+    data: T[];
+    links: PaginationLink[];
+    current_page: number;
+    last_page: number;
+    first_page_url?: string;
+    last_page_url?: string;
+    next_page_url?: string | null;
+    prev_page_url?: string | null;
+}
+
+// Legacy type alias
 export type BreadcrumbItemType = BreadcrumbItem;

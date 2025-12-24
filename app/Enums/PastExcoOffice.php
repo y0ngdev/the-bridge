@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum PastExcoOffice: string
 {
-    // Executive Positions
+    // Central Executive Positions
     case President = 'President';
     case VicePresidentAdmin = 'Vice President Administration';
     case VicePresidentChurchGrowth = 'Vice President Church Growth';

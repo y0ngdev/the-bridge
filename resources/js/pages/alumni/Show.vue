@@ -3,37 +3,14 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Alumnus, type EnumOption } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { index, show } from '@/actions/App/Http/Controllers/AlumnusController';
 import { ArrowLeft, Edit, Mail, Phone, MapPin, Calendar, Building, User, Briefcase, GraduationCap } from 'lucide-vue-next';
 
-interface Tenure {
-    id: number;
-    year: string;
-}
-
-interface Alumnus {
-    id: number;
-    name: string;
-    email: string | null;
-    phones: string[] | null;
-    department: string | null;
-    gender: string | null;
-    birth_date: string | null;
-    tenure_id: number | null;
-    unit: string | null;
-    state: string | null;
-    address: string | null;
-    past_exco_office: string | null;
-    current_exco_office: string | null;
-    is_futa_staff: boolean;
-    tenure?: Tenure | null;
-}
-
 const props = defineProps<{
     alumnus: Alumnus;
-    departments: { value: string; label: string }[];
+    departments: EnumOption[];
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [

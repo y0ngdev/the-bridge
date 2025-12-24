@@ -27,28 +27,13 @@ import {
 } from '@/components/ui/pagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Tenure, type SimplePaginatedResponse } from '@/types';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { Edit, Plus } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 
-interface Tenure {
-    id: number;
-    name: string;
-    year: string;
-}
-
-interface PaginatedTenures {
-    data: Tenure[];
-    links: Array<{ url: string | null; label: string; active: boolean }>;
-    current_page: number;
-    last_page: number;
-    first_page_url: string;
-    last_page_url: string;
-    next_page_url: string | null;
-    prev_page_url: string | null;
-}
+type PaginatedTenures = SimplePaginatedResponse<Tenure>;
 
 defineProps<{
     tenures: PaginatedTenures;
@@ -88,7 +73,7 @@ function handleAddSubmit() {
 
 const openEditDialog = (tenure: Tenure) => {
     editingTenure.value = tenure;
-    editForm.name = tenure.name;
+    editForm.name = tenure.name ?? '';
     editForm.year = tenure.year;
 
     showEditDialog.value = true;
