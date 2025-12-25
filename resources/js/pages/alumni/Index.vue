@@ -29,12 +29,15 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 import { type BreadcrumbItem, type Tenure, type EnumOption, type Alumnus, type SimplePaginatedResponse } from '@/types';
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { index, store, update, destroy, show, importStore } from '@/actions/App/Http/Controllers/AlumnusController';
 import { Plus, Edit, Trash2, Check, ChevronsUpDown, Eye, Download, Upload, Info, X, MessageSquarePlus } from 'lucide-vue-next';
 import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { toast } from 'vue-sonner';
+
+const page = usePage();
+const isAdmin = computed(() => page.props.auth?.user?.is_admin ?? false);
 
 type PaginatedAlumni = SimplePaginatedResponse<Alumnus>;
 
@@ -760,10 +763,10 @@ function openLogDialog(alumnus: Alumnus) {
                                     <Button variant="ghost" size="icon" @click="openLogDialog(alumnus)" title="Log Interaction">
                                         <MessageSquarePlus class="h-4 w-4 text-blue-600" />
                                     </Button>
-                                    <Button variant="ghost" size="icon" @click="openEditDialog(alumnus)">
+                                    <Button v-if="isAdmin" variant="ghost" size="icon" @click="openEditDialog(alumnus)">
                                         <Edit class="h-4 w-4" />
                                     </Button>
-                                    <Button variant="ghost" size="icon" @click="handleDelete(alumnus)">
+                                    <Button v-if="isAdmin" variant="ghost" size="icon" @click="handleDelete(alumnus)">
                                         <Trash2 class="h-4 w-4 text-destructive" />
                                     </Button>
                                 </div>

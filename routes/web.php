@@ -23,21 +23,31 @@ Route::middleware(['guest'])->get('/', function (Request $request) {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    // Member routes (all authenticated users)
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
-
-    Route::get('/analytics/outreach', [OutreachController::class, 'index'])->name('analytics.outreach');
-
-    Route::resource('tenures', TenureController::class)->except(['show', 'destroy', 'edit', 'create']);
-    Route::resource('departments', \App\Http\Controllers\DepartmentController::class)->except(['show', 'edit', 'create']);
-
+    Route::get('alumni', [AlumnusController::class, 'index'])->name('alumni.index');
     Route::get('alumni/birthdays', [AlumnusController::class, 'birthdays'])->name('alumni.birthdays');
-    Route::get('alumni/distribution', [AlumnusController::class, 'distribution'])->name('alumni.distribution');
-    Route::get('alumni/executives', [AlumnusController::class, 'executives'])->name('alumni.executives');
-    Route::get('alumni/export', [AlumnusController::class, 'export'])->name('alumni.export');
-    Route::post('alumni/import', [AlumnusController::class, 'importStore'])->name('alumni.import.store');
-    Route::resource('alumni', AlumnusController::class);
+    Route::get('alumni/{alumnus}', [AlumnusController::class, 'show'])->name('alumni.show');
     Route::post('alumni/{alumnus}/communications', [\App\Http\Controllers\CommunicationLogController::class, 'store'])->name('alumni.communications.store');
-    Route::delete('communications/{log}', [\App\Http\Controllers\CommunicationLogController::class, 'destroy'])->name('communications.destroy');
+
+    // Admin-only routes
+    Route::middleware('admin')->group(function () {
+        Route::get('/analytics/outreach', [OutreachController::class, 'index'])->name('analytics.outreach');
+
+        Route::resource('tenures', TenureController::class)->except(['show', 'destroy', 'edit', 'create']);
+        Route::resource('departments', \App\Http\Controllers\DepartmentController::class)->except(['show', 'edit', 'create']);
+
+        Route::get('alumni/distribution', [AlumnusController::class, 'distribution'])->name('alumni.distribution');
+        Route::get('alumni/executives', [AlumnusController::class, 'executives'])->name('alumni.executives');
+        Route::get('alumni/export', [AlumnusController::class, 'export'])->name('alumni.export');
+        Route::post('alumni/import', [AlumnusController::class, 'importStore'])->name('alumni.import.store');
+        Route::get('alumni/create', [AlumnusController::class, 'create'])->name('alumni.create');
+        Route::post('alumni', [AlumnusController::class, 'store'])->name('alumni.store');
+        Route::get('alumni/{alumnus}/edit', [AlumnusController::class, 'edit'])->name('alumni.edit');
+        Route::put('alumni/{alumnus}', [AlumnusController::class, 'update'])->name('alumni.update');
+        Route::delete('alumni/{alumnus}', [AlumnusController::class, 'destroy'])->name('alumni.destroy');
+        Route::delete('communications/{log}', [\App\Http\Controllers\CommunicationLogController::class, 'destroy'])->name('communications.destroy');
+    });
 
 });
 

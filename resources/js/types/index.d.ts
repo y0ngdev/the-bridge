@@ -16,6 +16,7 @@ export interface User {
     avatar?: string;
     avatar_url?: string;
     email_verified_at: string | null;
+    is_admin?: boolean;
     created_at: string;
     updated_at: string;
 }
@@ -34,6 +35,7 @@ export interface NavItem {
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon;
     isActive?: boolean;
+    adminOnly?: boolean;
 }
 
 // ============================================

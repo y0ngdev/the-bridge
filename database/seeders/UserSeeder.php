@@ -10,12 +10,18 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->create([
-            //            'first_name' => 'Demo',
-            //            'last_name' => 'User',
+        // Admin user
+        User::factory()->admin()->create([
             'name' => 'Unit Coordinator',
             'email' => 'aru@rcffuta.com',
             'password' => Hash::make('alumnirelations'),
+        ]);
+
+        // Normal member user (for logging calls)
+        User::factory()->create([
+            'name' => 'Call Logger',
+            'email' => 'member@rcffuta.com',
+            'password' => Hash::make('member123'),
         ]);
     }
 }
