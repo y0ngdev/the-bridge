@@ -1,22 +1,29 @@
 <script setup lang="ts">
+import type { ChartConfig } from '@/components/ui/chart';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent, componentToString } from '@/components/ui/chart';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem, type Tenure } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
-import { ArrowLeft, Phone, CheckCircle, Users } from 'lucide-vue-next';
+import { ArrowLeft, Phone, CheckCircle, Users, TrendingUp } from 'lucide-vue-next';
 import { index } from '@/actions/App/Http/Controllers/OutreachController';
 import { home } from '@/routes';
+import { VisAxis, VisStackedBar, VisXYContainer, VisDonut, VisSingleContainer } from '@unovis/vue';
+import { Donut } from '@unovis/ts';
+import { computed } from 'vue';
 
-defineProps<{
+const props = defineProps<{
     active_session: Tenure | null;
     stats: {
         total_reached: number;
         total_logs: number;
         success_rate: number;
+        total_alumni: number;
+        response_rate: number;
     };
     tenure_breakdown: Array<{
         tenure_name: string;
@@ -26,12 +33,45 @@ defineProps<{
     }>;
     type_breakdown: Array<{ type: string; count: number }>;
     outcome_breakdown: Array<{ outcome: string; count: number }>;
+    gender_breakdown: Array<{ gender: string; count: number; fill?: string }>;
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: home().url },
     { title: 'Outreach Analytics', href: index().url },
 ];
+
+// Chart accessors
+const xIndex = (_: any, i: number) => i;
+const yCount = (d: any) => d.count;
+
+const chartConfig = {
+    count: { label: 'Count', theme: { light: 'var(--chart-1)', dark: 'var(--chart-2)' } },
+};
+
+// Gender pie chart config - dynamic based on data
+const genderChartConfig = computed<ChartConfig>(() => {
+    const config: ChartConfig = {
+        count: { label: 'Count' },
+    };
+    props.gender_breakdown.forEach((item, i) => {
+        config[item.gender.toLowerCase()] = {
+            label: item.gender,
+            color: `var(--chart-${i + 1})`,
+        };
+    });
+    return config;
+});
+
+// Add fill property to gender data for coloring
+const genderDataWithFill = computed(() =>
+    props.gender_breakdown.map((item, i) => ({
+        ...item,
+        fill: `var(--color-${item.gender.toLowerCase()})`,
+    }))
+);
+
+const totalGenderCount = computed(() => props.gender_breakdown.reduce((sum, g) => sum + g.count, 0));
 </script>
 
 <template>
@@ -53,7 +93,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             </div>
 
             <!-- Summary Cards -->
-            <div class="grid gap-4 md:grid-cols-3">
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader class="flex flex-row items-center justify-between pb-2">
                         <CardTitle class="text-sm font-medium">Alumni Reached</CardTitle>
@@ -61,7 +101,17 @@ const breadcrumbs: BreadcrumbItem[] = [
                     </CardHeader>
                     <CardContent>
                         <div class="text-2xl font-bold">{{ stats.total_reached }}</div>
-                        <p class="text-xs text-muted-foreground">unique alumni contacted</p>
+                        <p class="text-xs text-muted-foreground">of {{ stats.total_alumni }} total</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader class="flex flex-row items-center justify-between pb-2">
+                        <CardTitle class="text-sm font-medium">Response Rate</CardTitle>
+                        <TrendingUp class="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div class="text-2xl font-bold text-blue-600">{{ stats.response_rate }}%</div>
+                        <p class="text-xs text-muted-foreground">alumni contacted</p>
                     </CardContent>
                 </Card>
                 <Card>
@@ -126,37 +176,95 @@ const breadcrumbs: BreadcrumbItem[] = [
                     </CardContent>
                 </Card>
 
-                <!-- Type Breakdown -->
+                <!-- Type Breakdown Chart -->
                 <Card>
                     <CardHeader>
                         <CardTitle>By Communication Type</CardTitle>
                         <CardDescription>Breakdown of contact methods used</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div v-if="type_breakdown.length > 0" class="space-y-4">
-                            <div v-for="item in type_breakdown" :key="item.type" class="flex items-center justify-between">
-                                <span class="text-sm font-medium">{{ item.type }}</span>
-                                <Badge>{{ item.count }}</Badge>
-                            </div>
-                        </div>
-                        <div v-else class="text-center py-4 text-muted-foreground text-sm">No data</div>
+                        <ChartContainer v-if="type_breakdown.length > 0" :config="chartConfig" class="h-[200px] w-full">
+                            <VisXYContainer :data="type_breakdown" :height="180">
+                                <VisStackedBar :x="xIndex" :y="yCount" :rounded-corners="10" />
+                                <VisAxis
+                                    type="x"
+                                    :tick-values="type_breakdown.map((_: any, i: number) => i)"
+                                    :tick-format="(v: number) => props.type_breakdown[v]?.type || ''"
+                                    :grid-line="false"
+                                    :tick-line="false"
+                                />
+                                <VisAxis type="y" :tick-format="(v: number) => Math.round(v)" :grid-line="false" :tick-line="false" />
+                            </VisXYContainer>
+                        </ChartContainer>
+                        <div v-else class="text-center py-8 text-muted-foreground text-sm">No data</div>
                     </CardContent>
                 </Card>
 
-                <!-- Outcome Breakdown -->
+                <!-- Outcome Breakdown Chart -->
                 <Card>
                     <CardHeader>
                         <CardTitle>By Outcome</CardTitle>
                         <CardDescription>Results of communication attempts</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div v-if="outcome_breakdown.length > 0" class="space-y-4">
-                            <div v-for="item in outcome_breakdown" :key="item.outcome" class="flex items-center justify-between">
-                                <span class="text-sm font-medium">{{ item.outcome }}</span>
-                                <Badge variant="outline">{{ item.count }}</Badge>
+                        <ChartContainer v-if="outcome_breakdown.length > 0" :config="chartConfig" class="h-[200px] w-full">
+                            <VisXYContainer :data="outcome_breakdown" :height="180">
+                                <VisStackedBar :x="xIndex" :y="yCount" :rounded-corners="10"/>
+                                <VisAxis
+                                    type="x"
+                                    :tick-values="outcome_breakdown.map((_: any, i: number) => i)"
+                                    :tick-format="(v: number) => props.outcome_breakdown[v]?.outcome || ''"
+                                    :grid-line="false"
+                                    :tick-line="false"
+                                />
+                                <VisAxis type="y" :tick-format="(v: number) => Math.round(v)" :grid-line="false" :tick-line="false" />
+                            </VisXYContainer>
+                        </ChartContainer>
+                        <div v-else class="text-center py-8 text-muted-foreground text-sm">No data</div>
+                    </CardContent>
+                </Card>
+
+                <!-- Gender Breakdown Pie Chart -->
+                <Card>
+                    <CardHeader>
+                        <CardTitle>By Gender</CardTitle>
+                        <CardDescription>Reached alumni by gender</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ChartContainer 
+                            v-if="gender_breakdown.length > 0" 
+                            :config="genderChartConfig" 
+                            class="mx-auto aspect-square max-h-[200px]"
+                            :style="{
+                                '--vis-donut-central-label-font-size': 'var(--text-2xl)',
+                                '--vis-donut-central-label-font-weight': 'var(--font-weight-bold)',
+                                '--vis-donut-central-label-text-color': 'var(--foreground)',
+                                '--vis-donut-central-sub-label-text-color': 'var(--muted-foreground)',
+                            }"
+                        >
+                            <VisSingleContainer :data="genderDataWithFill" :margin="{ top: 20, bottom: 20 }">
+                                <VisDonut 
+                                    :value="(d: any) => d.count" 
+                                    :color="(d: any) => d.fill"
+                                    :arc-width="30"
+                                    :pad-angle="0.02"
+                                    :central-label="totalGenderCount.toLocaleString()"
+                                    central-sub-label="Reached"
+                                />
+                                <ChartTooltip
+                                    :triggers="{
+                                        [Donut.selectors.segment]: componentToString(genderChartConfig, ChartTooltipContent, { hideLabel: true })!,
+                                    }"
+                                />
+                            </VisSingleContainer>
+                        </ChartContainer>
+                        <div v-if="gender_breakdown.length > 0" class="flex justify-center gap-4 mt-4 text-sm">
+                            <div v-for="(item, i) in gender_breakdown" :key="item.gender" class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full" :style="{ backgroundColor: `var(--chart-${i + 1})` }"></div>
+                                <span>{{ item.gender }}: {{ item.count }}</span>
                             </div>
                         </div>
-                        <div v-else class="text-center py-4 text-muted-foreground text-sm">No data</div>
+                        <div v-else class="text-center py-8 text-muted-foreground text-sm">No data</div>
                     </CardContent>
                 </Card>
             </div>
