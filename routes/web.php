@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlumnusController;
+use App\Http\Controllers\OutreachController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\TenureController;
@@ -23,6 +24,8 @@ Route::middleware(['guest'])->get('/', function (Request $request) {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
+
+    Route::get('/analytics/outreach', [OutreachController::class, 'index'])->name('analytics.outreach');
 
     Route::resource('tenures', TenureController::class)->except(['show', 'destroy', 'edit', 'create']);
     Route::resource('departments', \App\Http\Controllers\DepartmentController::class)->except(['show', 'edit', 'create']);

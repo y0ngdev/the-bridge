@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { BreadcrumbItem } from '@/types';
 import { home } from '@/routes';
 import { index as alumniIndex } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index as analyticsOutreach } from '@/actions/App/Http/Controllers/OutreachController';
 import { Link, Deferred } from '@inertiajs/vue3';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
@@ -153,33 +154,38 @@ const statConfigs = computed((): Stat[] => [
                 <template #fallback>
                     <Card>
                         <CardHeader><Skeleton class="h-6 w-48" /></CardHeader>
-                        <CardContent><Skeleton class="h-[200px]" /></CardContent>
+                        <CardContent><Skeleton class="h-[100px]" /></CardContent>
                     </Card>
                 </template>
                 <Card v-if="tenure_outreach">
-                    <CardHeader>
-                        <CardTitle>Outreach by Class Set</CardTitle>
-                        <CardDescription>
-                            <template v-if="active_session">Alumni reached during {{ active_session.name }}.</template>
-                            <template v-else>No active session set.</template>
-                        </CardDescription>
+                    <CardHeader class="flex flex-row items-center justify-between">
+                        <div>
+                            <CardTitle>Session Outreach</CardTitle>
+                            <CardDescription>
+                                <template v-if="active_session">{{ active_session.name }} ({{ active_session.year }})</template>
+                                <template v-else>No active session set</template>
+                            </CardDescription>
+                        </div>
+                        <Link :href="analyticsOutreach().url">
+                            <Button variant="outline" size="sm">View Details</Button>
+                        </Link>
                     </CardHeader>
                     <CardContent>
-                        <div v-if="tenure_outreach.length > 0" class="space-y-4">
-                            <div v-for="item in tenure_outreach" :key="item.tenure" class="flex items-center gap-4">
-                                <div class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">
-                                    {{ item.tenure.split('/')[0]?.slice(-2) || item.tenure.substring(0, 2) }}
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium">{{ item.tenure }}</p>
-                                    <div class="h-1.5 w-full bg-muted rounded-full overflow-hidden mt-1">
-                                        <div class="h-full bg-primary" :style="{ width: `${Math.min(item.reached * 5, 100)}%` }" />
-                                    </div>
-                                </div>
-                                <div class="text-sm font-medium">{{ item.reached }}</div>
+                        <div v-if="tenure_outreach.length > 0" class="grid grid-cols-3 gap-4 text-center">
+                            <div>
+                                <div class="text-2xl font-bold">{{ tenure_outreach.reduce((sum: number, t: any) => sum + t.reached, 0) }}</div>
+                                <p class="text-xs text-muted-foreground">Alumni Reached</p>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold">{{ tenure_outreach.length }}</div>
+                                <p class="text-xs text-muted-foreground">Class Sets</p>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold">{{ tenure_outreach[0]?.tenure || '—' }}</div>
+                                <p class="text-xs text-muted-foreground">Top Set</p>
                             </div>
                         </div>
-                        <div v-else class="text-center py-8 text-muted-foreground">
+                        <div v-else class="text-center py-4 text-muted-foreground">
                             <p>No outreach logged for this session yet.</p>
                         </div>
                     </CardContent>
