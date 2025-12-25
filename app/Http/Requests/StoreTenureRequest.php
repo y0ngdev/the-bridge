@@ -19,6 +19,9 @@ class StoreTenureRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'year' => ['required', 'string', 'max:20', 'unique:tenures,year'],
+            'is_active' => ['nullable', 'boolean'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
         ];
     }
 }

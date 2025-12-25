@@ -53,12 +53,15 @@ const props = defineProps<{
         tenure: string;
         initials: string;
     }>;
-    my_stats?: {
-        total: number;
-        this_month: number;
-        success_rate: number;
-        by_type: Array<{ type: string; count: number }>;
-    };
+    active_session?: {
+        id: number;
+        name: string;
+        year: string;
+    } | null;
+    tenure_outreach?: Array<{
+        tenure: string;
+        reached: number;
+    }>;
 }>();
 
 import LogActivityChart from '@/components/LogActivityChart.vue';
@@ -146,55 +149,41 @@ const statConfigs = computed((): Stat[] => [
                 </div>
             </Deferred>
 
-            <Deferred data="my_stats">
+            <Deferred data="tenure_outreach">
                 <template #fallback>
-                    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                        <Card class="col-span-3">
-                            <CardHeader><Skeleton class="h-6 w-48" /></CardHeader>
-                            <CardContent class="grid gap-4 grid-cols-3">
-                                <Skeleton v-for="i in 3" :key="i" class="h-24 w-full" />
-                            </CardContent>
-                        </Card>
-                         <Card class="col-span-4">
-                            <CardHeader><Skeleton class="h-6 w-48" /></CardHeader>
-                            <CardContent><Skeleton class="h-[200px]" /></CardContent>
-                        </Card>
-                    </div>
+                    <Card>
+                        <CardHeader><Skeleton class="h-6 w-48" /></CardHeader>
+                        <CardContent><Skeleton class="h-[200px]" /></CardContent>
+                    </Card>
                 </template>
-                <div v-if="my_stats" class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                    <!-- KPI Cards -->
-                    <Card class="col-span-3">
-                        <CardHeader>
-                            <CardTitle>My Communication Performance</CardTitle>
-                            <CardDescription>Your personal outreach statistics.</CardDescription>
-                        </CardHeader>
-                        <CardContent class="grid gap-4 grid-cols-3">
-                            <div class="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-lg border text-center">
-                                <span class="text-3xl font-bold">{{ my_stats.total }}</span>
-                                <span class="text-xs text-muted-foreground mt-1">Total Logs</span>
+                <Card v-if="tenure_outreach">
+                    <CardHeader>
+                        <CardTitle>Outreach by Class Set</CardTitle>
+                        <CardDescription>
+                            <template v-if="active_session">Alumni reached during {{ active_session.name }}.</template>
+                            <template v-else>No active session set.</template>
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div v-if="tenure_outreach.length > 0" class="space-y-4">
+                            <div v-for="item in tenure_outreach" :key="item.tenure" class="flex items-center gap-4">
+                                <div class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">
+                                    {{ item.tenure.split('/')[0]?.slice(-2) || item.tenure.substring(0, 2) }}
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium">{{ item.tenure }}</p>
+                                    <div class="h-1.5 w-full bg-muted rounded-full overflow-hidden mt-1">
+                                        <div class="h-full bg-primary" :style="{ width: `${Math.min(item.reached * 5, 100)}%` }" />
+                                    </div>
+                                </div>
+                                <div class="text-sm font-medium">{{ item.reached }}</div>
                             </div>
-                            <div class="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-lg border text-center">
-                                <span class="text-3xl font-bold">{{ my_stats.this_month }}</span>
-                                <span class="text-xs text-muted-foreground mt-1">This Month</span>
-                            </div>
-                             <div class="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-lg border text-center">
-                                <span class="text-3xl font-bold text-green-600">{{ my_stats.success_rate }}%</span>
-                                <span class="text-xs text-muted-foreground mt-1">Success Rate</span>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    
-                    <!-- Chart -->
-                    <Card class="col-span-4">
-                        <CardHeader>
-                            <CardTitle>Activity by Type</CardTitle>
-                            <CardDescription>Breakdown of your communication methods.</CardDescription>
-                        </CardHeader>
-                        <CardContent class="pl-2">
-                            <LogActivityChart :data="my_stats.by_type" />
-                        </CardContent>
-                    </Card>
-                </div>
+                        </div>
+                        <div v-else class="text-center py-8 text-muted-foreground">
+                            <p>No outreach logged for this session yet.</p>
+                        </div>
+                    </CardContent>
+                </Card>
             </Deferred>
 
             <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -2,6 +2,7 @@
 import { index, store, update } from '@/actions/App/Http/Controllers/TenureController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -13,6 +14,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -51,10 +53,16 @@ const goToPage = (page: number) => {
 const addForm = useForm({
     name: '',
     year: '',
+    is_active: false,
+    start_date: '',
+    end_date: '',
 });
 const editForm = useForm({
     name: '',
     year: '',
+    is_active: false,
+    start_date: '',
+    end_date: '',
 });
 const showAddDialog = ref(false);
 const showEditDialog = ref(false);
@@ -62,7 +70,12 @@ const showEditDialog = ref(false);
 const editingTenure = ref<Tenure | null>(null);
 
 function handleAddSubmit() {
-    addForm.post(store().url, {
+    addForm.transform((data) => ({
+        ...data,
+        is_active: Boolean(data.is_active),
+        start_date: data.start_date || null,
+        end_date: data.end_date || null,
+    })).post(store().url, {
         onSuccess: () => {
             showAddDialog.value = false;
             addForm.reset();
@@ -75,13 +88,21 @@ const openEditDialog = (tenure: Tenure) => {
     editingTenure.value = tenure;
     editForm.name = tenure.name ?? '';
     editForm.year = tenure.year;
+    editForm.is_active = tenure.is_active ?? false;
+    editForm.start_date = tenure.start_date ?? '';
+    editForm.end_date = tenure.end_date ?? '';
 
     showEditDialog.value = true;
 };
 
 function handleEditSubmit() {
     if (!editingTenure.value) return;
-    editForm.put(update(editingTenure.value.id).url, {
+    editForm.transform((data) => ({
+        ...data,
+        is_active: Boolean(data.is_active),
+        start_date: data.start_date || null,
+        end_date: data.end_date || null,
+    })).put(update(editingTenure.value.id).url, {
         onSuccess: () => {
             showEditDialog.value = false;
             editForm.reset();
@@ -142,6 +163,32 @@ function handleEditSubmit() {
                                 </div>
                             </div>
 
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <Label for="add_start_date">Start Date</Label>
+                                    <Input
+                                        id="add_start_date"
+                                        v-model="addForm.start_date"
+                                        type="date"
+                                    />
+                                    <InputError :message="addForm.errors.start_date" />
+                                </div>
+                                <div class="space-y-2">
+                                    <Label for="add_end_date">End Date</Label>
+                                    <Input
+                                        id="add_end_date"
+                                        v-model="addForm.end_date"
+                                        type="date"
+                                    />
+                                    <InputError :message="addForm.errors.end_date" />
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-2">
+                                <Checkbox id="add_is_active" v-model="addForm.is_active" />
+                                <Label for="add_is_active" class="cursor-pointer">Mark as Active Session</Label>
+                            </div>
+
                             <DialogFooter>
                                 <DialogClose as-child>
                                     <Button variant="outline" type="button">Cancel</Button>
@@ -161,6 +208,7 @@ function handleEditSubmit() {
                         <TableRow>
                             <TableHead>Name</TableHead>
                             <TableHead>Year</TableHead>
+                            <TableHead>Status</TableHead>
                             <TableHead class="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -170,6 +218,10 @@ function handleEditSubmit() {
                                 {{ tenure.name || '—' }}
                             </TableCell>
                             <TableCell>{{ tenure.year }}</TableCell>
+                            <TableCell>
+                                <Badge v-if="tenure.is_active" variant="default">Active</Badge>
+                                <span v-else class="text-muted-foreground text-xs">—</span>
+                            </TableCell>
                             <TableCell class="text-right">
                                 <Button variant="outline" size="sm" @click="openEditDialog(tenure)">
                                     <Edit class="h-4 w-4" />
@@ -239,9 +291,9 @@ function handleEditSubmit() {
                         </div>
                         <div class="grid grid-cols-1 gap-4">
                             <div class="space-y-2">
-                                <Label for="year">Year</Label>
+                                <Label for="edit_year">Year</Label>
                                 <Input
-                                    id="year"
+                                    id="edit_year"
                                     v-model="editForm.year"
                                     type="text"
                                     placeholder="e.g., 2015-2016"
@@ -250,6 +302,32 @@ function handleEditSubmit() {
                                 />
                                 <InputError :message="editForm.errors.year" />
                             </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <Label for="edit_start_date">Start Date</Label>
+                                <Input
+                                    id="edit_start_date"
+                                    v-model="editForm.start_date"
+                                    type="date"
+                                />
+                                <InputError :message="editForm.errors.start_date" />
+                            </div>
+                            <div class="space-y-2">
+                                <Label for="edit_end_date">End Date</Label>
+                                <Input
+                                    id="edit_end_date"
+                                    v-model="editForm.end_date"
+                                    type="date"
+                                />
+                                <InputError :message="editForm.errors.end_date" />
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-2">
+                            <Checkbox id="edit_is_active" v-model="editForm.is_active" />
+                            <Label for="edit_is_active" class="cursor-pointer">Mark as Active Session</Label>
                         </div>
 
                         <DialogFooter>

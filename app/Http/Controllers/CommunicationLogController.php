@@ -6,6 +6,7 @@ use App\Enums\CommunicationOutcome;
 use App\Enums\CommunicationType;
 use App\Models\Alumnus;
 use App\Models\CommunicationLog;
+use App\Models\Tenure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -21,9 +22,12 @@ class CommunicationLogController extends Controller
             'occurred_at' => ['required', 'date'],
         ]);
 
+        $activeSession = Tenure::active()->first();
+
         $alumnus->communicationLogs()->create([
             ...$validated,
             'user_id' => $request->user()->id,
+            'session_id' => $activeSession?->id,
         ]);
 
         return back()->with('success', 'Communication log added.');

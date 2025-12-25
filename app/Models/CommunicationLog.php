@@ -32,4 +32,12 @@ class CommunicationLog extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * The tenure/session during which this log was created.
+     */
+    public function session(): BelongsTo
+    {
+        return $this->belongsTo(Tenure::class, 'session_id');
+    }
 }

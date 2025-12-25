@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alumnus;
+use App\Models\CommunicationLog;
 use App\Models\Tenure;
 use Carbon\Carbon;
 use Inertia\Inertia;
@@ -71,31 +72,31 @@ class DashboardController extends Controller
                 ];
             });
 
-        // Personal Communication Log Stats
-        $user = auth()->user();
-        $myLogsQuery = $user->communicationLogs();
-        $totalLogs = $myLogsQuery->count();
-        $successfulLogs = $myLogsQuery->clone()->where('outcome', 'successful')->count();
+        // Active Session & Tenure Outreach
+        $activeSession = Tenure::active()->first();
+        $tenureOutreach = [];
 
-        $my_stats = [
-            'total' => $totalLogs,
-            'this_month' => $myLogsQuery->clone()->whereMonth('occurred_at', $today->month)->whereYear('occurred_at', $today->year)->count(),
-            'success_rate' => $totalLogs > 0 ? round(($successfulLogs / $totalLogs) * 100) : 0,
-            'by_type' => $myLogsQuery->clone()
-                ->selectRaw('type, count(*) as count')
-                ->groupBy('type')
+        if ($activeSession) {
+            $tenureOutreach = CommunicationLog::query()
+                ->join('alumni', 'communication_logs.alumnus_id', '=', 'alumni.id')
+                ->join('tenures', 'alumni.tenure_id', '=', 'tenures.id')
+                ->where('communication_logs.session_id', $activeSession->id)
+                ->selectRaw('tenures.name as tenure_name, COUNT(DISTINCT communication_logs.alumnus_id) as reached')
+                ->groupBy('tenures.id', 'tenures.name')
+                ->orderByDesc('reached')
                 ->get()
-                ->map(fn($item) => ['type' => $item->type->label(), 'count' => $item->count]),
-        ];
+                ->map(fn ($item) => ['tenure' => $item->tenure_name, 'reached' => $item->reached]);
+        }
 
         return Inertia::render('Dashboard', [
-            'stats' => Inertia::defer(fn() => $stats),
-            'gender_distribution' => Inertia::defer(fn() => $gender_distribution),
-            'state_distribution' => Inertia::defer(fn() => $state_distribution),
-            'unit_distribution' => Inertia::defer(fn() => $unit_distribution),
-            'state_unit_breakdown' => Inertia::defer(fn() => $state_unit_breakdown),
-            'recent_alumni' => Inertia::defer(fn() => $recent_alumni),
-            'my_stats' => Inertia::defer(fn() => $my_stats),
+            'stats' => Inertia::defer(fn () => $stats),
+            'gender_distribution' => Inertia::defer(fn () => $gender_distribution),
+            'state_distribution' => Inertia::defer(fn () => $state_distribution),
+            'unit_distribution' => Inertia::defer(fn () => $unit_distribution),
+            'state_unit_breakdown' => Inertia::defer(fn () => $state_unit_breakdown),
+            'recent_alumni' => Inertia::defer(fn () => $recent_alumni),
+            'active_session' => Inertia::defer(fn () => $activeSession),
+            'tenure_outreach' => Inertia::defer(fn () => $tenureOutreach),
         ]);
     }
 

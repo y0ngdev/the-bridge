@@ -55,6 +55,9 @@ export interface Tenure {
     id: number;
     name?: string;
     year: string;
+    is_active?: boolean;
+    start_date?: string | null;
+    end_date?: string | null;
 }
 
 // ============================================

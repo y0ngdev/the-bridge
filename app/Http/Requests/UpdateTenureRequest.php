@@ -20,6 +20,9 @@ class UpdateTenureRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'year' => ['required', 'string', 'max:20', Rule::unique('tenures', 'year')->ignore($this->route('tenure'))],
+            'is_active' => ['nullable', 'boolean'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
         ];
     }
 }
