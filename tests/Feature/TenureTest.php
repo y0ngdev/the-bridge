@@ -21,7 +21,7 @@ describe('Tenure Index', function () {
             ->get(route('tenures.index'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('tenures/Index')
                     ->has('tenures')
             );

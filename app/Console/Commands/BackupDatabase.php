@@ -20,7 +20,7 @@ class BackupDatabase extends Command
 
         $email = $this->option('email') ?? env('BACKUP_MAIL_TO') ?? config('mail.from.address');
 
-        if (!$email) {
+        if (! $email) {
             $this->error('No email address specified. Use --email=your@email.com or set MAIL_FROM_ADDRESS in .env');
 
             return self::FAILURE;
@@ -32,7 +32,7 @@ class BackupDatabase extends Command
         $tempZip = storage_path("app/{$zipName}");
 
         // Create backup
-        if (!$this->createBackup($tempZip)) {
+        if (! $this->createBackup($tempZip)) {
             return self::FAILURE;
         }
 
@@ -46,7 +46,7 @@ class BackupDatabase extends Command
             Mail::to($email)->send(new BackupMail($tempZip, $zipName));
             $this->info("✓ Backup sent to {$email}");
         } catch (\Exception $e) {
-            $this->error('Email failed: ' . $e->getMessage());
+            $this->error('Email failed: '.$e->getMessage());
 
             // Clean up
             if (file_exists($tempZip)) {
@@ -73,7 +73,7 @@ class BackupDatabase extends Command
     {
         $dbPath = database_path('database.sqlite');
 
-        if (!file_exists($dbPath)) {
+        if (! file_exists($dbPath)) {
             $this->error('SQLite database file not found!');
 
             return false;

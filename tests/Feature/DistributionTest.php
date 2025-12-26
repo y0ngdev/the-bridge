@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Alumnus;
-use App\Models\Tenure;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -22,7 +20,7 @@ describe('Alumni Distribution', function () {
             ->get(route('alumni.distribution'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('alumni/Distribution')
                     ->has('stateDistribution')
             );
@@ -41,7 +39,7 @@ describe('Alumni Executives', function () {
             ->get(route('alumni.executives'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('alumni/Executives')
             );
     });

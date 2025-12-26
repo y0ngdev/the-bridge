@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Calendar, RefreshCcw, AlertTriangle, CheckCircle, Users, Clock, XCircle } from 'lucide-vue-next';
+import { Calendar, RefreshCcw, AlertTriangle, CheckCircle, Users, Clock, XCircle, Trash2 } from 'lucide-vue-next';
 import { watch } from 'vue';
 import { toast } from 'vue-sonner';
 
@@ -23,11 +23,22 @@ interface SyncStatus {
     failed_at?: string;
 }
 
+interface UnsyncStatus {
+    status: 'running' | 'complete' | 'failed';
+    message: string;
+    deleted?: number;
+    failed?: number;
+    completed_at?: string;
+    started_at?: string;
+    failed_at?: string;
+}
+
 const props = defineProps<{
     isConfigured: boolean;
     alumniCount: number;
     calendarId: string;
     syncStatus: SyncStatus | null;
+    unsyncStatus: UnsyncStatus | null;
 }>();
 
 const page = usePage();
@@ -37,6 +48,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
 ];
 
 const form = useForm({});
+const unsyncForm = useForm({});
 
 const syncCalendar = () => {
     form.post('/settings/calendar/sync', {
@@ -44,15 +56,26 @@ const syncCalendar = () => {
     });
 };
 
+const unsyncCalendar = () => {
+    if (confirm('Are you sure you want to remove ALL birthday events from Google Calendar? This cannot be undone.')) {
+        unsyncForm.post('/settings/calendar/unsync', {
+            preserveScroll: true,
+        });
+    }
+};
+
 // Watch for flash messages from server
 watch(
-    () => page.props.flash as { success?: string; error?: string } | undefined,
+    () => page.props.flash as { success?: string; error?: string; warning?: string } | undefined,
     (flash) => {
         if (flash?.success) {
             toast.success(flash.success);
         }
         if (flash?.error) {
             toast.error(flash.error);
+        }
+        if (flash?.warning) {
+            toast.warning(flash.warning);
         }
     },
     { immediate: true }
@@ -110,6 +133,23 @@ watch(
                     </AlertDescription>
                 </Alert>
 
+                <!-- Unsync Status -->
+                <Alert v-if="unsyncStatus" :variant="unsyncStatus.status === 'failed' ? 'destructive' : 'default'">
+                    <RefreshCcw v-if="unsyncStatus.status === 'running'" class="h-4 w-4 animate-spin" />
+                    <CheckCircle v-else-if="unsyncStatus.status === 'complete'" class="h-4 w-4 text-green-600" />
+                    <XCircle v-else class="h-4 w-4" />
+                    <AlertTitle>
+                        {{ unsyncStatus.status === 'running' ? 'Removing Events...' : 
+                           unsyncStatus.status === 'complete' ? 'Events Removed' : 'Removal Failed' }}
+                    </AlertTitle>
+                    <AlertDescription>
+                        <p>{{ unsyncStatus.message }}</p>
+                        <p v-if="unsyncStatus.completed_at" class="text-xs text-muted-foreground mt-1">
+                            Completed: {{ unsyncStatus.completed_at }}
+                        </p>
+                    </AlertDescription>
+                </Alert>
+
                 <!-- Sync Card -->
                 <Card>
                     <CardHeader>
@@ -129,21 +169,37 @@ watch(
                             </div>
                         </div>
                         
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-4 flex-wrap">
                             <Button 
                                 @click="syncCalendar" 
-                                :disabled="form.processing || !isConfigured || syncStatus?.status === 'running'"
+                                :disabled="form.processing || !isConfigured || syncStatus?.status === 'running' || unsyncStatus?.status === 'running'"
                             >
                                 <RefreshCcw v-if="form.processing || syncStatus?.status === 'running'" class="mr-2 h-4 w-4 animate-spin" />
                                 <Calendar v-else class="mr-2 h-4 w-4" />
                                 {{ form.processing || syncStatus?.status === 'running' ? 'Syncing...' : 'Sync Birthdays to Calendar' }}
                             </Button>
+                            
+                            <Button 
+                                variant="outline"
+                                class="text-destructive hover:text-destructive"
+                                @click="unsyncCalendar" 
+                                :disabled="unsyncForm.processing || !isConfigured || syncStatus?.status === 'running' || unsyncStatus?.status === 'running'"
+                            >
+                                <RefreshCcw v-if="unsyncForm.processing || unsyncStatus?.status === 'running'" class="mr-2 h-4 w-4 animate-spin" />
+                                <Trash2 v-else class="mr-2 h-4 w-4" />
+                                {{ unsyncForm.processing || unsyncStatus?.status === 'running' ? 'Removing...' : 'Remove All Events' }}
+                            </Button>
+                            
                             <Badge v-if="!isConfigured" variant="outline">
                                 Configure first
                             </Badge>
                             <Badge v-else-if="syncStatus?.status === 'running'" variant="secondary">
                                 <Clock class="mr-1 h-3 w-3" />
-                                In progress
+                                Sync in progress
+                            </Badge>
+                            <Badge v-else-if="unsyncStatus?.status === 'running'" variant="secondary">
+                                <Clock class="mr-1 h-3 w-3" />
+                                Removal in progress
                             </Badge>
                         </div>
                         
@@ -156,3 +212,4 @@ watch(
         </SettingsLayout>
     </AppLayout>
 </template>
+

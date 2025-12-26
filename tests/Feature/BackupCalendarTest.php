@@ -12,7 +12,7 @@ describe('Backup', function () {
             ->get(route('backup.index'))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('settings/Backup')
             );
     });
@@ -24,7 +24,7 @@ describe('Calendar Settings', function () {
             ->get(route('calendar.index'))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('settings/Calendar')
             );
     });

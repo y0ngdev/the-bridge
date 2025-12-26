@@ -65,7 +65,7 @@ class DashboardController extends Controller
                         'name' => $a->name,
                         'email' => $a->email,
                         'tenure' => $a->tenure?->year ?? 'N/A',
-                        'initials' => $this->getInitials($a->name),
+                        'initials' => $a->initials,
                     ])
             ),
 
@@ -83,7 +83,7 @@ class DashboardController extends Controller
                         'id' => $a->id,
                         'name' => $a->name,
                         'office' => $a->current_exco_office,
-                        'initials' => $this->getInitials($a->name),
+                        'initials' => $a->initials,
                     ])
             ),
 
@@ -125,7 +125,7 @@ class DashboardController extends Controller
                     'name' => $alumnus->name,
                     'birth_date' => $birthDate->format('M j'),
                     'days_until' => $daysUntil,
-                    'initials' => $this->getInitials($alumnus->name),
+                    'initials' => $alumnus->initials,
                 ];
             })
             ->filter(fn ($a) => $a['days_until'] >= 0 && $a['days_until'] <= 14)
@@ -157,19 +157,5 @@ class DashboardController extends Controller
             'total_logs' => $logs->count(),
             'alumni_reached' => $logs->distinct('alumnus_id')->count('alumnus_id'),
         ];
-    }
-
-    /**
-     * Get initials from name.
-     */
-    private function getInitials(string $name): string
-    {
-        $words = explode(' ', $name);
-        $initials = '';
-        foreach ($words as $w) {
-            $initials .= strtoupper($w[0] ?? '');
-        }
-
-        return substr($initials, 0, 2);
     }
 }

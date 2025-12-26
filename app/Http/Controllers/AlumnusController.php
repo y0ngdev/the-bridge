@@ -22,36 +22,12 @@ class AlumnusController extends Controller
 {
     public function index(Request $request): Response
     {
-        $query = Alumnus::with(['tenure', 'department']);
-
-        // Search by name or email
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        // Filter by tenure
-        if ($request->filled('tenure_id')) {
-            $query->where('tenure_id', $request->tenure_id);
-        }
-
-        // Filter by unit
-        if ($request->filled('unit')) {
-            $query->where('unit', $request->unit);
-        }
-
-        // Filter by state
-        if ($request->filled('state')) {
-            $query->where('state', $request->state);
-        }
-
-        // Filter by gender
-        if ($request->filled('gender')) {
-            $query->whereRaw('LOWER(gender) = ?', [strtolower($request->gender)]);
-        }
+        $query = Alumnus::with(['tenure', 'department'])
+            ->search($request->search)
+            ->byTenure($request->tenure_id)
+            ->byUnit($request->unit)
+            ->byState($request->state)
+            ->byGender($request->gender);
 
         return Inertia::render('alumni/Index', [
             'alumni' => $query->latest()->paginate()->withQueryString(),
@@ -172,31 +148,11 @@ class AlumnusController extends Controller
 
     public function distribution(Request $request): Response
     {
-        $query = Alumnus::with('tenure');
-
-        // Filter by state
-        if ($request->filled('state')) {
-            $query->where('state', $request->state);
-        }
-
-        // Filter by unit
-        if ($request->filled('unit')) {
-            $query->where('unit', $request->unit);
-        }
-
-        // Filter by tenure
-        if ($request->filled('tenure_id')) {
-            $query->where('tenure_id', $request->tenure_id);
-        }
-
-        // Search by name or email
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
+        $query = Alumnus::with('tenure')
+            ->search($request->search)
+            ->byTenure($request->tenure_id)
+            ->byUnit($request->unit)
+            ->byState($request->state);
 
         // Get alumni counts by state for sidebar
         $stateDistribution = Alumnus::selectRaw('state, COUNT(*) as count')

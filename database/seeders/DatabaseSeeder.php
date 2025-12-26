@@ -2,14 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Alumnus;
 use App\Models\Department;
 use App\Models\Tenure;
 use App\Models\User;
-use Illuminate\Database\Seeder;
-
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Alumnus;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {

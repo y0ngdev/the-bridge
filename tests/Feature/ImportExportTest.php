@@ -1,6 +1,5 @@
 <?php
 
-use App\Exports\AlumnusExport;
 use App\Imports\AlumnusImport;
 use App\Models\Alumnus;
 use App\Models\Department;
@@ -89,7 +88,7 @@ describe('AlumnusImport Class', function () {
         $reflection = new \ReflectionMethod($import, 'findOrCreateDepartment');
         $reflection->setAccessible(true);
 
-        $departmentName = 'New Department ' . uniqid();
+        $departmentName = 'New Department '.uniqid();
         $departmentId = $reflection->invoke($import, $departmentName);
 
         expect($departmentId)->not->toBeNull();

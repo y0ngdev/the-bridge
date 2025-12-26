@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDepartmentRequest;
+use App\Http\Requests\UpdateDepartmentRequest;
 use App\Models\Department;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,28 +42,16 @@ class DepartmentController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreDepartmentRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'code' => 'required|string|max:10|unique:departments,code',
-            'name' => 'required|string|max:255',
-            'school' => 'nullable|string|max:50',
-        ]);
-
-        Department::create($validated);
+        Department::create($request->validated());
 
         return back()->with('success', 'Department created successfully.');
     }
 
-    public function update(Request $request, Department $department): RedirectResponse
+    public function update(UpdateDepartmentRequest $request, Department $department): RedirectResponse
     {
-        $validated = $request->validate([
-            'code' => 'required|string|max:10|unique:departments,code,'.$department->id,
-            'name' => 'required|string|max:255',
-            'school' => 'nullable|string|max:50',
-        ]);
-
-        $department->update($validated);
+        $department->update($request->validated());
 
         return back()->with('success', 'Department updated successfully.');
     }

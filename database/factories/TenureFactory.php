@@ -20,7 +20,7 @@ class TenureFactory extends Factory
 
         return [
             'name' => '',
-            'year' => $year . '-' . ($year + 1),
+            'year' => $year.'-'.($year + 1),
         ];
     }
 }

@@ -38,12 +38,12 @@ class BackupController
         try {
             $result = $this->createBackup();
 
-            if (!$result) {
+            if (! $result) {
                 return back()->with('error', 'Failed to create backup file.');
             }
 
             // Verify file exists before sending
-            if (!file_exists($result['path'])) {
+            if (! file_exists($result['path'])) {
                 return back()->with('error', 'Backup file was not created properly.');
             }
 
@@ -55,9 +55,9 @@ class BackupController
                 unlink($result['path']);
             }
 
-            return back()->with('success', 'Backup created and sent to ' . $request->email . '!');
+            return back()->with('success', 'Backup created and sent to '.$request->email.'!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Backup failed: ' . $e->getMessage());
+            return back()->with('error', 'Backup failed: '.$e->getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ class BackupController
     {
         $dbPath = database_path('database.sqlite');
 
-        if (!file_exists($dbPath)) {
+        if (! file_exists($dbPath)) {
             return null;
         }
 
@@ -103,7 +103,7 @@ class BackupController
         $appName = config('app.name', 'laravel-backup');
         $path = "{$appName}/{$filename}";
 
-        if (!Storage::disk('local')->exists($path)) {
+        if (! Storage::disk('local')->exists($path)) {
             abort(404, 'Backup file not found.');
         }
 
@@ -134,7 +134,7 @@ class BackupController
         }
 
         // Sort by date descending
-        usort($backups, fn($a, $b) => strtotime($b['date']) - strtotime($a['date']));
+        usort($backups, fn ($a, $b) => strtotime($b['date']) - strtotime($a['date']));
 
         return $backups;
     }
@@ -152,6 +152,6 @@ class BackupController
             $i++;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 }

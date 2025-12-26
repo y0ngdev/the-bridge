@@ -14,7 +14,7 @@ describe('Profile Settings', function () {
             ->get(route('profile.edit'))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('settings/Profile')
             );
     });
@@ -83,7 +83,7 @@ describe('Password Settings', function () {
             ->get(route('user-password.edit'))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('settings/Password')
             );
     });
@@ -95,7 +95,7 @@ describe('Appearance Settings', function () {
             ->get(route('appearance.edit'))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('settings/Appearance')
             );
     });

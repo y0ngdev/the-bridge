@@ -25,7 +25,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Admin-only routes
 
-
     Route::middleware('admin')->group(function () {
         Route::get('/analytics/outreach', [OutreachController::class, 'index'])->name('analytics.outreach');
 
@@ -50,8 +49,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('alumni/birthdays', [AlumnusController::class, 'birthdays'])->name('alumni.birthdays');
     Route::get('alumni/{alumnus}', [AlumnusController::class, 'show'])->name('alumni.show');
     Route::post('alumni/{alumnus}/communications', [\App\Http\Controllers\CommunicationLogController::class, 'store'])->name('alumni.communications.store');
-
-
 
 });
 
@@ -80,4 +77,5 @@ Route::middleware('auth')->group(function () {
 
     Route::get('settings/calendar', [\App\Http\Controllers\Settings\CalendarController::class, 'index'])->name('calendar.index');
     Route::post('settings/calendar/sync', [\App\Http\Controllers\Settings\CalendarController::class, 'sync'])->name('calendar.sync');
+    Route::post('settings/calendar/unsync', [\App\Http\Controllers\Settings\CalendarController::class, 'unsync'])->name('calendar.unsync');
 });

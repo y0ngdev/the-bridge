@@ -21,7 +21,7 @@ describe('Department Index', function () {
             ->get(route('departments.index'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('departments/Index')
             );
     });
