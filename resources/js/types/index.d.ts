@@ -81,7 +81,8 @@ export interface Alumnus {
     name: string;
     email: string | null;
     phones: string[] | null;
-    department: string | null;
+    department_id: number | null;
+    department?: { id: number; name: string; code: string } | null;
     gender: string | null;
     birth_date: string | null;
     tenure_id: number | null;

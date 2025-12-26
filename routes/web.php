@@ -23,14 +23,9 @@ Route::middleware(['guest'])->get('/', function (Request $request) {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Member routes (all authenticated users)
-    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
-    Route::get('alumni', [AlumnusController::class, 'index'])->name('alumni.index');
-    Route::get('alumni/birthdays', [AlumnusController::class, 'birthdays'])->name('alumni.birthdays');
-    Route::get('alumni/{alumnus}', [AlumnusController::class, 'show'])->name('alumni.show');
-    Route::post('alumni/{alumnus}/communications', [\App\Http\Controllers\CommunicationLogController::class, 'store'])->name('alumni.communications.store');
-
     // Admin-only routes
+
+
     Route::middleware('admin')->group(function () {
         Route::get('/analytics/outreach', [OutreachController::class, 'index'])->name('analytics.outreach');
 
@@ -48,6 +43,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('alumni/{alumnus}', [AlumnusController::class, 'destroy'])->name('alumni.destroy');
         Route::delete('communications/{log}', [\App\Http\Controllers\CommunicationLogController::class, 'destroy'])->name('communications.destroy');
     });
+
+    // Member routes (all authenticated users)
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
+    Route::get('alumni', [AlumnusController::class, 'index'])->name('alumni.index');
+    Route::get('alumni/birthdays', [AlumnusController::class, 'birthdays'])->name('alumni.birthdays');
+    Route::get('alumni/{alumnus}', [AlumnusController::class, 'show'])->name('alumni.show');
+    Route::post('alumni/{alumnus}/communications', [\App\Http\Controllers\CommunicationLogController::class, 'store'])->name('alumni.communications.store');
+
+
 
 });
 

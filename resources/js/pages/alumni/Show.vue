@@ -46,7 +46,7 @@ function formatDate(date: string | null): string {
                     </Link>
                     <div>
                         <h1 class="text-2xl font-bold">{{ alumnus.name }}</h1>
-                        <p class="text-muted-foreground">{{ alumnus.tenure?.year || 'No tenure' }} &bull; {{ departments.find(d => d.value === alumnus.department)?.label || alumnus.department || 'Unknown department' }}</p>
+                        <p class="text-muted-foreground">{{ alumnus.tenure?.year || 'No tenure' }} &bull; {{ alumnus.department?.name || 'Unknown department' }}</p>
                     </div>
                 </div>
                 <div class="flex gap-2">
@@ -112,7 +112,7 @@ function formatDate(date: string | null): string {
                             <Building class="h-5 w-5 text-muted-foreground mt-0.5" />
                             <div>
                                 <p class="text-sm text-muted-foreground">Department</p>
-                                <p class="font-medium">{{ departments.find(d => d.value === alumnus.department)?.label || alumnus.department || '—' }}</p>
+                                <p class="font-medium">{{ alumnus.department?.name || '—' }}</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3">
