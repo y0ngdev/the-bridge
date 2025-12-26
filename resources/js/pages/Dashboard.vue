@@ -109,7 +109,7 @@ const totalGender = computed(() =>
 const quickActions = [
     { title: 'Add Alumni', href: create().url, icon: UserPlus, color: 'bg-blue-500' },
     { title: 'View Birthdays', href: birthdays().url, icon: Cake, color: 'bg-pink-500' },
-    { title: 'Distribution', href: distribution().url, icon: Eye, color: 'bg-purple-500' },
+    { title: 'Location Distribution', href: distribution().url, icon: Eye, color: 'bg-purple-500' },
     { title: 'Outreach', href: analyticsOutreach().url, icon: Activity, color: 'bg-green-500' },
 ];
 </script>
@@ -395,7 +395,7 @@ const quickActions = [
                             <div v-for="dept in department_distribution" :key="dept.department" 
                                  class="flex items-center gap-3">
                                 <Badge variant="outline" class="w-14 justify-center text-[10px]">
-                                    {{ dept.department.substring(0, 5) }}
+                                    {{ dept.code }}
                                 </Badge>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-xs truncate mb-1">{{ dept.department }}</p>

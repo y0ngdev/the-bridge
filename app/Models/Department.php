@@ -40,7 +40,7 @@ class Department extends Model
     {
         return self::orderBy('name')
             ->get()
-            ->map(fn ($dept) => ['value' => $dept->code, 'label' => $dept->name])
+            ->map(fn ($dept) => ['value' => $dept->id, 'label' => $dept->name])
             ->toArray();
     }
 }

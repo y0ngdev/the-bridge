@@ -22,7 +22,7 @@ class AlumnusController extends Controller
 {
     public function index(Request $request): Response
     {
-        $query = Alumnus::with('tenure');
+        $query = Alumnus::with(['tenure', 'department']);
 
         // Search by name or email
         if ($request->filled('search')) {

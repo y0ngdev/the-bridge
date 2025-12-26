@@ -42,7 +42,7 @@ const props = defineProps<{
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Alumni', href: '/alumni' },
-    { title: 'Distribution', href: distribution().url },
+    { title: 'Location Distribution', href: distribution().url },
 ];
 
 const searchQuery = ref(props.filters.search || '');

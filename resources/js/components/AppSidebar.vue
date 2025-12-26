@@ -45,7 +45,7 @@ const allNavItems: NavItem[] = [
         icon: Cake,
     },
     {
-        title: 'Distribution',
+        title: 'Location Distribution',
         href: distribution().url,
         icon: MapPin,
         adminOnly: true,

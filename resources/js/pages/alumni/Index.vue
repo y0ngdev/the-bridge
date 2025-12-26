@@ -142,7 +142,7 @@ const addForm = useForm({
     name: '',
     email: '',
     phones: [] as string[],
-    department: '',
+    department_id: '' as string | number,
     gender: '',
     birth_date: '',
     tenure_id: '' as string | number,
@@ -158,7 +158,7 @@ const editForm = useForm({
     name: '',
     email: '',
     phones: [] as string[],
-    department: '',
+    department_id: '' as string | number,
     gender: '',
     birth_date: '',
     tenure_id: '' as string | number,
@@ -253,7 +253,7 @@ function openEditDialog(alumnus: Alumnus) {
     editForm.name = alumnus.name;
     editForm.email = alumnus.email || '';
     editForm.phones = alumnus.phones || [];
-    editForm.department = alumnus.department || '';
+    editForm.department_id = alumnus.department_id || '';
     editForm.gender = alumnus.gender || '';
     editForm.birth_date = formatBirthDateForEdit(alumnus.birth_date);
     editForm.tenure_id = alumnus.tenure_id || '';
@@ -537,8 +537,8 @@ function openLogDialog(alumnus: Alumnus) {
                                     <Label>Department</Label>
                                     <Popover v-model:open="openDepartmentCombobox">
                                         <PopoverTrigger as-child>
-                                            <Button variant="outline" role="combobox" class="justify-between w-full" :class="!addForm.department && 'text-muted-foreground'" :aria-invalid="!!addForm.errors.department">
-                                                {{ addForm.department ? departments.find(d => d.value === addForm.department)?.label : 'Select department...' }}
+                                            <Button variant="outline" role="combobox" class="justify-between w-full" :class="!addForm.department_id && 'text-muted-foreground'" :aria-invalid="!!addForm.errors.department_id">
+                                                {{ addForm.department_id ? departments.find(d => d.value === addForm.department_id)?.label : 'Select department...' }}
                                                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
@@ -548,16 +548,16 @@ function openLogDialog(alumnus: Alumnus) {
                                                 <CommandEmpty>No department found.</CommandEmpty>
                                                 <CommandList>
                                                     <CommandGroup>
-                                                        <CommandItem v-for="d in departments" :key="d.value" :value="d.label" @select="() => { addForm.department = d.value; openDepartmentCombobox = false; }">
+                                                        <CommandItem v-for="d in departments" :key="d.value" :value="d.label" @select="() => { addForm.department_id = d.value; openDepartmentCombobox = false; }">
                                                             {{ d.label }}
-                                                            <Check class="ml-auto h-4 w-4" :class="addForm.department === d.value ? 'opacity-100' : 'opacity-0'" />
+                                                            <Check class="ml-auto h-4 w-4" :class="addForm.department_id === d.value ? 'opacity-100' : 'opacity-0'" />
                                                         </CommandItem>
                                                     </CommandGroup>
                                                 </CommandList>
                                             </Command>
                                         </PopoverContent>
                                     </Popover>
-                                    <p v-if="addForm.errors.department" class="text-sm text-destructive">{{ addForm.errors.department }}</p>
+                                    <p v-if="addForm.errors.department_id" class="text-sm text-destructive">{{ addForm.errors.department_id }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="space-y-2">
@@ -750,7 +750,7 @@ function openLogDialog(alumnus: Alumnus) {
                                 {{ alumnus.name }}
                             </TableCell>
                             <TableCell>{{ alumnus.email || '—' }}</TableCell>
-                            <TableCell>{{ departments.find(d => d.value === alumnus.department)?.label || alumnus.department || '—' }}</TableCell>
+                            <TableCell>{{ alumnus.department?.name || '—' }}</TableCell>
                             <TableCell>{{ alumnus.tenure?.year || '—' }}</TableCell>
                             <TableCell>{{ alumnus.state || '—' }}</TableCell>
                             <TableCell>
@@ -881,8 +881,8 @@ function openLogDialog(alumnus: Alumnus) {
                         <Label>Department</Label>
                         <Popover v-model:open="openEditDepartmentCombobox">
                             <PopoverTrigger as-child>
-                                <Button variant="outline" role="combobox" class="justify-between w-full" :class="!editForm.department && 'text-muted-foreground'" :aria-invalid="!!editForm.errors.department">
-                                    {{ editForm.department ? departments.find(d => d.value === editForm.department)?.label : 'Select department...' }}
+                                <Button variant="outline" role="combobox" class="justify-between w-full" :class="!editForm.department_id && 'text-muted-foreground'" :aria-invalid="!!editForm.errors.department_id">
+                                    {{ editForm.department_id ? departments.find(d => d.value === editForm.department_id)?.label : 'Select department...' }}
                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                             </PopoverTrigger>
@@ -892,16 +892,16 @@ function openLogDialog(alumnus: Alumnus) {
                                     <CommandEmpty>No department found.</CommandEmpty>
                                     <CommandList>
                                         <CommandGroup>
-                                            <CommandItem v-for="d in departments" :key="d.value" :value="d.label" @select="() => { editForm.department = d.value; openEditDepartmentCombobox = false; }">
+                                            <CommandItem v-for="d in departments" :key="d.value" :value="d.label" @select="() => { editForm.department_id = d.value; openEditDepartmentCombobox = false; }">
                                                 {{ d.label }}
-                                                <Check class="ml-auto h-4 w-4" :class="editForm.department === d.value ? 'opacity-100' : 'opacity-0'" />
+                                                <Check class="ml-auto h-4 w-4" :class="editForm.department_id === d.value ? 'opacity-100' : 'opacity-0'" />
                                             </CommandItem>
                                         </CommandGroup>
                                     </CommandList>
                                 </Command>
                             </PopoverContent>
                         </Popover>
-                        <p v-if="editForm.errors.department" class="text-sm text-destructive">{{ editForm.errors.department }}</p>
+                        <p v-if="editForm.errors.department_id" class="text-sm text-destructive">{{ editForm.errors.department_id }}</p>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
