@@ -16,6 +16,7 @@ import {
 import { type BreadcrumbItem, type BirthdayAlumnus } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { birthdays, index } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import { Cake, Mail, Phone, PartyPopper, ChevronDown, ChevronUp } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 
@@ -27,7 +28,7 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Dashboard', href: dashboardIndex().url },
     { title: 'Alumni', href: index().url },
     { title: 'Birthdays', href: birthdays().url },
 ];

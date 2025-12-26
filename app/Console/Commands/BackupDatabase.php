@@ -18,7 +18,7 @@ class BackupDatabase extends Command
     {
         $this->info('Starting database backup...');
 
-        $email = $this->option('email') ?? env('BACKUP_MAIL_TO') ?? config('mail.from.address');
+        $email = $this->option('email') ?? config('notifications.backup_mail_to') ?? config('mail.from.address');
 
         if (! $email) {
             $this->error('No email address specified. Use --email=your@email.com or set MAIL_FROM_ADDRESS in .env');

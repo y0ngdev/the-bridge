@@ -11,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Calendar, RefreshCcw, AlertTriangle, CheckCircle, Users, Clock, XCircle, Trash2 } from 'lucide-vue-next';
 import { watch } from 'vue';
 import { toast } from 'vue-sonner';
+import { index, sync, unsync } from '@/actions/App/Http/Controllers/Settings/CalendarController';
 
 interface SyncStatus {
     status: 'running' | 'complete' | 'failed';
@@ -44,21 +45,21 @@ const props = defineProps<{
 const page = usePage();
 
 const breadcrumbItems: BreadcrumbItem[] = [
-    { title: 'Calendar settings', href: '/settings/calendar' },
+    { title: 'Calendar settings', href: index().url },
 ];
 
 const form = useForm({});
 const unsyncForm = useForm({});
 
 const syncCalendar = () => {
-    form.post('/settings/calendar/sync', {
+    form.post(sync().url, {
         preserveScroll: true,
     });
 };
 
 const unsyncCalendar = () => {
     if (confirm('Are you sure you want to remove ALL birthday events from Google Calendar? This cannot be undone.')) {
-        unsyncForm.post('/settings/calendar/unsync', {
+        unsyncForm.post(unsync().url, {
             preserveScroll: true,
         });
     }

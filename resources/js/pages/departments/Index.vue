@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { index, store, update, destroy } from '@/actions/App/Http/Controllers/DepartmentController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -49,7 +50,7 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Dashboard', href: dashboardIndex().url },
     { title: 'Departments', href: index().url },
 ];
 

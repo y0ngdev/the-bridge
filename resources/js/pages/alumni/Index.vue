@@ -31,6 +31,7 @@ import {
 import { type BreadcrumbItem, type Tenure, type EnumOption, type Alumnus, type SimplePaginatedResponse } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { index, store, update, destroy, show, importStore } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import { Plus, Edit, Trash2, Check, ChevronsUpDown, Eye, Download, Upload, Info, X, MessageSquarePlus } from 'lucide-vue-next';
 import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
 import { ref, computed } from 'vue';
@@ -58,7 +59,7 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Dashboard', href: dashboardIndex().url },
     { title: 'Alumni', href: index().url },
 ];
 

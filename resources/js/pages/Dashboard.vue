@@ -18,6 +18,7 @@ import { computed } from 'vue';
 import { create } from '@/actions/App/Http/Controllers/AlumnusController';
 import { birthdays, distribution, index as alumniIndex } from '@/actions/App/Http/Controllers/AlumnusController';
 import { index as analyticsOutreach } from '@/actions/App/Http/Controllers/OutreachController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 
 interface Stat {
     title: string;
@@ -45,12 +46,12 @@ const props = defineProps<{
     recent_alumni?: Array<{ id: number; name: string; email: string; tenure: string; initials: string }>;
     upcoming_birthdays?: Array<{ id: number; name: string; birth_date: string; days_until: number; initials: string }>;
     current_executives?: Array<{ id: number; name: string; office: string; initials: string }>;
-    department_distribution?: Array<{ department: string; abbreviation: string; total: number }>;
+    department_distribution?: Array<{ department: string; code: string; total: number }>;
     activity_summary?: { session: string | null; total_logs: number; alumni_reached: number };
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Dashboard', href: dashboardIndex().url },
 ];
 
 const statConfigs = computed((): Stat[] => [

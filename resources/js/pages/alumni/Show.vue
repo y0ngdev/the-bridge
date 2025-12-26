@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { type BreadcrumbItem, type Alumnus, type EnumOption } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { index, show } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import { destroy as destroyLog } from '@/actions/App/Http/Controllers/CommunicationLogController';
 import { ArrowLeft, Edit, Mail, Phone, MapPin, Calendar, Building, User, Briefcase, GraduationCap, History, Trash2 } from 'lucide-vue-next';
 import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
@@ -17,7 +18,7 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Dashboard', href: dashboardIndex().url },
     { title: 'Alumni', href: index().url },
     { title: props.alumnus.name, href: show(props.alumnus.id).url },
 ];

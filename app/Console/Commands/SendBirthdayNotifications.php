@@ -22,7 +22,7 @@ class SendBirthdayNotifications extends Command
 
     public function handle(): int
     {
-        $email = $this->option('email') ?? env('BIRTHDAY_NOTIFICATION_EMAIL') ?? env('MAIL_FROM_ADDRESS');
+        $email = $this->option('email') ?? config('notifications.birthday_notification_email') ?? config('mail.from.address');
 
         if (! $email) {
             $this->error('No email address specified. Set BIRTHDAY_NOTIFICATION_EMAIL in .env');

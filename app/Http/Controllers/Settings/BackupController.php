@@ -18,7 +18,7 @@ class BackupController
     public function index(): Response
     {
         $backups = $this->getBackupList();
-        $backupEmail = env('BACKUP_MAIL_TO', config('mail.from.address'));
+        $backupEmail = config('notifications.backup_mail_to', config('mail.from.address'));
 
         return Inertia::render('settings/Backup', [
             'backups' => $backups,

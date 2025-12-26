@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { type BreadcrumbItem, type Alumnus } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { executives, index, show } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import { Users, Mail, Phone, UserCircle, Crown, Briefcase } from 'lucide-vue-next';
 
 const props = defineProps<{
@@ -17,7 +18,7 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Dashboard', href: dashboardIndex().url },
     { title: 'Alumni', href: index().url },
     { title: 'Executives', href: executives().url },
 ];
