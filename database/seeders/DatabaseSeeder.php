@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
         $this->seedIfEmpty(Tenure::class, TenureSeeder::class);
         $this->seedIfEmpty(Department::class, DepartmentSeeder::class);
 
-        Alumnus::factory(40)->create();
+        if (app()->environment('local', 'testing')) {
+            Alumnus::factory(40)->create();
+        }
     }
 
     protected function seedIfEmpty(string $model, string $seeder): void
