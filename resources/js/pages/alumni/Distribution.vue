@@ -17,14 +17,14 @@ import {
 } from '@/components/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { type BreadcrumbItem, type Tenure, type EnumOption, type AlumnusSummary, type PaginatedResponse } from '@/types';
+import { type BreadcrumbItem, type Tenure, type EnumOption, type AlumnusSummary, type SimplePaginatedResponse, type PaginationLink } from '@/types';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { distribution, show } from '@/actions/App/Http/Controllers/AlumnusController';
+import AlumnusController from '@/actions/App/Http/Controllers/AlumnusController';
 import { MapPin, Search, Download, Eye, Filter, Check } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 import { toast } from 'vue-sonner';
 
-type PaginatedAlumni = PaginatedResponse<AlumnusSummary>;
+type PaginatedAlumni = SimplePaginatedResponse<AlumnusSummary>;
 
 const props = defineProps<{
     alumni: PaginatedAlumni;
@@ -41,8 +41,8 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Alumni', href: '/alumni' },
-    { title: 'Location Distribution', href: distribution().url },
+    { title: 'Alumni', href: AlumnusController.index().url },
+    { title: 'Location Distribution', href: AlumnusController.distribution().url },
 ];
 
 const searchQuery = ref(props.filters.search || '');
@@ -110,7 +110,7 @@ const filteredAlumniCount = computed(() => props.alumni?.total ?? 0);
 
 const applyFilters = () => {
     router.get(
-        distribution().url,
+        AlumnusController.distribution().url,
         {
             state: selectedState.value || undefined,
             unit: selectedUnit.value || undefined,
@@ -129,7 +129,7 @@ const clearFilters = () => {
     selectedUnit.value = '';
     selectedTenure.value = '';
     searchQuery.value = '';
-    router.get(distribution().url);
+    router.get(AlumnusController.distribution().url);
 };
 
 const selectState = (state: string) => {
@@ -155,7 +155,7 @@ const handleExport = () => {
     if (selectedTenure.value) params.append('tenure_id', String(selectedTenure.value));
 
     // Redirect to export endpoint
-    window.location.href = `/alumni/export?${params.toString()}`;
+    window.location.href = `${AlumnusController.export().url}?${params.toString()}`;
     
     isExportDialogOpen.value = false;
     toast.success('Export started! Download will begin shortly.');
@@ -163,7 +163,7 @@ const handleExport = () => {
 
 const paginationLinks = computed(() => {
     if (!props.alumni?.links) return [];
-    return props.alumni.links.filter(link => {
+    return props.alumni.links.filter((link: PaginationLink) => {
         // Remove "Previous" and "Next" text links
         return link.label !== '&laquo; Previous' && link.label !== 'Next &raquo;';
     });
@@ -359,7 +359,7 @@ const paginationLinks = computed(() => {
                                     <TableCell>{{ alumnus.unit || '-' }}</TableCell>
                                     <TableCell>{{ alumnus.tenure?.year || '-' }}</TableCell>
                                     <TableCell class="text-right">
-                                        <Link :href="show.url(alumnus.id)">
+                                        <Link :href="AlumnusController.show(alumnus.id).url">
                                             <Button variant="ghost" size="sm">
                                                 <Eye class="h-4 w-4" />
                                             </Button>

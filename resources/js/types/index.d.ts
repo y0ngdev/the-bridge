@@ -184,6 +184,11 @@ export interface SimplePaginatedResponse<T> {
     last_page_url?: string;
     next_page_url?: string | null;
     prev_page_url?: string | null;
+    from: number | null;
+    to: number | null;
+    total: number;
+    per_page: number;
+    path?: string;
 }
 
 // Legacy type alias

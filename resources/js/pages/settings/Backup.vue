@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Mail, Database, RefreshCcw, Download } from 'lucide-vue-next';
 import { watch } from 'vue';
 import { toast } from 'vue-sonner';
+import { index, store, download } from '@/actions/App/Http/Controllers/Settings/BackupController';
 
 interface Backup {
     name: string;
@@ -28,7 +29,7 @@ const props = defineProps<{
 const page = usePage();
 
 const breadcrumbItems: BreadcrumbItem[] = [
-    { title: 'Backup settings', href: '/settings/backup' },
+    { title: 'Backup settings', href: index().url },
 ];
 
 const form = useForm({
@@ -36,7 +37,7 @@ const form = useForm({
 });
 
 const runBackup = () => {
-    form.post('/settings/backup', {
+    form.post(store().url, {
         preserveScroll: true,
     });
 };
@@ -129,7 +130,7 @@ watch(
                                     </TableCell>
                                     <TableCell>{{ backup.date }}</TableCell>
                                     <TableCell class="text-right">
-                                        <a :href="`/settings/backup/download/${backup.name}`">
+                                        <a :href="download(backup.name).url">
                                             <Button variant="outline" size="sm">
                                                 <Download class="mr-2 h-4 w-4" />
                                                 Download

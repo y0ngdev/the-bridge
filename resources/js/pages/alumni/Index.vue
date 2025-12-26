@@ -31,6 +31,7 @@ import {
 import { type BreadcrumbItem, type Tenure, type EnumOption, type Alumnus, type SimplePaginatedResponse } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { index, store, update, destroy, show, importStore } from '@/actions/App/Http/Controllers/AlumnusController';
+import AlumnusController from '@/actions/App/Http/Controllers/AlumnusController';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import { Plus, Edit, Trash2, Check, ChevronsUpDown, Eye, Download, Upload, Info, X, MessageSquarePlus } from 'lucide-vue-next';
 import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
@@ -129,7 +130,7 @@ function getExportUrl() {
     if (exportUnit.value && exportUnit.value !== '__all__') params.append('unit', exportUnit.value);
     if (exportState.value && exportState.value !== '__all__') params.append('state', exportState.value);
     if (exportGender.value && exportGender.value !== '__all__') params.append('gender', exportGender.value);
-    return `/alumni/export?${params.toString()}`;
+    return `${AlumnusController.export().url}?${params.toString()}`;
 }
 
 // Filter state
