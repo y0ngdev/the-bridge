@@ -17,7 +17,7 @@ class AlumnusFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'phones' => [$this->faker->phoneNumber()],
-            'department' => Department::inRandomOrder()->first()?->code,
+            'department_id' => Department::inRandomOrder()->first()?->id,
             'gender' => $this->faker->randomElement(['M', 'F']),
             'state' => $this->faker->randomElement(\App\Enums\NigerianState::cases()),
             'unit' => $this->faker->randomElement(\App\Enums\Unit::cases()),
