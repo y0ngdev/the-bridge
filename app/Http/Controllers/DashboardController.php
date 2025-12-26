@@ -18,86 +18,145 @@ class DashboardController extends Controller
     {
         $today = Carbon::today();
 
-        $stats = [
-            'total_alumni' => Alumnus::count(),
-            'total_tenures' => Tenure::count(),
-            'birthdays_today' => Alumnus::whereMonth('birth_date', $today->month)
-                ->whereDay('birth_date', $today->day)
-                ->count(),
-            'new_this_month' => Alumnus::whereMonth('created_at', $today->month)
-                ->whereYear('created_at', $today->year)
-                ->count(),
-        ];
+        return Inertia::render('Dashboard', [
+            // Core Stats
+            'stats' => Inertia::defer(fn () => [
+                'total_alumni' => Alumnus::count(),
+                'total_tenures' => Tenure::count(),
+                'birthdays_today' => Alumnus::whereMonth('birth_date', $today->month)
+                    ->whereDay('birth_date', $today->day)
+                    ->count(),
+                'new_this_month' => Alumnus::whereMonth('created_at', $today->month)
+                    ->whereYear('created_at', $today->year)
+                    ->count(),
+                'futa_staff' => Alumnus::where('is_futa_staff', true)->count(),
+                'with_contact' => Alumnus::where(function ($q) {
+                    $q->whereNotNull('email')
+                        ->orWhereJsonLength('phones', '>', 0);
+                })->count(),
+            ]),
 
-        $gender_distribution = [
-            'male' => Alumnus::where('gender', 'M')->count(),
-            'female' => Alumnus::where('gender', 'F')->count(),
-            'unspecified' => Alumnus::whereNull('gender')->count(),
-        ];
+            // Gender Distribution (simple counts)
+            'gender_distribution' => Inertia::defer(fn () => [
+                'male' => Alumnus::where('gender', 'M')->count(),
+                'female' => Alumnus::where('gender', 'F')->count(),
+                'unspecified' => Alumnus::whereNull('gender')->count(),
+            ]),
 
-        $state_distribution = Alumnus::query()
-            ->selectRaw('state, count(*) as total')
-            ->whereNotNull('state')
-            ->groupBy('state')
-            ->orderByDesc('total')
-            ->get();
+            // Top Units (only top 5)
+            'unit_distribution' => Inertia::defer(
+                fn () => Alumnus::query()
+                    ->selectRaw('unit, count(*) as total')
+                    ->whereNotNull('unit')
+                    ->groupBy('unit')
+                    ->orderByDesc('total')
+                    ->limit(5)
+                    ->get()
+            ),
 
-        $unit_distribution = Alumnus::query()
-            ->selectRaw('unit, count(*) as total')
-            ->whereNotNull('unit')
-            ->groupBy('unit')
-            ->orderByDesc('total')
-            ->get();
+            // Recent Alumni
+            'recent_alumni' => Inertia::defer(
+                fn () => Alumnus::with('tenure')
+                    ->orderBy('id', 'desc')
+                    ->take(5)
+                    ->get()
+                    ->map(fn ($a) => [
+                        'id' => $a->id,
+                        'name' => $a->name,
+                        'email' => $a->email,
+                        'tenure' => $a->tenure?->year ?? 'N/A',
+                        'initials' => $this->getInitials($a->name),
+                    ])
+            ),
 
-        $state_unit_breakdown = Alumnus::query()
-            ->selectRaw('state, unit, count(*) as total')
-            ->whereNotNull('state')
-            ->whereNotNull('unit')
-            ->groupBy('state', 'unit')
-            ->orderBy('state')
-            ->orderBy('unit')
-            ->get();
+            // Upcoming Birthdays (next 14 days)
+            'upcoming_birthdays' => Inertia::defer(fn () => $this->getUpcomingBirthdays(5)),
 
-        $recent_alumni = Alumnus::with('tenure')
-            ->orderBy('id', 'desc')
-            ->take(5)
+            // Current Executives
+            'current_executives' => Inertia::defer(
+                fn () => Alumnus::whereNotNull('current_exco_office')
+                    ->where('current_exco_office', '!=', '')
+                    ->orderBy('current_exco_office')
+                    ->take(6)
+                    ->get()
+                    ->map(fn ($a) => [
+                        'id' => $a->id,
+                        'name' => $a->name,
+                        'office' => $a->current_exco_office,
+                        'initials' => $this->getInitials($a->name),
+                    ])
+            ),
+
+            // Department Distribution (top 5) - uses department relationship
+            'department_distribution' => Inertia::defer(
+                fn () => Alumnus::query()
+                    ->join('departments', 'alumni.department_id', '=', 'departments.id')
+                    ->selectRaw('departments.name as department, departments.code, count(*) as total')
+                    ->groupBy('departments.id', 'departments.name', 'departments.code')
+                    ->orderByDesc('total')
+                    ->limit(5)
+                    ->get()
+            ),
+
+            // Activity Summary (current session)
+            'activity_summary' => Inertia::defer(fn () => $this->getActivitySummary()),
+        ]);
+    }
+
+    /**
+     * Get upcoming birthdays.
+     */
+    private function getUpcomingBirthdays(int $limit): array
+    {
+        $today = Carbon::today();
+        $endDate = $today->copy()->addDays(14);
+
+        return Alumnus::whereNotNull('birth_date')
             ->get()
-            ->map(function ($alumnus) {
+            ->map(function ($alumnus) use ($today) {
+                $birthDate = $alumnus->birth_date->copy()->year($today->year);
+                if ($birthDate->lt($today)) {
+                    $birthDate->addYear();
+                }
+                $daysUntil = $today->diffInDays($birthDate, false);
+
                 return [
                     'id' => $alumnus->id,
                     'name' => $alumnus->name,
-                    'email' => $alumnus->email,
-                    'tenure' => $alumnus->tenure ? $alumnus->tenure->year : 'N/A',
+                    'birth_date' => $birthDate->format('M j'),
+                    'days_until' => $daysUntil,
                     'initials' => $this->getInitials($alumnus->name),
                 ];
-            });
+            })
+            ->filter(fn ($a) => $a['days_until'] >= 0 && $a['days_until'] <= 14)
+            ->sortBy('days_until')
+            ->take($limit)
+            ->values()
+            ->all();
+    }
 
-        // Active Session & Tenure Outreach
+    /**
+     * Get activity summary for current session.
+     */
+    private function getActivitySummary(): array
+    {
         $activeSession = Tenure::active()->first();
-        $tenureOutreach = [];
 
-        if ($activeSession) {
-            $tenureOutreach = CommunicationLog::query()
-                ->join('alumni', 'communication_logs.alumnus_id', '=', 'alumni.id')
-                ->join('tenures', 'alumni.tenure_id', '=', 'tenures.id')
-                ->where('communication_logs.session_id', $activeSession->id)
-                ->selectRaw('tenures.name as tenure_name, COUNT(DISTINCT communication_logs.alumnus_id) as reached')
-                ->groupBy('tenures.id', 'tenures.name')
-                ->orderByDesc('reached')
-                ->get()
-                ->map(fn ($item) => ['tenure' => $item->tenure_name, 'reached' => $item->reached]);
+        if (! $activeSession) {
+            return [
+                'session' => null,
+                'total_logs' => 0,
+                'alumni_reached' => 0,
+            ];
         }
 
-        return Inertia::render('Dashboard', [
-            'stats' => Inertia::defer(fn () => $stats),
-            'gender_distribution' => Inertia::defer(fn () => $gender_distribution),
-            'state_distribution' => Inertia::defer(fn () => $state_distribution),
-            'unit_distribution' => Inertia::defer(fn () => $unit_distribution),
-            'state_unit_breakdown' => Inertia::defer(fn () => $state_unit_breakdown),
-            'recent_alumni' => Inertia::defer(fn () => $recent_alumni),
-            'active_session' => Inertia::defer(fn () => $activeSession),
-            'tenure_outreach' => Inertia::defer(fn () => $tenureOutreach),
-        ]);
+        $logs = CommunicationLog::where('session_id', $activeSession->id);
+
+        return [
+            'session' => $activeSession->name.' ('.$activeSession->year.')',
+            'total_logs' => $logs->count(),
+            'alumni_reached' => $logs->distinct('alumnus_id')->count('alumnus_id'),
+        ];
     }
 
     /**

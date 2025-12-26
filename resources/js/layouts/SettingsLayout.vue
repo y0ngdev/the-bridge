@@ -26,6 +26,10 @@ const sidebarNavItems: NavItem[] = [
         title: 'Backup',
         href: '/settings/backup',
     },
+    {
+        title: 'Calendar',
+        href: '/settings/calendar',
+    },
 ];
 
 const currentPath = typeof window !== undefined ? window.location.pathname : '';
@@ -55,8 +59,8 @@ const currentPath = typeof window !== undefined ? window.location.pathname : '';
 
             <Separator class="my-6 lg:hidden" />
 
-            <div class="flex-1 md:max-w-2xl">
-                <section class="max-w-xl space-y-12">
+            <div class="flex-1 md:max-w-4xl">
+                <section class="max-w-4xl space-y-12">
                     <slot />
                 </section>
             </div>

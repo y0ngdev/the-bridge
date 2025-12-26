@@ -69,4 +69,11 @@ Route::middleware('auth')->group(function () {
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/Appearance');
     })->name('appearance.edit');
+
+    Route::get('settings/backup', [\App\Http\Controllers\Settings\BackupController::class, 'index'])->name('backup.index');
+    Route::post('settings/backup', [\App\Http\Controllers\Settings\BackupController::class, 'store'])->name('backup.store');
+    Route::get('settings/backup/download/{filename}', [\App\Http\Controllers\Settings\BackupController::class, 'download'])->name('backup.download');
+
+    Route::get('settings/calendar', [\App\Http\Controllers\Settings\CalendarController::class, 'index'])->name('calendar.index');
+    Route::post('settings/calendar/sync', [\App\Http\Controllers\Settings\CalendarController::class, 'sync'])->name('calendar.sync');
 });

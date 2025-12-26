@@ -31,6 +31,14 @@ class Alumnus extends Model
     }
 
     /**
+     * Get the department this alumnus belongs to.
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    /**
      * Alumni executive positions (post-graduation leadership roles)
      */
     //    public function executivePositions(): HasMany

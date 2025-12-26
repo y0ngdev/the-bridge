@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Alumnus;
+use App\Models\Department;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -24,6 +25,7 @@ class AlumnusImport implements ToModel, WithHeadingRow
             'name' => $row['name'] ?? null,
             'email' => $row['email'] ?? null,
             'phones' => $this->parsePhones($row['phones'] ?? $row['phone'] ?? null),
+            'department_id' => $this->findOrCreateDepartment($row['department'] ?? null),
             'gender' => $row['gender'] ?? null,
             'birth_date' => $this->parseBirthDate($row['birth_date'] ?? $row['birthday'] ?? null),
             'tenure_id' => $this->tenureId,
@@ -31,6 +33,53 @@ class AlumnusImport implements ToModel, WithHeadingRow
             'unit' => $row['unit'] ?? null,
             'address' => $row['address'] ?? $row['home_address'] ?? null,
         ]);
+    }
+
+    /**
+     * Find or create a department from string.
+     */
+    protected function findOrCreateDepartment(?string $department): ?int
+    {
+        if (! $department || empty(trim($department))) {
+            return null;
+        }
+
+        $departmentName = trim($department);
+
+        // Try to find existing department by name or code
+        $dept = Department::where('name', $departmentName)
+            ->orWhere('code', $departmentName)
+            ->first();
+
+        if ($dept) {
+            return $dept->id;
+        }
+
+        // Create new department
+        $words = explode(' ', $departmentName);
+        $code = '';
+        foreach ($words as $word) {
+            if (strlen($word) > 0) {
+                $code .= strtoupper(substr($word, 0, 1));
+            }
+        }
+
+        // Ensure code is unique
+        $baseCode = $code ?: 'DEPT';
+        $code = $baseCode;
+        $counter = 1;
+        while (Department::where('code', $code)->exists()) {
+            $code = $baseCode.$counter;
+            $counter++;
+        }
+
+        $dept = Department::create([
+            'code' => $code,
+            'name' => $departmentName,
+            'school' => 'Unknown',
+        ]);
+
+        return $dept->id;
     }
 
     /**

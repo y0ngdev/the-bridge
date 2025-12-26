@@ -1,25 +1,30 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Users, Calendar, Cake, TrendingUp, ArrowUpRight, MapPin, Briefcase, Search } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
-import { BreadcrumbItem } from '@/types';
-import { home } from '@/routes';
-import { index as alumniIndex } from '@/actions/App/Http/Controllers/AlumnusController';
-import { index as analyticsOutreach } from '@/actions/App/Http/Controllers/OutreachController';
-import { Link, Deferred } from '@inertiajs/vue3';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ref, computed } from 'vue';
+import { Deferred } from '@inertiajs/vue3';
+import { type BreadcrumbItem } from '@/types';
+import { 
+    Users, Calendar, Cake, TrendingUp, GraduationCap, Phone, 
+    UserPlus, Eye, Download, Award, Building, Activity, 
+    ArrowRight, Clock
+} from 'lucide-vue-next';
+import { computed } from 'vue';
+
+import { create } from '@/actions/App/Http/Controllers/AlumnusController';
+import { birthdays, distribution, index as alumniIndex } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index as analyticsOutreach } from '@/actions/App/Http/Controllers/OutreachController';
 
 interface Stat {
     title: string;
-    value: number | string | undefined;
+    value?: number;
     icon: any;
     description: string;
+    color?: string;
 }
 
 const props = defineProps<{
@@ -28,88 +33,85 @@ const props = defineProps<{
         total_tenures: number;
         birthdays_today: number;
         new_this_month: number;
+        futa_staff: number;
+        with_contact: number;
     };
     gender_distribution?: {
         male: number;
         female: number;
         unspecified: number;
     };
-    state_distribution?: Array<{
-        state: string;
-        total: number;
-    }>;
-    unit_distribution?: Array<{
-        unit: string;
-        total: number;
-    }>;
-    state_unit_breakdown?: Array<{
-        state: string;
-        unit: string;
-        total: number;
-    }>;
-    recent_alumni?: Array<{
-        id: number;
-        name: string;
-        email: string;
-        tenure: string;
-        initials: string;
-    }>;
-    active_session?: {
-        id: number;
-        name: string;
-        year: string;
-    } | null;
-    tenure_outreach?: Array<{
-        tenure: string;
-        reached: number;
-    }>;
+    unit_distribution?: Array<{ unit: string; total: number }>;
+    recent_alumni?: Array<{ id: number; name: string; email: string; tenure: string; initials: string }>;
+    upcoming_birthdays?: Array<{ id: number; name: string; birth_date: string; days_until: number; initials: string }>;
+    current_executives?: Array<{ id: number; name: string; office: string; initials: string }>;
+    department_distribution?: Array<{ department: string; abbreviation: string; total: number }>;
+    activity_summary?: { session: string | null; total_logs: number; alumni_reached: number };
 }>();
 
-import LogActivityChart from '@/components/LogActivityChart.vue';
-
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: home().url },
+    { title: 'Dashboard', href: '/dashboard' },
 ];
-
-const searchQuery = ref('');
-
-const filteredBreakdown = computed(() => {
-    if (!props.state_unit_breakdown) return [];
-    if (!searchQuery.value) return props.state_unit_breakdown;
-    const q = searchQuery.value.toLowerCase();
-    return props.state_unit_breakdown.filter((item) =>
-        item.state.toLowerCase().includes(q) ||
-        item.unit.toLowerCase().includes(q)
-    );
-});
 
 const statConfigs = computed((): Stat[] => [
     {
         title: 'Total Alumni',
         value: props.stats?.total_alumni,
         icon: Users,
-        description: 'Total registered members',
+        description: 'Registered members',
+        color: 'text-blue-600',
     },
     {
-        title: 'Tenures',
+        title: 'Sessions',
         value: props.stats?.total_tenures,
         icon: Calendar,
-        description: 'Academic years tracked',
+        description: 'Academic sessions',
+        color: 'text-purple-600',
     },
     {
         title: 'Birthdays Today',
         value: props.stats?.birthdays_today,
         icon: Cake,
         description: 'Celebrating today',
+        color: 'text-pink-600',
     },
     {
         title: 'New This Month',
         value: props.stats?.new_this_month,
         icon: TrendingUp,
-        description: 'Recent registrations',
+        description: 'Recent additions',
+        color: 'text-green-600',
     },
 ]);
 
+const extraStats = computed(() => [
+    {
+        title: 'FUTA Staff',
+        value: props.stats?.futa_staff,
+        icon: Building,
+        color: 'text-amber-600',
+    },
+    {
+        title: 'With Contact',
+        value: props.stats?.with_contact,
+        icon: Phone,
+        color: 'text-teal-600',
+        percentage: props.stats?.total_alumni ? Math.round((props.stats.with_contact / props.stats.total_alumni) * 100) : 0,
+    },
+]);
+
+const totalGender = computed(() => 
+    (props.gender_distribution?.male ?? 0) + 
+    (props.gender_distribution?.female ?? 0) + 
+    (props.gender_distribution?.unspecified ?? 0)
+);
+
+const quickActions = [
+    { title: 'Add Alumni', href: create().url, icon: UserPlus, color: 'bg-blue-500' },
+    { title: 'View Birthdays', href: birthdays().url, icon: Cake, color: 'bg-pink-500' },
+    { title: 'Distribution', href: distribution().url, icon: Eye, color: 'bg-purple-500' },
+    { title: 'Outreach', href: analyticsOutreach().url, icon: Activity, color: 'bg-green-500' },
+];
 </script>
 
 <template>
@@ -117,6 +119,7 @@ const statConfigs = computed((): Stat[] => [
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-1 flex-col gap-6 p-6">
+            <!-- Main Stats -->
             <Deferred data="stats">
                 <template #fallback>
                     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -126,7 +129,7 @@ const statConfigs = computed((): Stat[] => [
                                 <Skeleton class="h-4 w-4 rounded-full" />
                             </CardHeader>
                             <CardContent>
-                                <Skeleton class="h-8 w-16 mb-2" />
+                                <Skeleton class="h-8 w-16 mb-1" />
                                 <Skeleton class="h-3 w-32" />
                             </CardContent>
                         </Card>
@@ -135,276 +138,354 @@ const statConfigs = computed((): Stat[] => [
                 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card v-for="stat in statConfigs" :key="stat.title">
                         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle class="text-sm font-medium">
-                                {{ stat.title }}
-                            </CardTitle>
-                            <component :is="stat.icon" class="h-4 w-4 text-muted-foreground" />
+                            <CardTitle class="text-sm font-medium">{{ stat.title }}</CardTitle>
+                            <component :is="stat.icon" class="h-4 w-4" :class="stat.color" />
                         </CardHeader>
-                        <CardContent v-if="stats">
-                            <div class="text-2xl font-bold">{{ stat.value }}</div>
-                            <p class="text-xs text-muted-foreground">
-                                {{ stat.description }}
-                            </p>
+                        <CardContent>
+                            <div class="text-2xl font-bold">{{ stat.value ?? 0 }}</div>
+                            <p class="text-xs text-muted-foreground">{{ stat.description }}</p>
                         </CardContent>
                     </Card>
                 </div>
             </Deferred>
 
-            <Deferred data="tenure_outreach">
-                <template #fallback>
-                    <Card>
-                        <CardHeader><Skeleton class="h-6 w-48" /></CardHeader>
-                        <CardContent><Skeleton class="h-[100px]" /></CardContent>
-                    </Card>
-                </template>
-                <Card v-if="tenure_outreach">
-                    <CardHeader class="flex flex-row items-center justify-between">
-                        <div>
-                            <CardTitle>Session Outreach</CardTitle>
-                            <CardDescription>
-                                <template v-if="active_session">{{ active_session.name }} ({{ active_session.year }})</template>
-                                <template v-else>No active session set</template>
-                            </CardDescription>
-                        </div>
-                        <Link :href="analyticsOutreach().url">
-                            <Button variant="outline" size="sm">View Details</Button>
-                        </Link>
+            <!-- Quick Actions + Extra Stats -->
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Quick Actions -->
+                <Card>
+                    <CardHeader>
+                        <CardTitle class="text-sm">Quick Actions</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div v-if="tenure_outreach.length > 0" class="grid grid-cols-3 gap-4 text-center">
-                            <div>
-                                <div class="text-2xl font-bold">{{ tenure_outreach.reduce((sum: number, t: any) => sum + t.reached, 0) }}</div>
-                                <p class="text-xs text-muted-foreground">Alumni Reached</p>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-bold">{{ tenure_outreach.length }}</div>
-                                <p class="text-xs text-muted-foreground">Class Sets</p>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-bold">{{ tenure_outreach[0]?.tenure || '—' }}</div>
-                                <p class="text-xs text-muted-foreground">Top Set</p>
-                            </div>
-                        </div>
-                        <div v-else class="text-center py-4 text-muted-foreground">
-                            <p>No outreach logged for this session yet.</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <Link v-for="action in quickActions" :key="action.title" :href="action.href">
+                                <Button variant="outline" class="w-full justify-start gap-2 h-auto py-3">
+                                    <div :class="[action.color, 'p-1.5 rounded-md']">
+                                        <component :is="action.icon" class="h-3.5 w-3.5 text-white" />
+                                    </div>
+                                    <span class="text-xs">{{ action.title }}</span>
+                                </Button>
+                            </Link>
                         </div>
                     </CardContent>
                 </Card>
-            </Deferred>
 
-            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <!-- Extra Stats (FUTA Staff, Contact Info) -->
+                <Deferred data="stats">
+                    <template #fallback>
+                        <Card>
+                            <CardContent class="pt-6">
+                                <Skeleton class="h-20" />
+                            </CardContent>
+                        </Card>
+                    </template>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle class="text-sm">Highlights</CardTitle>
+                        </CardHeader>
+                        <CardContent class="space-y-4">
+                            <div v-for="stat in extraStats" :key="stat.title" class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <component :is="stat.icon" class="h-4 w-4" :class="stat.color" />
+                                    <span class="text-sm">{{ stat.title }}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold">{{ stat.value ?? 0 }}</span>
+                                    <Badge v-if="stat.percentage" variant="secondary" class="text-xs">
+                                        {{ stat.percentage }}%
+                                    </Badge>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </Deferred>
+
+                <!-- Activity Summary -->
+                <Deferred data="activity_summary">
+                    <template #fallback>
+                        <Card>
+                            <CardContent class="pt-6">
+                                <Skeleton class="h-20" />
+                            </CardContent>
+                        </Card>
+                    </template>
+                    <Card v-if="activity_summary">
+                        <CardHeader class="pb-2">
+                            <CardTitle class="text-sm flex items-center gap-2">
+                                <Activity class="h-4 w-4 text-green-600" />
+                                Session Activity
+                            </CardTitle>
+                            <CardDescription v-if="activity_summary.session">
+                                {{ activity_summary.session }}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div v-if="activity_summary.session" class="grid grid-cols-2 gap-4 text-center">
+                                <div>
+                                    <div class="text-2xl font-bold text-green-600">{{ activity_summary.alumni_reached }}</div>
+                                    <p class="text-xs text-muted-foreground">Alumni Reached</p>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold">{{ activity_summary.total_logs }}</div>
+                                    <p class="text-xs text-muted-foreground">Total Logs</p>
+                                </div>
+                            </div>
+                            <p v-else class="text-sm text-muted-foreground text-center py-4">
+                                No active session set
+                            </p>
+                        </CardContent>
+                    </Card>
+                </Deferred>
+            </div>
+
+            <!-- Middle Row: Birthdays + Gender + Executives -->
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Upcoming Birthdays -->
+                <Deferred data="upcoming_birthdays">
+                    <template #fallback>
+                        <Card>
+                            <CardHeader><Skeleton class="h-5 w-40" /></CardHeader>
+                            <CardContent class="space-y-3">
+                                <div v-for="i in 4" :key="i" class="flex gap-3 items-center">
+                                    <Skeleton class="h-8 w-8 rounded-full" />
+                                    <div class="space-y-1.5">
+                                        <Skeleton class="h-3 w-24" />
+                                        <Skeleton class="h-2 w-16" />
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </template>
+                    <Card>
+                        <CardHeader class="flex flex-row items-center justify-between">
+                            <div>
+                                <CardTitle class="text-sm flex items-center gap-2">
+                                    <Cake class="h-4 w-4 text-pink-500" />
+                                    Upcoming Birthdays
+                                </CardTitle>
+                            </div>
+                            <Link :href="birthdays().url">
+                                <Button variant="ghost" size="sm" class="h-7 text-xs">
+                                    View All <ArrowRight class="ml-1 h-3 w-3" />
+                                </Button>
+                            </Link>
+                        </CardHeader>
+                        <CardContent>
+                            <div v-if="upcoming_birthdays && upcoming_birthdays.length" class="space-y-3">
+                                <div v-for="person in upcoming_birthdays" :key="person.id" 
+                                     class="flex items-center gap-3">
+                                    <Avatar class="h-8 w-8">
+                                        <AvatarFallback class="text-xs">{{ person.initials }}</AvatarFallback>
+                                    </Avatar>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium truncate">{{ person.name }}</p>
+                                        <p class="text-xs text-muted-foreground">{{ person.birth_date }}</p>
+                                    </div>
+                                    <Badge :variant="person.days_until === 0 ? 'default' : 'secondary'" class="shrink-0">
+                                        <Clock v-if="person.days_until > 0" class="h-3 w-3 mr-1" />
+                                        {{ person.days_until === 0 ? 'Today!' : `${person.days_until}d` }}
+                                    </Badge>
+                                </div>
+                            </div>
+                            <p v-else class="text-sm text-muted-foreground text-center py-6">
+                                No upcoming birthdays in the next 2 weeks
+                            </p>
+                        </CardContent>
+                    </Card>
+                </Deferred>
+
+                <!-- Gender Distribution -->
                 <Deferred data="gender_distribution">
                     <template #fallback>
-                        <Card class="col-span-2">
-                            <CardHeader><Skeleton class="h-6 w-32" /></CardHeader>
-                            <CardContent class="space-y-4 pt-4">
-                                <div v-for="i in 3" :key="i" class="space-y-2">
-                                    <Skeleton class="h-4 w-full" />
-                                    <Skeleton class="h-2 w-full rouned-full" />
-                                </div>
-                            </CardContent>
+                        <Card>
+                            <CardHeader><Skeleton class="h-5 w-40" /></CardHeader>
+                            <CardContent><Skeleton class="h-24" /></CardContent>
                         </Card>
                     </template>
-                    <Card v-if="gender_distribution && stats" class="col-span-2">
+                    <Card v-if="gender_distribution && stats">
                         <CardHeader>
-                            <CardTitle>Gender Distribution</CardTitle>
-                            <CardDescription>Breakdown by gender identity.</CardDescription>
+                            <CardTitle class="text-sm">Gender Distribution</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <div class="space-y-4 pt-4">
-                                <div v-for="(count, gender) in gender_distribution" :key="gender" class="space-y-1.5">
-                                    <div class="flex items-center justify-between text-sm">
-                                        <span class="capitalize font-medium">{{ gender }}</span>
-                                        <span class="text-muted-foreground">{{ count }} ({{ Math.round((count / stats.total_alumni) * 100) || 0 }}%)</span>
-                                    </div>
-                                    <div class="h-2 w-full bg-muted rounded-full overflow-hidden">
-                                        <div 
-                                            class="h-full transition-all duration-500" 
-                                            :class="gender === 'male' ? 'bg-blue-500' : gender === 'female' ? 'bg-pink-500' : 'bg-gray-500'"
-                                            :style="{ width: `${(count / stats.total_alumni) * 100}%` }"
-                                        />
-                                    </div>
-                                </div>
+                        <CardContent class="space-y-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                <span class="text-sm flex-1">Male</span>
+                                <span class="font-semibold">{{ gender_distribution.male }}</span>
+                                <span class="text-xs text-muted-foreground w-10 text-right">
+                                    {{ totalGender ? Math.round((gender_distribution.male / totalGender) * 100) : 0 }}%
+                                </span>
                             </div>
+                            <Progress :model-value="totalGender ? (gender_distribution.male / totalGender) * 100 : 0" class="h-2 bg-muted [&>div]:bg-blue-500" />
+                            
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-pink-500"></div>
+                                <span class="text-sm flex-1">Female</span>
+                                <span class="font-semibold">{{ gender_distribution.female }}</span>
+                                <span class="text-xs text-muted-foreground w-10 text-right">
+                                    {{ totalGender ? Math.round((gender_distribution.female / totalGender) * 100) : 0 }}%
+                                </span>
+                            </div>
+                            <Progress :model-value="totalGender ? (gender_distribution.female / totalGender) * 100 : 0" class="h-2 bg-muted [&>div]:bg-pink-500" />
                         </CardContent>
                     </Card>
                 </Deferred>
 
-                <Deferred data="unit_distribution">
+                <!-- Current Executives -->
+                <Deferred data="current_executives">
                     <template #fallback>
-                        <Card class="col-span-2">
-                            <CardHeader><Skeleton class="h-6 w-32" /></CardHeader>
-                            <CardContent class="space-y-4 pt-4">
-                                <div v-for="i in 4" :key="i" class="flex gap-4 items-center">
+                        <Card>
+                            <CardHeader><Skeleton class="h-5 w-40" /></CardHeader>
+                            <CardContent class="space-y-3">
+                                <div v-for="i in 4" :key="i" class="flex gap-3 items-center">
                                     <Skeleton class="h-8 w-8 rounded-full" />
-                                    <div class="space-y-2">
-                                        <Skeleton class="h-3 w-32" />
-                                        <Skeleton class="h-1.5 w-24" />
+                                    <div class="space-y-1.5">
+                                        <Skeleton class="h-3 w-24" />
+                                        <Skeleton class="h-2 w-16" />
                                     </div>
                                 </div>
                             </CardContent>
                         </Card>
                     </template>
-                    <Card v-if="unit_distribution && stats" class="col-span-2">
-                        <CardHeader>
-                            <CardTitle>Top Units</CardTitle>
-                            <CardDescription>Most active alumni units.</CardDescription>
+                    <Card>
+                        <CardHeader class="flex flex-row items-center justify-between">
+                            <CardTitle class="text-sm flex items-center gap-2">
+                                <Award class="h-4 w-4 text-amber-500" />
+                                Current Executives
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div class="space-y-4">
-                                <div v-for="item in unit_distribution.slice(0, 4)" :key="item.unit" class="flex items-center gap-4">
-                                    <div class="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold">
-                                        {{ item.unit.split(' ').map(w => w[0]).join('').substring(0, 2) }}
+                            <div v-if="current_executives && current_executives.length" class="space-y-3">
+                                <div v-for="exec in current_executives" :key="exec.id" 
+                                     class="flex items-center gap-3">
+                                    <Avatar class="h-8 w-8">
+                                        <AvatarFallback class="text-xs bg-amber-100 dark:bg-amber-900">{{ exec.initials }}</AvatarFallback>
+                                    </Avatar>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium truncate">{{ exec.name }}</p>
+                                        <p class="text-xs text-muted-foreground">{{ exec.office }}</p>
                                     </div>
-                                    <div class="grid gap-1">
-                                        <p class="text-xs font-medium">{{ item.unit }}</p>
-                                        <div class="h-1.5 w-32 bg-muted rounded-full overflow-hidden">
-                                            <div class="h-full bg-primary" :style="{ width: `${(item.total / stats.total_alumni) * 100}%` }" />
+                                </div>
+                            </div>
+                            <p v-else class="text-sm text-muted-foreground text-center py-6">
+                                No current executives set
+                            </p>
+                        </CardContent>
+                    </Card>
+                </Deferred>
+            </div>
+
+            <!-- Bottom Row: Departments + Units + Recent Alumni -->
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Top Departments -->
+                <Deferred data="department_distribution">
+                    <template #fallback>
+                        <Card>
+                            <CardHeader><Skeleton class="h-5 w-40" /></CardHeader>
+                            <CardContent><Skeleton class="h-32" /></CardContent>
+                        </Card>
+                    </template>
+                    <Card v-if="department_distribution && stats">
+                        <CardHeader>
+                            <CardTitle class="text-sm flex items-center gap-2">
+                                <GraduationCap class="h-4 w-4 text-purple-500" />
+                                Top Departments
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent class="space-y-3">
+                            <div v-for="dept in department_distribution" :key="dept.department" 
+                                 class="flex items-center gap-3">
+                                <Badge variant="outline" class="w-14 justify-center text-[10px]">
+                                    {{ dept.department.substring(0, 5) }}
+                                </Badge>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs truncate mb-1">{{ dept.department }}</p>
+                                    <div class="h-2 bg-muted rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" 
+                                             :style="{ width: `${(dept.total / stats.total_alumni) * 100}%` }">
                                         </div>
                                     </div>
-                                    <div class="ml-auto text-xs font-medium">{{ item.total }}</div>
                                 </div>
+                                <span class="text-sm font-medium w-8 text-right">{{ dept.total }}</span>
                             </div>
                         </CardContent>
                     </Card>
                 </Deferred>
-            </div>
 
-            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Deferred data="state_distribution">
+                <!-- Top Units -->
+                <Deferred data="unit_distribution">
                     <template #fallback>
-                        <Card class="col-span-4">
-                            <CardHeader><Skeleton class="h-6 w-32" /></CardHeader>
-                            <CardContent><Skeleton class="h-[200px] w-full" /></CardContent>
+                        <Card>
+                            <CardHeader><Skeleton class="h-5 w-32" /></CardHeader>
+                            <CardContent><Skeleton class="h-32" /></CardContent>
                         </Card>
                     </template>
-                    <Card v-if="state_distribution && stats" class="col-span-4">
-                        <CardHeader class="flex flex-row items-center">
-                            <div class="grid gap-2">
-                                <CardTitle>Geographic Breakdown</CardTitle>
-                                <CardDescription>Alumni distribution across states.</CardDescription>
-                            </div>
+                    <Card v-if="unit_distribution && stats">
+                        <CardHeader>
+                            <CardTitle class="text-sm">Top Units</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <div class="rounded-md border">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>State</TableHead>
-                                            <TableHead class="text-right">Count</TableHead>
-                                            <TableHead class="text-right">Percentage</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        <TableRow v-for="item in state_distribution.slice(0, 5)" :key="item.state">
-                                            <TableCell class="font-medium">{{ item.state }}</TableCell>
-                                            <TableCell class="text-right">{{ item.total }}</TableCell>
-                                            <TableCell class="text-right">{{ Math.round((item.total / stats.total_alumni) * 100) }}%</TableCell>
-                                        </TableRow>
-                                        <TableRow v-if="state_distribution.length === 0">
-                                            <TableCell colspan="3" class="text-center py-4 text-muted-foreground italic">No state data available</TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
+                        <CardContent class="space-y-3">
+                            <div v-for="item in unit_distribution" :key="item.unit" 
+                                 class="flex items-center gap-3">
+                                <div class="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-[8px] font-bold shrink-0">
+                                    {{ item.unit.split(' ').map(w => w[0]).join('').substring(0, 2) }}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs truncate">{{ item.unit }}</p>
+                                    <div class="h-1.5 bg-muted rounded-full overflow-hidden mt-1">
+                                        <div class="h-full bg-primary" 
+                                             :style="{ width: `${(item.total / stats.total_alumni) * 100}%` }">
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-medium">{{ item.total }}</span>
                             </div>
                         </CardContent>
                     </Card>
                 </Deferred>
 
+                <!-- Recent Alumni -->
                 <Deferred data="recent_alumni">
                     <template #fallback>
-                        <Card class="col-span-3">
-                            <CardHeader><Skeleton class="h-6 w-32" /></CardHeader>
-                            <CardContent class="space-y-4 pt-4">
-                                <div v-for="i in 5" :key="i" class="flex gap-4 items-center">
-                                    <Skeleton class="h-9 w-9 rounded-full" />
-                                    <div class="space-y-2">
-                                        <Skeleton class="h-4 w-32" />
-                                        <Skeleton class="h-3 w-48" />
+                        <Card>
+                            <CardHeader><Skeleton class="h-5 w-32" /></CardHeader>
+                            <CardContent class="space-y-3">
+                                <div v-for="i in 5" :key="i" class="flex gap-3 items-center">
+                                    <Skeleton class="h-8 w-8 rounded-full" />
+                                    <div class="space-y-1.5">
+                                        <Skeleton class="h-3 w-24" />
+                                        <Skeleton class="h-2 w-32" />
                                     </div>
                                 </div>
                             </CardContent>
                         </Card>
                     </template>
-                    <Card v-if="recent_alumni" class="col-span-3">
-                        <CardHeader>
-                            <CardTitle>Recent Alumni</CardTitle>
-                            <CardDescription>Latest members added.</CardDescription>
+                    <Card v-if="recent_alumni">
+                        <CardHeader class="flex flex-row items-center justify-between">
+                            <CardTitle class="text-sm">Recent Alumni</CardTitle>
+                            <Link :href="alumniIndex().url">
+                                <Button variant="ghost" size="sm" class="h-7 text-xs">
+                                    View All <ArrowRight class="ml-1 h-3 w-3" />
+                                </Button>
+                            </Link>
                         </CardHeader>
                         <CardContent>
-                            <div class="space-y-8">
-                                <div v-for="alumnus in recent_alumni" :key="alumnus.id" class="flex items-center gap-4">
-                                    <Avatar class="h-9 w-9">
-                                        <AvatarFallback>{{ alumnus.initials }}</AvatarFallback>
+                            <div class="space-y-3">
+                                <div v-for="alumnus in recent_alumni" :key="alumnus.id" 
+                                     class="flex items-center gap-3">
+                                    <Avatar class="h-8 w-8">
+                                        <AvatarFallback class="text-xs">{{ alumnus.initials }}</AvatarFallback>
                                     </Avatar>
-                                    <div class="grid gap-1">
-                                        <p class="text-sm font-medium leading-none">{{ alumnus.name }}</p>
-                                        <p class="text-sm text-muted-foreground">{{ alumnus.email }}</p>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium truncate">{{ alumnus.name }}</p>
+                                        <p class="text-xs text-muted-foreground truncate">{{ alumnus.email || 'No email' }}</p>
                                     </div>
-                                    <div class="ml-auto font-medium text-xs text-muted-foreground">{{ alumnus.tenure }}</div>
-                                </div>
-                                <div v-if="recent_alumni.length === 0" class="flex h-full items-center justify-center py-10">
-                                    <p class="text-sm text-muted-foreground italic">No alumni found yet.</p>
+                                    <Badge variant="outline" class="text-xs shrink-0">{{ alumnus.tenure }}</Badge>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
                 </Deferred>
             </div>
-
-            <Deferred data="state_unit_breakdown">
-                <template #fallback>
-                    <Card>
-                        <CardHeader><Skeleton class="h-6 w-48" /></CardHeader>
-                        <CardContent><Skeleton class="h-[300px] w-full" /></CardContent>
-                    </Card>
-                </template>
-                <Card v-if="state_unit_breakdown">
-                    <CardHeader class="flex flex-row items-center justify-between">
-                        <div class="grid gap-1">
-                            <CardTitle class="flex items-center gap-2">
-                                <MapPin class="h-5 w-5 text-muted-foreground" />
-                                Detailed State & Unit Breakdown
-                            </CardTitle>
-                            <CardDescription>A comprehensive view of alumni distribution by state and unit.</CardDescription>
-                        </div>
-                        <div class="relative w-64">
-                             <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                             <Input
-                               v-model="searchQuery"
-                               type="search"
-                               placeholder="Search state or unit..."
-                               class="pl-8"
-                             />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div class="rounded-md border max-h-[400px] overflow-auto">
-                            <Table>
-                                <TableHeader class="sticky top-0 bg-background z-10 shadow-sm font-bold">
-                                    <TableRow>
-                                        <TableHead>State</TableHead>
-                                        <TableHead>Unit</TableHead>
-                                        <TableHead class="text-right">Alumni Count</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow v-for="(item, index) in filteredBreakdown" :key="index">
-                                        <TableCell class="font-medium font-bold text-blue-700 dark:text-blue-400">{{ item.state }}</TableCell>
-                                        <TableCell>{{ item.unit }}</TableCell>
-                                        <TableCell class="text-right font-medium">{{ item.total }}</TableCell>
-                                    </TableRow>
-                                    <TableRow v-if="filteredBreakdown.length === 0">
-                                        <TableCell colspan="3" class="text-center py-8 text-muted-foreground italic">
-                                            {{ state_unit_breakdown.length === 0 ? 'No distribution data available yet.' : 'No results matching your search.' }}
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </div>
-                    </CardContent>
-                </Card>
-            </Deferred>
         </div>
     </AppLayout>
 </template>
