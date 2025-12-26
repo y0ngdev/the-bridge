@@ -16,7 +16,7 @@ class TenureFactory extends Factory
      */
     public function definition(): array
     {
-        $year = $this->faker->unique()->numberBetween(2026, 2050);
+        $year = $this->faker->numberBetween(2026, 2050);
 
         return [
             'name' => '',
