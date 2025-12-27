@@ -16,9 +16,9 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { type BreadcrumbItem, type Tenure, type EnumOption, type AlumnusSummary, type SimplePaginatedResponse, type PaginationLink } from '@/types';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link, router, Deferred } from '@inertiajs/vue3';
+import { Skeleton } from '@/components/ui/skeleton';
 import AlumnusController from '@/actions/App/Http/Controllers/AlumnusController';
 import { MapPin, Search, Download, Eye, Filter, Check } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
@@ -27,8 +27,8 @@ import { toast } from 'vue-sonner';
 type PaginatedAlumni = SimplePaginatedResponse<AlumnusSummary>;
 
 const props = defineProps<{
-    alumni: PaginatedAlumni;
-    stateDistribution: Record<string, number>;
+    alumni?: PaginatedAlumni;
+    stateDistribution?: Record<string, number>;
     units: EnumOption[];
     states: EnumOption[];
     tenures: EnumOption[];
@@ -103,7 +103,7 @@ const exportFieldModels = Object.fromEntries(
 
 const totalAlumni = computed(() => {
     // Sum all counts from stateDistribution to get true total, not filtered total
-    return Object.values(props.stateDistribution).reduce((sum: number, count) => sum + (count as number), 0);
+    return Object.values(props.stateDistribution ?? {}).reduce((sum: number, count) => sum + (count as number), 0);
 });
 
 const filteredAlumniCount = computed(() => props.alumni?.total ?? 0);
@@ -163,7 +163,7 @@ const handleExport = () => {
 
 const paginationLinks = computed(() => {
     if (!props.alumni?.links) return [];
-    return props.alumni.links.filter((link: PaginationLink) => {
+    return (props.alumni.links as PaginationLink[]).filter((link: PaginationLink) => {
         // Remove "Previous" and "Next" text links
         return link.label !== '&laquo; Previous' && link.label !== 'Next &raquo;';
     });
@@ -175,41 +175,60 @@ const paginationLinks = computed(() => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex gap-6">
             <!-- Sidebar with state distribution -->
-            <Card class="w-80 h-fit sticky top-6">
-                <CardHeader>
-                    <CardTitle class="flex items-center gap-2">
-                        <MapPin class="h-5 w-5" />
-                        States
-                    </CardTitle>
-                    <CardDescription>{{ Object.keys(stateDistribution).length }} states with alumni</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ScrollArea class="h-[calc(100vh-240px)]">
-                        <div class="space-y-1">
-                            <Button
-                                variant="ghost"
-                                class="w-full justify-between"
-                                :class="{ 'bg-accent': !selectedState }"
-                                @click="selectState('')"
-                            >
-                                <span>All States</span>
-                                <span class="text-muted-foreground">{{ totalAlumni }}</span>
-                            </Button>
-                            <Button
-                                v-for="(count, state) in stateDistribution"
-                                :key="String(state)"
-                                variant="ghost"
-                                class="w-full justify-between"
-                                :class="{ 'bg-accent': selectedState === String(state) }"
-                                @click="selectState(String(state))"
-                            >
-                                <span>{{ String(state) }}</span>
-                                <span class="text-muted-foreground">{{ count }}</span>
-                            </Button>
-                        </div>
-                    </ScrollArea>
-                </CardContent>
-            </Card>
+            <Deferred data="stateDistribution">
+                <template #fallback>
+                    <Card class="w-80 h-fit sticky top-6">
+                        <CardHeader>
+                            <CardTitle class="flex items-center gap-2">
+                                <MapPin class="h-5 w-5" />
+                                States
+                            </CardTitle>
+                            <CardDescription>Loading states...</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div class="space-y-2">
+                                <Skeleton v-for="i in 10" :key="i" class="h-9 w-full" />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </template>
+
+                <Card class="w-80 h-fit sticky top-6">
+                    <CardHeader>
+                        <CardTitle class="flex items-center gap-2">
+                            <MapPin class="h-5 w-5" />
+                            States
+                        </CardTitle>
+                        <CardDescription>{{ Object.keys(stateDistribution ?? {}).length }} states with alumni</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ScrollArea class="h-[calc(100vh-240px)]">
+                            <div class="space-y-1">
+                                <Button
+                                    variant="ghost"
+                                    class="w-full justify-between"
+                                    :class="{ 'bg-accent': !selectedState }"
+                                    @click="selectState('')"
+                                >
+                                    <span>All States</span>
+                                    <span class="text-muted-foreground">{{ totalAlumni }}</span>
+                                </Button>
+                                <Button
+                                    v-for="(count, state) in stateDistribution"
+                                    :key="String(state)"
+                                    variant="ghost"
+                                    class="w-full justify-between"
+                                    :class="{ 'bg-accent': selectedState === String(state) }"
+                                    @click="selectState(String(state))"
+                                >
+                                    <span>{{ String(state) }}</span>
+                                    <span class="text-muted-foreground">{{ count }}</span>
+                                </Button>
+                            </div>
+                        </ScrollArea>
+                    </CardContent>
+                </Card>
+            </Deferred>
 
             <!-- Main content area -->
             <div class="flex-1 space-y-6">
@@ -325,104 +344,118 @@ const paginationLinks = computed(() => {
                 <Card>
                     <CardHeader>
                         <CardTitle>Alumni List</CardTitle>
-                        <CardDescription>
-                            <template v-if="alumni?.data?.length">
-                                Showing {{ alumni.from }}-{{ alumni.to }} of {{ filteredAlumniCount }} alumni
+                        <Deferred data="alumni">
+                            <template #fallback>
+                                <CardDescription>Loading alumni list...</CardDescription>
                             </template>
-                            <template v-else>
-                                No alumni found
-                            </template>
-                        </CardDescription>
+                            <CardDescription>
+                                <template v-if="alumni?.data?.length">
+                                    Showing {{ alumni.from }}-{{ alumni.to }} of {{ filteredAlumniCount }} alumni
+                                </template>
+                                <template v-else>
+                                    No alumni found
+                                </template>
+                            </CardDescription>
+                        </Deferred>
                     </CardHeader>
                     <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Name</TableHead>
-                                    <TableHead>Email</TableHead>
-                                    <TableHead>State</TableHead>
-                                    <TableHead>Unit</TableHead>
-                                    <TableHead>Tenure</TableHead>
-                                    <TableHead class="text-right">Actions</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                <TableRow v-if="alumni.data.length === 0">
-                                    <TableCell colspan="6" class="text-center py-8 text-muted-foreground">
-                                        No alumni found matching your filters
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow v-for="alumnus in alumni.data" :key="alumnus.id">
-                                    <TableCell class="font-medium">{{ alumnus.name }}</TableCell>
-                                    <TableCell>{{ alumnus.email || '-' }}</TableCell>
-                                    <TableCell>{{ alumnus.state || '-' }}</TableCell>
-                                    <TableCell>{{ alumnus.unit || '-' }}</TableCell>
-                                    <TableCell>{{ alumnus.tenure?.year || '-' }}</TableCell>
-                                    <TableCell class="text-right">
-                                        <Link :href="AlumnusController.show(alumnus.id).url">
-                                            <Button variant="ghost" size="sm">
-                                                <Eye class="h-4 w-4" />
-                                            </Button>
-                                        </Link>
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
+                        <Deferred data="alumni">
+                            <template #fallback>
+                                <div class="space-y-4">
+                                    <div class="space-y-2">
+                                        <Skeleton v-for="i in 10" :key="i" class="h-12 w-full" />
+                                    </div>
+                                </div>
+                            </template>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Name</TableHead>
+                                        <TableHead>Email</TableHead>
+                                        <TableHead>State</TableHead>
+                                        <TableHead>Unit</TableHead>
+                                        <TableHead>Tenure</TableHead>
+                                        <TableHead class="text-right">Actions</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow v-if="(alumni?.data ?? []).length === 0">
+                                        <TableCell colspan="6" class="text-center py-8 text-muted-foreground">
+                                            No alumni found matching your filters
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow v-for="alumnus in (alumni?.data ?? [])" :key="alumnus.id">
+                                        <TableCell class="font-medium">{{ alumnus.name }}</TableCell>
+                                        <TableCell>{{ alumnus.email || '-' }}</TableCell>
+                                        <TableCell>{{ alumnus.state || '-' }}</TableCell>
+                                        <TableCell>{{ alumnus.unit || '-' }}</TableCell>
+                                        <TableCell>{{ alumnus.tenure?.year || '-' }}</TableCell>
+                                        <TableCell class="text-right">
+                                            <Link :href="AlumnusController.show(alumnus.id).url">
+                                                <Button variant="ghost" size="sm">
+                                                    <Eye class="h-4 w-4" />
+                                                </Button>
+                                            </Link>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
 
-                        <!-- Pagination -->
-                        <div v-if="alumni?.last_page && alumni.last_page > 1" class="mt-6 flex justify-center gap-2">
-                            <Link 
-                                v-if="alumni?.prev_page_url"
-                                :href="alumni.first_page_url || '#'"
-                                preserve-state
-                                preserve-scroll
-                            >
-                                <Button variant="outline" size="sm">First</Button>
-                            </Link>
-                            <Link 
-                                v-if="alumni?.prev_page_url"
-                                :href="alumni.prev_page_url"
-                                preserve-state
-                                preserve-scroll
-                            >
-                                <Button variant="outline" size="sm">Previous</Button>
-                            </Link>
-                            
-                            <template v-for="(link, index) in paginationLinks" :key="index">
-                                <span v-if="link.label === '...'" class="px-3 py-2 text-sm text-muted-foreground">...</span>
-                                <Link
-                                    v-else
-                                    :href="link.url || '#'"
+                            <!-- Pagination -->
+                            <div v-if="alumni?.last_page && alumni.last_page > 1" class="mt-6 flex justify-center gap-2">
+                                <Link 
+                                    v-if="alumni?.prev_page_url"
+                                    :href="alumni.first_page_url || '#'"
                                     preserve-state
                                     preserve-scroll
                                 >
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        :class="{ 'bg-accent': link.active }"
-                                    >
-                                        {{ link.label }}
-                                    </Button>
+                                    <Button variant="outline" size="sm">First</Button>
                                 </Link>
-                            </template>
+                                <Link 
+                                    v-if="alumni?.prev_page_url"
+                                    :href="alumni.prev_page_url"
+                                    preserve-state
+                                    preserve-scroll
+                                >
+                                    <Button variant="outline" size="sm">Previous</Button>
+                                </Link>
+                                
+                                <template v-for="(link, index) in paginationLinks" :key="index">
+                                    <span v-if="link.label === '...'" class="px-3 py-2 text-sm text-muted-foreground">...</span>
+                                    <Link
+                                        v-else
+                                        :href="link.url || '#'"
+                                        preserve-state
+                                        preserve-scroll
+                                    >
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            :class="{ 'bg-accent': link.active }"
+                                        >
+                                            {{ link.label }}
+                                        </Button>
+                                    </Link>
+                                </template>
 
-                            <Link 
-                                v-if="alumni?.next_page_url"
-                                :href="alumni.next_page_url"
-                                preserve-state
-                                preserve-scroll
-                            >
-                                <Button variant="outline" size="sm">Next</Button>
-                            </Link>
-                            <Link 
-                                v-if="alumni?.next_page_url"
-                                :href="alumni.last_page_url || '#'"
-                                preserve-state
-                                preserve-scroll
-                            >
-                                <Button variant="outline" size="sm">Last</Button>
-                            </Link>
-                        </div>
+                                <Link 
+                                    v-if="alumni?.next_page_url"
+                                    :href="alumni.next_page_url"
+                                    preserve-state
+                                    preserve-scroll
+                                >
+                                    <Button variant="outline" size="sm">Next</Button>
+                                </Link>
+                                <Link 
+                                    v-if="alumni?.next_page_url"
+                                    :href="alumni.last_page_url || '#'"
+                                    preserve-state
+                                    preserve-scroll
+                                >
+                                    <Button variant="outline" size="sm">Last</Button>
+                                </Link>
+                            </div>
+                        </Deferred>
                     </CardContent>
                 </Card>
             </div>
