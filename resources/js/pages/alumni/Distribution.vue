@@ -19,7 +19,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { type BreadcrumbItem, type Tenure, type EnumOption, type AlumnusSummary, type SimplePaginatedResponse, type PaginationLink } from '@/types';
 import { Head, Link, router, Deferred } from '@inertiajs/vue3';
 import { Skeleton } from '@/components/ui/skeleton';
-import AlumnusController from '@/actions/App/Http/Controllers/AlumnusController';
+import { index, distribution, exportMethod, show } from '@/actions/App/Http/Controllers/AlumnusController';
 import { MapPin, Search, Download, Eye, Filter, Check } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 import { toast } from 'vue-sonner';
@@ -41,8 +41,8 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Alumni', href: AlumnusController.index().url },
-    { title: 'Location Distribution', href: AlumnusController.distribution().url },
+    { title: 'Alumni', href: index().url },
+    { title: 'Location Distribution', href: distribution().url },
 ];
 
 const searchQuery = ref(props.filters.search || '');
@@ -110,7 +110,7 @@ const filteredAlumniCount = computed(() => props.alumni?.total ?? 0);
 
 const applyFilters = () => {
     router.get(
-        AlumnusController.distribution().url,
+        distribution().url,
         {
             state: selectedState.value || undefined,
             unit: selectedUnit.value || undefined,
@@ -129,7 +129,7 @@ const clearFilters = () => {
     selectedUnit.value = '';
     selectedTenure.value = '';
     searchQuery.value = '';
-    router.get(AlumnusController.distribution().url);
+    router.get(distribution().url);
 };
 
 const selectState = (state: string) => {
@@ -155,7 +155,7 @@ const handleExport = () => {
     if (selectedTenure.value) params.append('tenure_id', String(selectedTenure.value));
 
     // Redirect to export endpoint
-    window.location.href = `${AlumnusController.export().url}?${params.toString()}`;
+    window.location.href = `${exportMethod().url}?${params.toString()}`;
     
     isExportDialogOpen.value = false;
     toast.success('Export started! Download will begin shortly.');
@@ -391,7 +391,7 @@ const paginationLinks = computed(() => {
                                         <TableCell>{{ alumnus.unit || '-' }}</TableCell>
                                         <TableCell>{{ alumnus.tenure?.year || '-' }}</TableCell>
                                         <TableCell class="text-right">
-                                            <Link :href="AlumnusController.show(alumnus.id).url">
+                                            <Link :href="show(alumnus.id).url">
                                                 <Button variant="ghost" size="sm">
                                                     <Eye class="h-4 w-4" />
                                                 </Button>

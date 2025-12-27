@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PasswordController from '@/actions/App/Http/Controllers/Settings/PasswordController';
+import { update } from '@/actions/App/Http/Controllers/Settings/PasswordController';
 import InputError from '@/components/InputError.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/SettingsLayout.vue';
@@ -29,7 +29,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
                 <HeadingSmall title="Update password" description="Ensure your account is using a long, random password to stay secure" />
 
                 <Form
-                    v-bind="PasswordController.update.form()"
+                    v-bind="update.form()"
                     :options="{
                         preserveScroll: true,
                     }"

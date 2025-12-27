@@ -115,7 +115,6 @@ export interface BirthdayAlumnus {
     email: string | null;
     phones: string[] | null;
     dept: string | null;
-    dept: string | null;
     location: string | null;
 }
 
