@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Tenure extends Model
 {
@@ -19,7 +21,7 @@ class Tenure extends Model
         ];
     }
 
-    public function alumni(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function alumni(): HasMany
     {
         return $this->hasMany(Alumnus::class);
     }
@@ -27,7 +29,7 @@ class Tenure extends Model
     /**
      * Scope for the currently active tenure/session.
      */
-    public function scopeActive($query): \Illuminate\Database\Eloquent\Builder
+    public function scopeActive($query): Builder
     {
         return $query->where('is_active', true);
     }

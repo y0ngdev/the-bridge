@@ -68,7 +68,7 @@ class RedemptionWeekAttendanceController extends Controller
         $eventDay = request()->input('event_day');
         $alumnusIds = request()->input('alumnus_ids', []);
 
-        if (empty($alumnusIds) || ! $eventDay) {
+        if (empty($alumnusIds) || !$eventDay) {
             return redirect()->back()->with('error', 'No attendances selected.');
         }
 

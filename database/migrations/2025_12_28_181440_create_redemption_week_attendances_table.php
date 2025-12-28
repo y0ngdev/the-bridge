@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->foreignId('alumnus_id')->constrained('alumni')->cascadeOnDelete();
 
             $table->foreignId('marked_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('event_day');
             $table->timestamps();
 
             $table->unique(['session_id', 'alumnus_id', 'event_day'], 'unique_attendance');

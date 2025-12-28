@@ -38,7 +38,7 @@ class RedemptionWeekSessionController extends Controller
         return Inertia::render('redemption-week/Index', [
             'sessions' => $sessions,
             'totalAlumni' => $totalAlumni,
-            'eventDays' => collect(RedemptionWeekDay::ordered())->map(fn ($day) => [
+            'eventDays' => collect(RedemptionWeekDay::ordered())->map(fn($day) => [
                 'value' => $day->value,
                 'label' => $day->label(),
             ]),
@@ -94,7 +94,7 @@ class RedemptionWeekSessionController extends Controller
             'totalAlumni' => $totalAlumni,
             'totalAttendees' => $session->total_attendees,
             'perfectAttendance' => $session->perfect_attendance_count,
-            'eventDays' => collect(RedemptionWeekDay::ordered())->map(fn ($day) => [
+            'eventDays' => collect(RedemptionWeekDay::ordered())->map(fn($day) => [
                 'value' => $day->value,
                 'label' => $day->label(),
             ]),
