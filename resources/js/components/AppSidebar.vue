@@ -6,11 +6,12 @@ import { index as tenuresIndex } from '@/routes/tenures';
 import { index as departmentsIndex } from '@/routes/departments';
 import { index as alumnusIndex } from '@/routes/alumni';
 import { birthdays, distribution, executives } from '@/routes/alumni';
+import { index as rwIndex } from '@/routes/redemption-week';
 import { Link, usePage } from '@inertiajs/vue3';
 import AppLogo from '@/components/AppLogo.vue';
 import { home } from '@/routes';
 import { NavItem } from '@/types';
-import { Building2, Cake, Calendar, HardDrive, LayoutGrid, MapPin, UserCheck, Users } from 'lucide-vue-next';
+import { Building2, Cake, Calendar, CalendarDays, HardDrive, LayoutGrid, MapPin, UserCheck, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 const page = usePage();
@@ -38,6 +39,11 @@ const allNavItems: NavItem[] = [
         title: 'Alumni',
         href: alumnusIndex().url,
         icon: Users,
+    },
+    {
+        title: 'Redemption Week',
+        href: rwIndex().url,
+        icon: CalendarDays,
     },
     {
         title: 'Birthdays',

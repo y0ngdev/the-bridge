@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AlumnusController;
 use App\Http\Controllers\OutreachController;
+use App\Http\Controllers\RedemptionWeekAttendanceController;
+use App\Http\Controllers\RedemptionWeekSessionController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\TenureController;
@@ -41,6 +43,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('alumni/{alumnus}', [AlumnusController::class, 'update'])->name('alumni.update');
         Route::delete('alumni/{alumnus}', [AlumnusController::class, 'destroy'])->name('alumni.destroy');
         Route::delete('communications/{log}', [\App\Http\Controllers\CommunicationLogController::class, 'destroy'])->name('communications.destroy');
+
+        // Redemption Week - Admin only (session management)
+        Route::post('redemption-week', [RedemptionWeekSessionController::class, 'store'])->name('redemption-week.store');
+        Route::put('redemption-week/{session}', [RedemptionWeekSessionController::class, 'update'])->name('redemption-week.update');
+        Route::delete('redemption-week/{session}', [RedemptionWeekSessionController::class, 'destroy'])->name('redemption-week.destroy');
+        Route::delete('redemption-week/{session}/attendance/{attendance}', [RedemptionWeekAttendanceController::class, 'destroy'])->name('redemption-week.attendance.destroy');
+        Route::post('redemption-week/{session}/attendance/bulk-destroy', [RedemptionWeekAttendanceController::class, 'bulkDestroy'])->name('redemption-week.attendance.bulk-destroy');
     });
 
     // Member routes (all authenticated users)
@@ -49,6 +58,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('alumni/birthdays', [AlumnusController::class, 'birthdays'])->name('alumni.birthdays');
     Route::get('alumni/{alumnus}', [AlumnusController::class, 'show'])->name('alumni.show');
     Route::post('alumni/{alumnus}/communications', [\App\Http\Controllers\CommunicationLogController::class, 'store'])->name('alumni.communications.store');
+
+    // Redemption Week - Member routes (all authenticated users)
+    Route::get('redemption-week', [RedemptionWeekSessionController::class, 'index'])->name('redemption-week.index');
+    Route::get('redemption-week/{session}', [RedemptionWeekSessionController::class, 'show'])->name('redemption-week.show');
+    Route::post('redemption-week/{session}/attendance', [RedemptionWeekAttendanceController::class, 'store'])->name('redemption-week.attendance.store');
 
 });
 

@@ -11,6 +11,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // Todo: Can you clean up this file to cater for just new entries
     public function up(): void
     {
         // Step 1: Add nullable department_id column

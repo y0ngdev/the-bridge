@@ -190,5 +190,49 @@ export interface SimplePaginatedResponse<T> {
     path?: string;
 }
 
+// ============================================
+// Redemption Week Types
+// ============================================
+
+export interface EventDay {
+    value: string;
+    label: string;
+}
+
+export interface RedemptionWeekSession {
+    id: number;
+    name: string;
+    year: number;
+    start_date: string | null;
+    end_date: string | null;
+    event_dates: Record<string, string> | null;
+    description: string | null;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+    attendances_count?: number;
+    attendance_stats?: Record<string, { label: string; count: number }>;
+    unique_attendees?: number;
+    perfect_count?: number;
+}
+
+export interface RedemptionWeekAttendance {
+    id: number;
+    session_id: number;
+    alumnus_id: number;
+    event_day: string;
+    marked_by: number | null;
+    created_at: string;
+    updated_at: string;
+    alumnus?: { id: number; name: string; email: string | null };
+    marked_by_user?: User;
+}
+
+export interface AttendanceByDay {
+    label: string;
+    attendances: RedemptionWeekAttendance[];
+    count: number;
+}
+
 // Legacy type alias
 export type BreadcrumbItemType = BreadcrumbItem;
