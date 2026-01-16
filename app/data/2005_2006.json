@@ -1,0 +1,538 @@
+[
+  {
+    "sn": 1,
+    "name": "ALAO M. OLAYEMI",
+    "gender": "M",
+    "department": "AEE",
+    "phone": 8054041088,
+    "birth_date": "MAR 6TH"
+  },
+  {
+    "sn": 2,
+    "name": "AGBOTOBA GBENGA",
+    "gender": "M",
+    "department": "AEE",
+    "phone": 8035678768,
+    "birth_date": "MAY 27TH"
+  },
+  {
+    "sn": 3,
+    "name": "MEGBUWANUN. A. A",
+    "gender": "M",
+    "department": "AGE",
+    "phone": 8029442293,
+    "birth_date": "FEB10TH"
+  },
+  {
+    "sn": 4,
+    "name": "OYENEYE OLABODE",
+    "gender": "M",
+    "department": "AGE",
+    "phone": 8035369018,
+    "birth_date": "NOV 19TH"
+  },
+  {
+    "sn": 5,
+    "name": "BANKOLE O. M",
+    "gender": "M",
+    "department": "AGP",
+    "birth_date": "JAN 11TH"
+  },
+  {
+    "sn": 6,
+    "name": "OKUNNIGA SEGUN",
+    "gender": "M",
+    "department": "AGP",
+    "birth_date": "MAR 28TH"
+  },
+  {
+    "sn": 7,
+    "name": "AKINRINADE OPEYEMI",
+    "gender": "M",
+    "department": "AGP",
+    "phone": 8034397417,
+    "birth_date": "SEPT 26TH"
+  },
+  {
+    "sn": 8,
+    "name": "ESENE E. E",
+    "gender": "M",
+    "department": "AGY",
+    "birth_date": "FEB 18TH"
+  },
+  {
+    "sn": 9,
+    "name": "JIMOH SURAJUDEEN",
+    "gender": "M",
+    "department": "AGY",
+    "phone": 8035175590,
+    "birth_date": "NOV 19TH"
+  },
+  {
+    "sn": 10,
+    "name": "JAGBORO GERSHOM",
+    "gender": "M",
+    "department": "AGY",
+    "phone": 8038349738,
+    "birth_date": "SEPT 8TH"
+  },
+  {
+    "sn": 11,
+    "name": "AWODEYIN SANYA",
+    "gender": "M",
+    "department": "ARC",
+    "phone": 8037186170,
+    "birth_date": "AUG 27TH"
+  },
+  {
+    "sn": 12,
+    "name": "JUSTIN CHIKEZIE",
+    "gender": "M",
+    "department": "ARC",
+    "birth_date": "MAY11TH"
+  },
+  {
+    "sn": 13,
+    "name": "AJAYI MOMTUNDE",
+    "gender": "F",
+    "department": "BCH",
+    "birth_date": "DEC 5TH"
+  },
+  {
+    "sn": 14,
+    "name": "MOMOH ALABA",
+    "gender": "M",
+    "department": "BCH",
+    "birth_date": "JUNE 29TH"
+  },
+  {
+    "sn": 15,
+    "name": "BOLARINWA BOSEDE",
+    "gender": "F",
+    "department": "BCH",
+    "birth_date": "JULY 18TH"
+  },
+  {
+    "sn": 16,
+    "name": "SALAMI OLUFEMI",
+    "gender": "M",
+    "department": "BIO",
+    "birth_date": "FEB 24TH"
+  },
+  {
+    "sn": 17,
+    "name": "FABOYEDE TOLA",
+    "gender": "F",
+    "department": "CHE",
+    "birth_date": "JAN 18TH"
+  },
+  {
+    "sn": 18,
+    "name": "OLAIYA TOLU",
+    "gender": "F",
+    "department": "CHE",
+    "phone": 8054150349,
+    "birth_date": "JUL 20TH"
+  },
+  {
+    "sn": 19,
+    "name": "BALOGUN TAYO",
+    "gender": "F",
+    "department": "CHE",
+    "birth_date": "JULY21ST"
+  },
+  {
+    "sn": 20,
+    "name": "OUAGBO ADESEGUNFUNMI",
+    "gender": "M",
+    "department": "CHE",
+    "phone": 8034384605,
+    "birth_date": "NOV 12TH"
+  },
+  {
+    "sn": 21,
+    "name": "OGUNDEJI SUNDAY",
+    "gender": "M",
+    "department": "CHE",
+    "birth_date": "OCT 14TH"
+  },
+  {
+    "sn": 22,
+    "name": "ADESANWO B. ADEWUNMI",
+    "gender": "M",
+    "department": "CSC",
+    "birth_date": "APR 24TH"
+  },
+  {
+    "sn": 23,
+    "name": "ODOFIN OLUWASEUN",
+    "gender": "M",
+    "department": "CSC",
+    "phone": 8034007112,
+    "birth_date": "NOV 11TH"
+  },
+  {
+    "sn": 24,
+    "name": "ADEPOJU MORADEKE",
+    "gender": "F",
+    "department": "CSC",
+    "phone": 8034902707,
+    "birth_date": "NOV 26TH"
+  },
+  {
+    "sn": 25,
+    "name": "IDOWU OYEYEMI",
+    "gender": "M",
+    "department": "CSC",
+    "birth_date": "OCT 6TH"
+  },
+  {
+    "sn": 26,
+    "name": "ALEJO OLAKUNLE",
+    "gender": "M",
+    "department": "CSP",
+    "birth_date": "OCT 25TH"
+  },
+  {
+    "sn": 27,
+    "name": "OYEWUSI MICHAEL",
+    "gender": "M",
+    "department": "CVE",
+    "phone": 8054470323,
+    "birth_date": "DEC 29TH"
+  },
+  {
+    "sn": 28,
+    "name": "AKINWUNMI ISAAC",
+    "gender": "M",
+    "department": "CVE",
+    "birth_date": "OCT 7TH"
+  },
+  {
+    "sn": 29,
+    "name": "AYETORO A. B",
+    "gender": "M",
+    "department": "CVE",
+    "phone": 8035307395,
+    "birth_date": "SEPT 2ND"
+  },
+  {
+    "sn": 30,
+    "name": "OMONIYI KOLA",
+    "gender": "M",
+    "department": "EEE",
+    "birth_date": "APR 12TH"
+  },
+  {
+    "sn": 31,
+    "name": "OGUNDIPE AKKINTUNDE",
+    "gender": "M",
+    "department": "EEE",
+    "phone": 8035963873,
+    "birth_date": "APR 19TH"
+  },
+  {
+    "sn": 32,
+    "name": "THOMAS OLAROTIMI",
+    "gender": "M",
+    "department": "EEE",
+    "birth_date": "MAY 31ST"
+  },
+  {
+    "sn": 33,
+    "name": "AJALA YEMI",
+    "gender": "M",
+    "department": "EEE",
+    "birth_date": "OCT 17TH"
+  },
+  {
+    "sn": 34,
+    "name": "LONGE MUYIWA",
+    "gender": "M",
+    "department": "ESM",
+    "birth_date": "AUG 13TH"
+  },
+  {
+    "sn": 35,
+    "name": "FRANKLIN. C",
+    "gender": "M",
+    "department": "ESM",
+    "phone": 8038579079,
+    "birth_date": "JAN 11TH"
+  },
+  {
+    "sn": 36,
+    "name": "OMISORE AFOLABI",
+    "gender": "M",
+    "department": "ESM",
+    "birth_date": "SEPT 29TH"
+  },
+  {
+    "sn": 37,
+    "name": "AWOTIMIRO OLUWATOSIN",
+    "gender": "F",
+    "department": "FST",
+    "phone": 8038126521,
+    "birth_date": "OCT 16TH"
+  },
+  {
+    "sn": 38,
+    "name": "KUNLERE ADESOJI",
+    "gender": "M",
+    "department": "FWL",
+    "phone": 8034902014,
+    "birth_date": "APR 24TH"
+  },
+  {
+    "sn": 39,
+    "name": "AJO BAALE",
+    "gender": "M",
+    "department": "IDD",
+    "phone": 8035690292,
+    "birth_date": "NOV 16TH"
+  },
+  {
+    "sn": 40,
+    "name": "ASAMU MICHAEL",
+    "gender": "M",
+    "department": "MCB",
+    "birth_date": "MAR 11TH"
+  },
+  {
+    "sn": 41,
+    "name": "ESHO TOLA",
+    "gender": "F",
+    "department": "MCB",
+    "phone": 8033564863,
+    "birth_date": "NOV 25TH"
+  },
+  {
+    "sn": 42,
+    "name": "ODOLE OLUGBENGA",
+    "gender": "M",
+    "department": "MEE",
+    "phone": 8034617764,
+    "birth_date": "DEC 27TH"
+  },
+  {
+    "sn": 43,
+    "name": "BAJOMO ALABA",
+    "gender": "M",
+    "department": "MEE",
+    "phone": 8034677544,
+    "birth_date": "JULY 26TH"
+  },
+  {
+    "sn": 44,
+    "name": "ASAFA GBENGA",
+    "gender": "M",
+    "department": "MEE",
+    "phone": 8035393846,
+    "birth_date": "JULY 2ND"
+  },
+  {
+    "sn": 45,
+    "name": "BANJOKO A. A",
+    "gender": "M",
+    "department": "MEE",
+    "birth_date": "JULY 7TH"
+  },
+  {
+    "sn": 46,
+    "name": "CHOGUDO NELSON",
+    "gender": "M",
+    "department": "MEE",
+    "birth_date": "MAY 23RD"
+  },
+  {
+    "sn": 47,
+    "name": "ABIOYE TAIWO. E",
+    "gender": "M",
+    "department": "MEE",
+    "phone": 8034347247,
+    "birth_date": "SEPT 3RD"
+  },
+  {
+    "sn": 48,
+    "name": "AJILEYE SEGUNM",
+    "gender": "M",
+    "department": "MME",
+    "phone": 8034113375,
+    "birth_date": "FEB 12TH",
+    "unit": "PRESIDENT"
+  },
+  {
+    "sn": 49,
+    "name": "SALAMI OLUFEMI",
+    "gender": "M",
+    "department": "MME",
+    "birth_date": "JULY 14TH"
+  },
+  {
+    "sn": 50,
+    "name": "OLAWANDE OLUBUKOLA",
+    "gender": "F",
+    "department": "MME",
+    "birth_date": "NOV 11TH"
+  },
+  {
+    "sn": 51,
+    "name": "OBIKI NDUDI",
+    "gender": "M",
+    "department": "MNE",
+    "phone": 8035662574,
+    "birth_date": "AUG 24TH"
+  },
+  {
+    "sn": 52,
+    "name": "AMODU OLUWASEGUN. V",
+    "gender": "M",
+    "department": "MNE",
+    "birth_date": "FEB 22ND"
+  },
+  {
+    "sn": 53,
+    "name": "AYINOLA ABIOLA",
+    "gender": "M",
+    "department": "MNE",
+    "birth_date": "FEB 2ND"
+  },
+  {
+    "sn": 54,
+    "name": "ESAN OLAYIWOLA",
+    "gender": "M",
+    "department": "MNE",
+    "birth_date": "JAN 8TH"
+  },
+  {
+    "sn": 55,
+    "name": "FADIMILEHIN OLAYEMI",
+    "gender": "M",
+    "department": "MNE",
+    "phone": 8028988126
+  },
+  {
+    "sn": 56,
+    "name": "OLORUNFEMI ADEDAYO",
+    "gender": "M",
+    "department": "MNE",
+    "phone": 8030651545,
+    "birth_date": "JUNE 16TH"
+  },
+  {
+    "sn": 57,
+    "name": "OKAFOR P. C",
+    "gender": "M",
+    "department": "MNE",
+    "phone": 8043334562,
+    "birth_date": "MAY 15TH"
+  },
+  {
+    "sn": 58,
+    "name": "ADEDIRAN A. TUNDE",
+    "gender": "M",
+    "department": "PHY",
+    "phone": 8036565342,
+    "birth_date": "AUG 17TH"
+  },
+  {
+    "sn": 59,
+    "name": "JEHREY A.",
+    "gender": "M",
+    "department": "PHY",
+    "phone": 8035623733,
+    "birth_date": "OCT 30TH"
+  },
+  {
+    "sn": 60,
+    "name": "AJAYI. A SUCCESS",
+    "gender": "M",
+    "department": "PHY",
+    "phone": 8034978775,
+    "birth_date": "JUNE 23RD"
+  },
+  {
+    "sn": 61,
+    "name": "ESAN FOLAKEMI",
+    "gender": "F",
+    "department": "QSV",
+    "phone": 8035464271,
+    "birth_date": "JUNE 16TH"
+  },
+  {
+    "sn": 62,
+    "name": "KAREEM DOLAPO",
+    "gender": "F",
+    "department": "QSV",
+    "phone": 8038046153,
+    "birth_date": "NOV 15TH"
+  },
+  {
+    "sn": 63,
+    "name": "ROTIBA DICKSON",
+    "gender": "M",
+    "department": "QSV",
+    "phone": 8036951219,
+    "birth_date": "SEPT 19TH"
+  },
+  {
+    "sn": 64,
+    "name": "SANNI GABRIELLA",
+    "gender": "M",
+    "department": "QSV"
+  },
+  {
+    "sn": 65,
+    "name": "ABEGUNDE KAYODE",
+    "gender": "M",
+    "department": "URP",
+    "phone": 8029183974,
+    "birth_date": "DEC 11TH"
+  },
+  {
+    "sn": 66,
+    "name": "DUROJAIYE EDWARD",
+    "gender": "M",
+    "department": "URP",
+    "phone": 8035786392,
+    "birth_date": "JAN 10TH"
+  },
+  {
+    "sn": 67,
+    "name": "ADEYINKA ADEOLA",
+    "gender": "F",
+    "department": "URP",
+    "phone": 8035852092,
+    "birth_date": "JULY 30TH"
+  },
+  {
+    "sn": 68,
+    "name": "OLOWOSEGUN ADEBOLAM",
+    "gender": "M",
+    "department": "URP",
+    "phone": 8033704059,
+    "birth_date": "SEPT 1ST"
+  },
+  {
+    "sn": 69,
+    "name": "ADAMS ADEOLA",
+    "department": "MCB",
+    "birth_date": "JUNE 5TH"
+  },
+  {
+    "sn": 70,
+    "name": "AKANDE RASHIDAT",
+    "gender": "F",
+    "department": "BCH",
+    "birth_date": "JULY 16TH"
+  },
+  {
+    "sn": 71
+  },
+  {
+    "sn": 72
+  },
+  {
+    "sn": 73
+  }
+]

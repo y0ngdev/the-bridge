@@ -1,0 +1,396 @@
+[
+  {
+    "sn": 1,
+    "name": "ABOABA OLANREWAJU",
+    "department": "AGP",
+    "birth_date": "2016-11-16 00:00:00"
+  },
+  {
+    "sn": 2,
+    "name": "ABODUNDE DOLAPO",
+    "department": "IMC",
+    "birth_date": "2016-12-29 00:00:00"
+  },
+  {
+    "sn": 3,
+    "name": "ADE-ODUMBONI ADELEKE",
+    "department": "APH",
+    "birth_date": "2016-06-26 00:00:00"
+  },
+  {
+    "sn": 4,
+    "name": "ADEBAYO BANKOLE",
+    "department": "FWL",
+    "birth_date": "2016-06-23 00:00:00"
+  },
+  {
+    "sn": 5,
+    "name": "ADEGBOYEGA MAYOKUN",
+    "department": "BIO",
+    "birth_date": "2016-05-20 00:00:00"
+  },
+  {
+    "sn": 6,
+    "name": "ADENIRAN PETER",
+    "department": "AGP",
+    "birth_date": "2016-03-23 00:00:00"
+  },
+  {
+    "sn": 7,
+    "name": "ADESIDA ABIODUN",
+    "department": "AGY",
+    "birth_date": "2016-12-15 00:00:00"
+  },
+  {
+    "sn": 8,
+    "name": "ADETAYO BABATUNDE",
+    "department": "EEE",
+    "birth_date": "2016-07-14 00:00:00"
+  },
+  {
+    "sn": 9,
+    "name": "ADEWUMI FOLASADE",
+    "department": "AGY",
+    "birth_date": "2016-10-19 00:00:00"
+  },
+  {
+    "sn": 10,
+    "name": "ADEYEYE FESTUS",
+    "department": "MEE",
+    "birth_date": "2016-07-24 00:00:00"
+  },
+  {
+    "sn": 11,
+    "name": "AFOLALU ADENIRAN",
+    "department": "MEE",
+    "birth_date": "2016-12-05 00:00:00"
+  },
+  {
+    "sn": 12,
+    "name": "AINA ABAYOMI",
+    "department": "CVE",
+    "birth_date": "2016-02-22 00:00:00"
+  },
+  {
+    "sn": 13,
+    "name": "AJAYI ADENIYI",
+    "department": "AGY",
+    "birth_date": "2016-12-25 00:00:00"
+  },
+  {
+    "sn": 14,
+    "name": "AJENIFUJA KELVIN",
+    "department": "AGY",
+    "birth_date": "2016-09-02 00:00:00"
+  },
+  {
+    "sn": 15,
+    "name": "AJUMOBI OLUMAYOWA",
+    "department": "MME",
+    "birth_date": "2016-12-25 00:00:00"
+  },
+  {
+    "sn": 16,
+    "name": "AKANO OLAKUNLE",
+    "department": "IMC",
+    "birth_date": "2016-06-01 00:00:00"
+  },
+  {
+    "sn": 17,
+    "name": "AKINOLA BOLANLE",
+    "department": "BCH",
+    "birth_date": "2016-06-01 00:00:00"
+  },
+  {
+    "sn": 18,
+    "name": "AKINOLA FRANK",
+    "department": "AGY",
+    "birth_date": "2016-04-05 00:00:00"
+  },
+  {
+    "sn": 19,
+    "name": "AKINOLA TEMIDAYO",
+    "department": "BIO",
+    "birth_date": "2016-07-26 00:00:00"
+  },
+  {
+    "sn": 20,
+    "name": "ALEXANDER ADESHINA",
+    "department": "CHE",
+    "birth_date": "2016-12-13 00:00:00"
+  },
+  {
+    "sn": 21,
+    "name": "ALIU OLUWATOYIN",
+    "department": "CVE",
+    "birth_date": "2016-04-03 00:00:00"
+  },
+  {
+    "sn": 22,
+    "name": "ALONGE JOSEPHINE",
+    "department": "BIO",
+    "birth_date": "2016-06-10 00:00:00"
+  },
+  {
+    "sn": 23,
+    "name": "ARINDE FUNSHO",
+    "department": "MNE",
+    "birth_date": "2016-01-23 00:00:00"
+  },
+  {
+    "sn": 24,
+    "name": "AWOFISOYE B.O",
+    "department": "AEE",
+    "birth_date": "2016-01-23 00:00:00"
+  },
+  {
+    "sn": 25,
+    "name": "BADA ABOSEDE",
+    "department": "CVE",
+    "birth_date": "2016-09-11 00:00:00"
+  },
+  {
+    "sn": 26,
+    "name": "CLARKE OKAH W.E",
+    "department": "AGY",
+    "birth_date": "2016-01-26 00:00:00"
+  },
+  {
+    "sn": 27,
+    "name": "EGBOBI K.O",
+    "department": "MEE",
+    "birth_date": "2016-12-14 00:00:00"
+  },
+  {
+    "sn": 28,
+    "name": "EJIOFOR NKIRUKA",
+    "department": "FST",
+    "birth_date": "2016-10-16 00:00:00"
+  },
+  {
+    "sn": 29,
+    "name": "ELEHINTE YEMISI",
+    "department": "BIO",
+    "birth_date": "2016-10-06 00:00:00"
+  },
+  {
+    "sn": 30,
+    "name": "FAKOREDE ADESOJI",
+    "department": "IMC",
+    "birth_date": "2016-09-23 00:00:00"
+  },
+  {
+    "sn": 31,
+    "name": "FALEYE TAYO",
+    "department": "PHY",
+    "birth_date": "2016-08-10 00:00:00"
+  },
+  {
+    "sn": 32,
+    "name": "IBINI OLUMIDE",
+    "department": "MEE",
+    "birth_date": "2016-10-10 00:00:00"
+  },
+  {
+    "sn": 33,
+    "name": "ILAYA ANDREW",
+    "department": "MET",
+    "birth_date": "2016-04-15 00:00:00"
+  },
+  {
+    "sn": 34,
+    "name": "ISARINDE ISIAH",
+    "department": "MNE",
+    "birth_date": "2016-04-04 00:00:00"
+  },
+  {
+    "sn": 35,
+    "name": "ISIMIJOLA OLUWATOYIN",
+    "department": "EEE",
+    "birth_date": "2016-06-04 00:00:00"
+  },
+  {
+    "sn": 36,
+    "name": "IWAYE CHRISTIANAH",
+    "department": "IMC",
+    "birth_date": "2016-04-24 00:00:00"
+  },
+  {
+    "sn": 37,
+    "name": "KAYODE TEMITOPE",
+    "department": "AGE",
+    "birth_date": "2016-05-15 00:00:00"
+  },
+  {
+    "sn": 38,
+    "name": "LERAMO PETER",
+    "department": "PHY",
+    "birth_date": "2016-12-22 00:00:00"
+  },
+  {
+    "sn": 39,
+    "name": "NATHANIEL SEGUN",
+    "department": "MNE",
+    "birth_date": "2016-07-21 00:00:00"
+  },
+  {
+    "sn": 40,
+    "name": "OGUNBANJO YOMI",
+    "department": "AGE",
+    "birth_date": "2016-04-27 00:00:00"
+  },
+  {
+    "sn": 41,
+    "name": "OGUNGBMILA TOKUNBO",
+    "department": "AGY",
+    "birth_date": "2016-01-21 00:00:00"
+  },
+  {
+    "sn": 42,
+    "name": "OGUNLANA ADEBOYE",
+    "department": "BIO",
+    "birth_date": "2016-06-16 00:00:00"
+  },
+  {
+    "sn": 43,
+    "name": "OGUNTOLA SEUN",
+    "department": "AGY",
+    "birth_date": "2016-03-04 00:00:00"
+  },
+  {
+    "sn": 44,
+    "name": "OGUNYE AYOYEMI",
+    "department": "MNE",
+    "birth_date": "2016-10-20 00:00:00"
+  },
+  {
+    "sn": 45,
+    "name": "OJO EZEIKEL",
+    "birth_date": "2016-04-06 00:00:00"
+  },
+  {
+    "sn": 46,
+    "name": "OJO WURAOLA",
+    "department": "AGY",
+    "birth_date": "2016-03-28 00:00:00"
+  },
+  {
+    "sn": 47,
+    "name": "OJOADE OLUWASEYI",
+    "department": "MME",
+    "birth_date": "2016-07-23 00:00:00"
+  },
+  {
+    "sn": 48,
+    "name": "OKUWOBI ADEWALE",
+    "department": "MME",
+    "birth_date": "2016-05-16 00:00:00"
+  },
+  {
+    "sn": 49,
+    "name": "OLA MONISOLA",
+    "department": "AGY",
+    "birth_date": "2016-02-17 00:00:00"
+  },
+  {
+    "sn": 50,
+    "name": "OLALUDE IFEDAYO",
+    "department": "AEE",
+    "birth_date": "2016-09-29 00:00:00"
+  },
+  {
+    "sn": 51,
+    "name": "OLASUKANMI OLATUNJI",
+    "department": "PHY",
+    "birth_date": "2016-04-05 00:00:00"
+  },
+  {
+    "sn": 52,
+    "name": "OLATUNJI MODUPE",
+    "department": "FST",
+    "birth_date": "2016-05-25 00:00:00"
+  },
+  {
+    "sn": 53,
+    "name": "OLANIPEKUN PHILIP",
+    "department": "ARC",
+    "birth_date": "2016-05-14 00:00:00"
+  },
+  {
+    "sn": 54,
+    "name": "OLOWOLEREKUN SAMSON",
+    "department": "AGY",
+    "birth_date": "2016-04-26 00:00:00"
+  },
+  {
+    "sn": 55,
+    "name": "OLUWADARE DOMINIC",
+    "department": "QSV",
+    "birth_date": "2016-11-04 00:00:00"
+  },
+  {
+    "sn": 56,
+    "name": "OMOLE OLANREWAJU",
+    "department": "CVE"
+  },
+  {
+    "sn": 57,
+    "name": "OMOSUYI DEJI",
+    "department": "MEE",
+    "birth_date": "2016-01-05 00:00:00"
+  },
+  {
+    "sn": 58,
+    "name": "ONILEOWO ARIYO",
+    "department": "EEE",
+    "birth_date": "2016-08-18 00:00:00"
+  },
+  {
+    "sn": 59,
+    "name": "OYEDUNTAN GBENGA",
+    "department": "CHE",
+    "birth_date": "2016-09-21 00:00:00"
+  },
+  {
+    "sn": 60,
+    "name": "OYENUGA OLUFEMI",
+    "department": "IMC",
+    "birth_date": "2016-03-25 00:00:00"
+  },
+  {
+    "sn": 61,
+    "name": "QUADRI MODUPE",
+    "department": "FST",
+    "birth_date": "2016-01-24 00:00:00"
+  },
+  {
+    "sn": 62,
+    "name": "ROMILUYI ADESUYI",
+    "department": "CSP",
+    "birth_date": "2016-10-22 00:00:00"
+  },
+  {
+    "sn": 63,
+    "name": "SHEYA ROBINSON",
+    "department": "PHY",
+    "birth_date": "2016-04-23 00:00:00"
+  },
+  {
+    "sn": 64,
+    "name": "TAIWO ADEYINKA",
+    "department": "MME",
+    "birth_date": "2016-10-01 00:00:00"
+  },
+  {
+    "sn": 65,
+    "name": "TEIBO JOHN",
+    "department": "AGY",
+    "birth_date": "2016-11-19 00:00:00"
+  },
+  {
+    "sn": 66,
+    "name": "AKINSUNMOYE FRANKLIN",
+    "department": "MEE",
+    "birth_date": "2016-03-30 00:00:00"
+  }
+]

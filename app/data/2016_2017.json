@@ -1,0 +1,2566 @@
+[
+  {
+    "sn": 1,
+    "name": "ANDREW SHADRACH",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 8189593722,
+    "gender": "M",
+    "birth_date": "1ST JAN"
+  },
+  {
+    "sn": 2,
+    "name": "BELLO BLESSING",
+    "school": "SOS",
+    "department": "BCH",
+    "phone": 7038971302,
+    "e_mail_add": "ninoogus@yahoo.com",
+    "birth_date": "2ND JAN"
+  },
+  {
+    "sn": 3,
+    "name": "AKINROTOYE PEACHES",
+    "school": "SAAT",
+    "department": "FST",
+    "phone": 8117659288,
+    "e_mail_add": "peachesakinrotoye@gmail.com",
+    "gender": "F",
+    "birth_date": "2ND JAN"
+  },
+  {
+    "sn": 4,
+    "name": "BABATUNDE OLADIMEJI ZION",
+    "school": "SAAT",
+    "department": "FWT",
+    "phone": 8181722349,
+    "e_mail_add": "Oladimejibabatunde665@y.com",
+    "birth_date": "3RD JAN"
+  },
+  {
+    "sn": 5,
+    "name": "OLASUNKANMI ISRAEL AYOADE",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 7061008645,
+    "birth_date": "7TH JAN"
+  },
+  {
+    "sn": 6,
+    "name": "FOLORUNSHO OLUWAGBENGA",
+    "school": "SEET",
+    "department": "EEE",
+    "phone": 8069133140,
+    "e_mail_add": "gbengagideonf@gmail.com",
+    "birth_date": "8TH JAN"
+  },
+  {
+    "sn": 7,
+    "name": "OMOTOLA IBUKUNOLUWA",
+    "school": "S OS",
+    "department": "CSC",
+    "phone": 7036330052,
+    "birth_date": "8TH JAN"
+  },
+  {
+    "sn": 8,
+    "name": "ADENIRAN OLUWAFEMI",
+    "school": "SET",
+    "department": "SVG",
+    "phone": 7068366737,
+    "e_mail_add": "oluwafemmy7@gmail.com",
+    "birth_date": "16TH JAN"
+  },
+  {
+    "sn": 9,
+    "name": "JESUYANMIFE FEYINTOLUWA",
+    "e_mail_add": "feyintoluwajesuyanmife@y.com",
+    "birth_date": "16TH JAN"
+  },
+  {
+    "sn": 10,
+    "name": "ADEBAYO OLUWOLE",
+    "school": "SEET",
+    "department": "AGE",
+    "phone": 7032183535,
+    "e_mail_add": "adebayooluwolet@yahoo.com",
+    "gender": "M",
+    "birth_date": "16TH JAN"
+  },
+  {
+    "sn": 11,
+    "name": "OLUWOLE  SEGUN O",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 7069505313,
+    "e_mail_add": "oluwasegun61@yahoo.com",
+    "birth_date": "18TH JAN"
+  },
+  {
+    "sn": 12,
+    "name": "AGBAJE OMOTOLANI",
+    "school": "SET",
+    "department": "URP",
+    "phone": 8154028310,
+    "birth_date": "20TH JAN"
+  },
+  {
+    "sn": 13,
+    "name": "OYENIRAN SIJUADE (ASST. CORD.)",
+    "school": "SET",
+    "department": "IDD",
+    "phone": 8031914407,
+    "e_mail_add": "Sijuade.oyeniran14@y.com",
+    "gender": "F",
+    "birth_date": "21th JAN"
+  },
+  {
+    "sn": 14,
+    "name": "JESUDOWOLE OPEYEMI DORCAS",
+    "school": "SAAT",
+    "department": "FWT",
+    "phone": 8163463753,
+    "e_mail_add": "opsy4il@yahoo.com",
+    "gender": "F",
+    "birth_date": "22ND JAN"
+  },
+  {
+    "sn": 15,
+    "name": "FIOLA TOLULOPE",
+    "school": "SET",
+    "department": "IDD",
+    "phone": 8105930921,
+    "e_mail_add": "Fiola_tolulope@yahoo.com",
+    "gender": "F",
+    "birth_date": "23RD JAN"
+  },
+  {
+    "sn": 16,
+    "name": "AKINNUBI ILEMOBAYO LAURA",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 8162486690,
+    "e_mail_add": "akinnubi.ilemobayo.y.com",
+    "birth_date": "24TH JAN"
+  },
+  {
+    "sn": 17,
+    "name": "OYELANA ADENIYI E",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 8174413214,
+    "e_mail_add": "adeniyielijah@y.com",
+    "birth_date": "25TH JAN"
+  },
+  {
+    "sn": 18,
+    "name": "OMOJOLA VICTOR B",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8099391761,
+    "e_mail_add": "vikiflex@gmail.com",
+    "gender": "M",
+    "birth_date": "25TH JAN"
+  },
+  {
+    "sn": 19,
+    "name": "OJO OLADEHINDE P",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 8131829834,
+    "e_mail_add": "oladehindeojo@gmail.com",
+    "gender": "M",
+    "birth_date": "29TH JAN"
+  },
+  {
+    "sn": 20
+  },
+  {
+    "sn": 21,
+    "name": "OGUNMUYIWA ABAYOMI",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 8106427753,
+    "birth_date": "1ST FEB"
+  },
+  {
+    "sn": 22,
+    "name": "JOSEPH AYODEJI",
+    "school": "SET",
+    "department": "ARC",
+    "phone": 8130563068,
+    "e_mail_add": "jeremiahdejijoseph@y.com",
+    "birth_date": "5TH FEB"
+  },
+  {
+    "sn": 23,
+    "name": "OLARINDE ELIZABETH",
+    "school": "SET",
+    "department": "ESM",
+    "phone": 8138986445,
+    "birth_date": "7TH FEB"
+  },
+  {
+    "sn": 24,
+    "name": "FAJORIN DAMILOLA",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 7067694595,
+    "e_mail_add": "Seyihbk87@hotmail.com",
+    "birth_date": "7TH FEB"
+  },
+  {
+    "sn": 25,
+    "name": "AKINDOYIN OLUWAFISAYO H",
+    "school": "SOS",
+    "department": "STA",
+    "phone": 7061945695,
+    "e_mail_add": "Mail2hellen009@y.com",
+    "birth_date": "7TH FEB"
+  },
+  {
+    "sn": 26,
+    "name": "DARAMOLA JOSEPH",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 8107019302,
+    "e_mail_add": "dreliberty@gmail.com",
+    "birth_date": "9TH FEB"
+  },
+  {
+    "sn": 27,
+    "name": "SMART G. DANIEL",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 8090964880,
+    "e_mail_add": "hesjithe@gmail.com",
+    "gender": "M",
+    "birth_date": "9TH FEB"
+  },
+  {
+    "sn": 28,
+    "name": "ALADE FUNMILAYO E",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 7067214845,
+    "e_mail_add": "Aladefunmilayo67@y.com",
+    "birth_date": "11TH FEB"
+  },
+  {
+    "sn": 29,
+    "name": "OLAMISEGBE ADETOYE",
+    "school": "SEMS",
+    "department": "RSG",
+    "phone": 8137626630,
+    "birth_date": "12TH  FEB"
+  },
+  {
+    "sn": 30,
+    "name": "YELE ADEYELE",
+    "school": "SAAT",
+    "department": "AEC",
+    "phone": 7068399404,
+    "e_mail_add": "yeledeyele@gmail.com",
+    "birth_date": "12TH FEB"
+  },
+  {
+    "sn": 31,
+    "name": "ADODO OLAOLUWA RAY",
+    "school": "SEET",
+    "department": "EEE",
+    "phone": 8064798196,
+    "e_mail_add": "adodoolaoluwa@gmail.com",
+    "birth_date": "14TH FEB"
+  },
+  {
+    "sn": 32,
+    "name": "ADESUYI BLESSING OLUWASEUN",
+    "school": "SET",
+    "department": "IDD",
+    "phone": 7068096042,
+    "e_mail_add": "bravoblessing@yahoo.com",
+    "gender": "M",
+    "birth_date": "15TH FEB"
+  },
+  {
+    "sn": 33,
+    "name": "AGBELUSI OLORUNTOBA SAMUEL",
+    "school": "SOS",
+    "department": "CHE",
+    "phone": 8180962778,
+    "e_mail_add": "oloruntobaagbelusi@y.com",
+    "birth_date": "17TH FEB"
+  },
+  {
+    "sn": 34,
+    "name": "OLASEHINDE ROTIMI",
+    "school": "SEET",
+    "department": "MEE",
+    "phone": 7080940239,
+    "birth_date": "22ND FEB"
+  },
+  {
+    "sn": 35,
+    "name": "OPATOKE ABIMBOLA",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 8071667667,
+    "birth_date": "25TH FEB"
+  },
+  {
+    "sn": 36,
+    "name": "ADETOLA OMOWUMI RUTH",
+    "school": "SET",
+    "department": "ESM",
+    "birth_date": "22ND FEB"
+  },
+  {
+    "sn": 37,
+    "name": "OGUNLEYE ADEKUNLE ANTHONY",
+    "school": "SEET",
+    "department": "MNE",
+    "phone": 7066122526,
+    "e_mail_add": "Kunleye25@gmail.com",
+    "gender": "M",
+    "birth_date": "25TH FEB"
+  },
+  {
+    "sn": 38,
+    "name": "IMORHOA CHARLES",
+    "school": "SOS",
+    "department": "BIO",
+    "phone": 8110832844,
+    "e_mail_add": "imorhoacharles@gmai.com",
+    "gender": "M",
+    "birth_date": "25TH FEB"
+  },
+  {
+    "sn": 39,
+    "name": "ADEGBULUGBE OLUWANIFEMI",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 8100187792,
+    "e_mail_add": "adegbulugbenifemi@gmail.com",
+    "birth_date": "28TH FEB"
+  },
+  {
+    "sn": 40,
+    "name": "PASEDA SEUN TOYOSI",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8134866792,
+    "birth_date": "29TH FEB"
+  },
+  {
+    "sn": 41,
+    "name": "OLADOSU MICHAEL OLAYINKA",
+    "school": "SEET",
+    "department": "MET",
+    "phone": 8104764101,
+    "e_mail_add": "oladosuolayinka@aol.com",
+    "gender": "M",
+    "birth_date": "29TH FEB"
+  },
+  {
+    "sn": 42
+  },
+  {
+    "sn": 43
+  },
+  {
+    "sn": 44,
+    "name": "TIJANI GOODNESS",
+    "school": "SET",
+    "department": "SVG",
+    "phone": 8162028614,
+    "birth_date": "1ST MAR"
+  },
+  {
+    "sn": 45,
+    "name": "AKINTOLURE BUKOLA",
+    "school": "SAAT",
+    "department": "ARE",
+    "phone": 7032305818,
+    "e_mail_add": "bukolaakintelure@gmail.com",
+    "gender": "F",
+    "birth_date": "2ND MAR"
+  },
+  {
+    "sn": 46,
+    "name": "EDUNWA NELSON",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 8075000421,
+    "e_mail_add": "edunwanelson@gmail.com",
+    "birth_date": "3RD MAR"
+  },
+  {
+    "sn": 47,
+    "name": "MUMINI BUKUNMI",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 7032844198,
+    "e_mail_add": "bestbukunmi@yahoo.com",
+    "gender": "M",
+    "birth_date": "8TH MAR"
+  },
+  {
+    "sn": 48,
+    "name": "TALABI YINKA",
+    "school": "SEET",
+    "department": "MNE",
+    "phone": 8035019999,
+    "e_mail_add": "Yinkson01@yahoo.com",
+    "birth_date": "8TH MAR"
+  },
+  {
+    "sn": 49,
+    "name": "IMUERE DESMOND",
+    "school": "SAAT",
+    "department": "APH",
+    "phone": 8062108459,
+    "e_mail_add": "desmondimuere@gmail.com",
+    "birth_date": "12TH MAR"
+  },
+  {
+    "sn": 50,
+    "name": "ADELEGAN OLUWAGBEMI",
+    "school": "SMAT",
+    "department": "TMT",
+    "phone": 8104812205,
+    "e_mail_add": "padelegan@yahoo.com",
+    "birth_date": "12TH MAR"
+  },
+  {
+    "sn": 51,
+    "name": "ONWUKA OSITA DAMIAN",
+    "school": "SMAT",
+    "department": "TMT",
+    "phone": 8130625124,
+    "e_mail_add": "damianosinache@gmail.com",
+    "birth_date": "13TH MAR"
+  },
+  {
+    "sn": 52,
+    "name": "ADEKUNLE ADEYINKA",
+    "school": "SET",
+    "department": "ESM",
+    "phone": 8134705887,
+    "e_mail_add": "Yincute4real@gmail.com",
+    "birth_date": "14TH MAR"
+  },
+  {
+    "sn": 53,
+    "name": "AWOPETU MARTINA",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 8185774147,
+    "e_mail_add": "awopetumartina@gmail.com",
+    "gender": "F",
+    "birth_date": "16TH MAR"
+  },
+  {
+    "sn": 54,
+    "name": "ELUE GIFT RITA",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 7062778105,
+    "birth_date": "17TH MAR"
+  },
+  {
+    "sn": 55,
+    "name": "ABIMBOLA JOSHUA SEYI",
+    "school": "SEET",
+    "department": "AGE",
+    "phone": 7035195461,
+    "e_mail_add": "abimbolajoshua24@gmail.com",
+    "gender": "M",
+    "birth_date": "18TH MAR"
+  },
+  {
+    "sn": 56,
+    "name": "AKEJU OLUWABUSAYO",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 7039405636,
+    "birth_date": "19TH MAR"
+  },
+  {
+    "sn": 57,
+    "name": "OGUNLADE MIRACLE",
+    "school": "SEET",
+    "department": "MME",
+    "phone": 8132149729,
+    "e_mail_add": "Toluwase103@gmail.com",
+    "gender": "M",
+    "birth_date": "20TH MAR"
+  },
+  {
+    "sn": 58,
+    "name": "ODETAYO BOLUWATIFE T",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 8168558683,
+    "e_mail_add": "Odetayo.boluwatife@GMAIL.com",
+    "gender": "M",
+    "birth_date": "22ND MAR"
+  },
+  {
+    "sn": 59,
+    "name": "ADEBAYO OLABODE",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 8131316174,
+    "birth_date": "23RD MAR"
+  },
+  {
+    "sn": 60,
+    "name": "OGUNDANNA PRECIOUS",
+    "school": "SAAT",
+    "department": "FST",
+    "phone": 8052271472,
+    "e_mail_add": "adeayoogundanna@yahoo.com",
+    "gender": "F",
+    "birth_date": "23RD MAR"
+  },
+  {
+    "sn": 61,
+    "name": "ALADE ABAYOMI ADELEKE",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 8146273062,
+    "birth_date": "26TH MAR"
+  },
+  {
+    "sn": 62,
+    "name": "ADEOGUN OLOLADE",
+    "school": "SAAT",
+    "department": "AEC",
+    "phone": 7068399402,
+    "e_mail_add": "adeogunololade@gmail.com",
+    "birth_date": "26TH MAR"
+  },
+  {
+    "sn": 63,
+    "name": "ALABI ANUOLUWAPO",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8103964338,
+    "birth_date": "28TH MAR"
+  },
+  {
+    "sn": 64,
+    "name": "ODETUNDE OLANREWAJU",
+    "school": "SAAT",
+    "department": "FWT",
+    "phone": 8165378693,
+    "e_mail_add": "Odetundeolanrewaju4@gmail.com",
+    "gender": "M",
+    "birth_date": "28TH MAR"
+  },
+  {
+    "sn": 65,
+    "name": "OLAOYE OLUWATIMILEHIN",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 8131895118,
+    "e_mail_add": "timmiechamp@gmail.com",
+    "gender": "M",
+    "birth_date": "28TH MAR"
+  },
+  {
+    "sn": 66,
+    "name": "BAKARE OLUBUNMI MAYOWA",
+    "school": "SET",
+    "department": "SVG",
+    "phone": 8105764417,
+    "birth_date": "29TH MAR"
+  },
+  {
+    "sn": 67,
+    "name": "AKINSEYE SUNDAY",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 8130197355,
+    "e_mail_add": "sundayakinseye@yahoo.com",
+    "gender": "M",
+    "birth_date": "29TH MAR"
+  },
+  {
+    "sn": 68,
+    "name": "KEGBE CYNTHIA UFUOMA",
+    "school": "SET",
+    "department": "URP",
+    "phone": 7037230695,
+    "e_mail_add": "cynthiakegbe@yahoo.com",
+    "birth_date": "30TH MAR"
+  },
+  {
+    "sn": 69
+  },
+  {
+    "sn": 70
+  },
+  {
+    "sn": 71,
+    "name": "SOYEBO OPEOLUWA",
+    "school": "SOS",
+    "department": "STA",
+    "phone": 7066251669,
+    "birth_date": "2ND APRIL"
+  },
+  {
+    "sn": 72,
+    "name": "SHEBA WALE",
+    "school": "SOS",
+    "department": "BIO",
+    "phone": 806118680,
+    "e_mail_add": "shebawale@yahoo.com",
+    "gender": "M",
+    "birth_date": "3RD APRIL"
+  },
+  {
+    "sn": 73,
+    "name": "ADETULA RICHARD",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8178080946,
+    "e_mail_add": "Richard.adetula@gmail.com",
+    "gender": "M",
+    "birth_date": "4TH APRIL"
+  },
+  {
+    "sn": 74,
+    "name": "GODSWILL ADAMU`",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 8163899540,
+    "birth_date": "7TH APRIL"
+  },
+  {
+    "sn": 75,
+    "name": "KOMOLAFE OLAJUMOKE",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 8167307084,
+    "e_mail_add": "g.prestige@yahoo.com",
+    "gender": "F",
+    "birth_date": "7TH APRIL"
+  },
+  {
+    "sn": 76,
+    "name": "AMORE DAMILOLA",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 8180537549,
+    "e_mail_add": "amoredamilola@gmail.com",
+    "birth_date": "9TH APRL"
+  },
+  {
+    "sn": 77,
+    "name": "SHITTU OLUWASEUN",
+    "school": "SAAT",
+    "department": "CSP",
+    "phone": 8104281382,
+    "e_mail_add": "Holuwarsheunjenny77@gmail.com",
+    "gender": "M",
+    "birth_date": "9TH APRIL"
+  },
+  {
+    "sn": 78,
+    "name": "OGUNTOKUN ESTHER",
+    "school": "SOS",
+    "department": "BCH",
+    "phone": 7033829987,
+    "e_mail_add": "Esther.oguntokun@yahoo.com",
+    "gender": "F",
+    "birth_date": "10TH APRIL"
+  },
+  {
+    "sn": 79,
+    "name": "ADEBOWALE MICHAEL A",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 8139655742,
+    "e_mail_add": "Micade33@gmail.com",
+    "birth_date": "10TH APRIL"
+  },
+  {
+    "sn": 80,
+    "name": "OLADIPUPO AYORINDE",
+    "school": "SET",
+    "department": "URP",
+    "phone": 8133325847,
+    "e_mail_add": "Spik2ayo@gmail.com",
+    "gender": "M",
+    "birth_date": "11TH APRIL"
+  },
+  {
+    "sn": 81,
+    "name": "JOHN ENOBONG",
+    "school": "SEET",
+    "department": "MNE",
+    "phone": 8131241162,
+    "e_mail_add": "johnenobong13@gmail.com",
+    "gender": "F",
+    "birth_date": "13TH APRIL"
+  },
+  {
+    "sn": 82,
+    "name": "AJISEYIRI AJOKE AGNES",
+    "school": "SAAT",
+    "department": "APH",
+    "phone": 8060677173,
+    "birth_date": "14TH APRIL"
+  },
+  {
+    "sn": 83,
+    "name": "AKINYEMI OLUMIDE",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 7061558340,
+    "e_mail_add": "lumideez@yahoo.co.uk",
+    "gender": "M",
+    "birth_date": "13TH APRIL"
+  },
+  {
+    "sn": 84,
+    "name": "BALOGUN TUNDE",
+    "school": "SET",
+    "department": "ARC",
+    "phone": 8101034666,
+    "birth_date": "14TH APRIL"
+  },
+  {
+    "sn": 85,
+    "name": "OLABIWONNU ABIODUN DAVID",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 8131562545,
+    "e_mail_add": "Abiodun.olanbiwonnu@mail.com",
+    "gender": "M",
+    "birth_date": "14TH APRIL"
+  },
+  {
+    "sn": 86,
+    "name": "OLUPONNA OLUWATAYO",
+    "school": "SMAT",
+    "department": "TMT",
+    "phone": 7062660497,
+    "e_mail_add": "Oluponna22@yahoo.com",
+    "gender": "M",
+    "birth_date": "16TH APRIL"
+  },
+  {
+    "sn": 87,
+    "name": "OLUWATOBI IYANUOLUWA",
+    "school": "SEET",
+    "department": "EEE",
+    "phone": 8108461412,
+    "e_mail_add": "Iyanutobi1@yahoo.com",
+    "birth_date": "15TH APRL"
+  },
+  {
+    "sn": 88,
+    "name": "AFE TEMIDAYO EBENEZER",
+    "school": "SAAT",
+    "department": "ARE",
+    "phone": 7032244087,
+    "birth_date": "16TH APRIL"
+  },
+  {
+    "sn": 89,
+    "name": "FARAMO ADEWALE",
+    "school": "SAAT",
+    "department": "EWM",
+    "phone": 7065124643,
+    "e_mail_add": "Olajustin810@gmail.com",
+    "gender": "M",
+    "birth_date": "21ST APRIL"
+  },
+  {
+    "sn": 90,
+    "name": "OLUFUNMI ADEBOWALE",
+    "school": "SET",
+    "department": "ARC",
+    "phone": 7068384392,
+    "e_mail_add": "Sanvilla69@yahoo.com",
+    "gender": "M",
+    "birth_date": "22ND APRIL"
+  },
+  {
+    "sn": 91,
+    "name": "ADEGBORO EMMANUEL. S",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8101501553,
+    "e_mail_add": "sirshanme@gmail.com",
+    "gender": "M",
+    "birth_date": "22ND APRIL"
+  },
+  {
+    "sn": 92,
+    "name": "OLORUNTOYIN FEMI A",
+    "school": "SET",
+    "department": "URP",
+    "phone": 8112558135,
+    "e_mail_add": "------------",
+    "birth_date": "22ND APRIL"
+  },
+  {
+    "sn": 93,
+    "name": "OLALEYE ISRAEL OLUMIDE",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8162072200,
+    "e_mail_add": "Olaleyeisrael99@livemail.com",
+    "gender": "M",
+    "birth_date": "22NDAPRIL"
+  },
+  {
+    "sn": 94,
+    "name": "NZEMEKE CHNEYEM",
+    "school": "SET",
+    "department": "URP",
+    "phone": 8164463387,
+    "birth_date": "27TH APRIL"
+  },
+  {
+    "sn": 95,
+    "name": "LAWAL JAMEAS OLADIPUPO",
+    "school": "SET",
+    "department": "URP",
+    "phone": 7063957490,
+    "e_mail_add": "olamultiplylaw@yahoo.com",
+    "birth_date": "29TH APRIL"
+  },
+  {
+    "sn": 96,
+    "name": "OLABANJI OLUKUNLE",
+    "school": "SAAT",
+    "department": "FAT",
+    "phone": 7062775848,
+    "e_mail_add": "olukay_olas@yahoo.com",
+    "birth_date": "30TH APRIL"
+  },
+  {
+    "sn": 97,
+    "name": "FADIRAN ABIOLA",
+    "school": "SAAT",
+    "department": "ARE",
+    "phone": 8109820246,
+    "birth_date": "1ST MAY"
+  },
+  {
+    "sn": 98,
+    "name": "OYEKANMI LEKAN",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 8193560169,
+    "e_mail_add": "l.oyekanmi@yahoo.com",
+    "birth_date": "4TH MAY"
+  },
+  {
+    "sn": 99,
+    "name": "OLADEJO MERCY",
+    "school": "SET",
+    "department": "SVG",
+    "phone": 7065852675,
+    "e_mail_add": "mercyoladejo@yahoo.com",
+    "gender": "F",
+    "birth_date": "4TH MAY"
+  },
+  {
+    "sn": 100,
+    "name": "OKUNUGA OLUWATOSIN S",
+    "school": "SOS",
+    "department": "CHE",
+    "phone": 8136062810,
+    "e_mail_add": "Okunnugaoluwatosin@yahoo.com",
+    "gender": "M",
+    "birth_date": "5TH MAY"
+  },
+  {
+    "sn": 101,
+    "name": "AKINDELE DAVID",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8134150054,
+    "e_mail_add": "------------",
+    "birth_date": "5TH MAY"
+  },
+  {
+    "sn": 102,
+    "name": "ADEBAYO VICTOR B",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 8149333273,
+    "e_mail_add": "Vadebayo16@yahoo.com",
+    "birth_date": "7TH MAY"
+  },
+  {
+    "sn": 103,
+    "name": "OYEYEMI SEFUNMI",
+    "school": "SAAT",
+    "department": "AEC",
+    "phone": 8166135613,
+    "birth_date": "7TH MAY"
+  },
+  {
+    "sn": 104,
+    "name": "OLAJIDE ADEMOLA",
+    "school": "SEET",
+    "department": "MEE",
+    "phone": 8106174438,
+    "e_mail_add": "Olajideademola84@gmail.com",
+    "gender": "M",
+    "birth_date": "7TH MAY"
+  },
+  {
+    "sn": 105,
+    "name": "EJIGA SHADRACH",
+    "school": "SAAT",
+    "department": "AEC",
+    "phone": 8166680878,
+    "e_mail_add": "ejigashadrach@yahoo.com",
+    "birth_date": "8TH MAY"
+  },
+  {
+    "sn": 106,
+    "name": "OKELEYE OLOLADE",
+    "school": "SMAT",
+    "department": "EMT",
+    "phone": 8104374166,
+    "e_mail_add": "Lolade.okeleye2@gmail.com",
+    "gender": "F",
+    "birth_date": "9TH MAY"
+  },
+  {
+    "sn": 107,
+    "name": "AKINBOBOYE JOHNSON",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 8130817586,
+    "e_mail_add": "ifedayojohn@gmail.com",
+    "birth_date": "10TH MAY"
+  },
+  {
+    "sn": 108,
+    "name": "GARBA JOHN SIMEON",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8142251571,
+    "e_mail_add": "garbaj@gmail.com",
+    "gender": "M",
+    "birth_date": "10TH MAY"
+  },
+  {
+    "sn": 109,
+    "name": "AGBOOLA OLUWATOSIN",
+    "school": "SOS",
+    "department": "STA",
+    "phone": 8138703688,
+    "e_mail_add": "tosinagboolalizzy@yahoo.com",
+    "gender": "F",
+    "birth_date": "12TH MAY"
+  },
+  {
+    "sn": 110,
+    "name": "BHADMUS OLUFUNKE",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 7036361316,
+    "e_mail_add": "phunkepet@yahoo.com",
+    "gender": "M",
+    "birth_date": "13TH MAY"
+  },
+  {
+    "sn": 111,
+    "name": "AKINDELE DAVID K",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8134150054,
+    "e_mail_add": "Davidkehinde41@yahoo.com",
+    "gender": "M",
+    "birth_date": "14TH MAY"
+  },
+  {
+    "sn": 112,
+    "name": "AKANDE ADEOLA",
+    "school": "SAAT",
+    "department": "ARE",
+    "phone": 7062308800,
+    "birth_date": "15TH MAY"
+  },
+  {
+    "sn": 113,
+    "name": "THOMAS VICTORIA",
+    "school": "SAAT",
+    "department": "FST",
+    "phone": 8165934217,
+    "e_mail_add": "Vot4god@yahoo.com",
+    "birth_date": "17TH MAY"
+  },
+  {
+    "sn": 114,
+    "name": "DADA FELIX O",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 8163680582,
+    "birth_date": "17TH MAY"
+  },
+  {
+    "sn": 115,
+    "name": "VINCENT PHILLIP E",
+    "school": "SEET",
+    "department": "MEE",
+    "phone": 7081639709,
+    "e_mail_add": "vincentphilipemmam@yahoo.co",
+    "birth_date": "18TH MAY"
+  },
+  {
+    "sn": 116,
+    "name": "AKINYELE PELUMI",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 7064845657,
+    "e_mail_add": "pelumiakinyele@gmail.com",
+    "birth_date": "18TH MAY"
+  },
+  {
+    "sn": 117,
+    "name": "FAGBAMIGBE TAIWO",
+    "school": "SAAT",
+    "department": "ARE",
+    "phone": 7035618481,
+    "e_mail_add": "Fagbamigbe_taiwo@yahoo.com",
+    "birth_date": "20TH MAY"
+  },
+  {
+    "sn": 118,
+    "name": "MASEBINU GODWIN O.",
+    "school": "SMAT",
+    "department": "TMT",
+    "phone": 8169770810,
+    "e_mail_add": "Godwinmasebinu@yahoo.com",
+    "gender": "M",
+    "birth_date": "21ST MAY"
+  },
+  {
+    "sn": 119,
+    "name": "ADODO VICTORIA",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8161830430,
+    "birth_date": "21ST MAY"
+  },
+  {
+    "sn": 120,
+    "name": "ODUO SUNDAY",
+    "school": "SET",
+    "department": "ESM",
+    "phone": 7069644691,
+    "birth_date": "21ST MAY"
+  },
+  {
+    "sn": 121,
+    "name": "IMOLETUYI BUKOLA",
+    "school": "SAAT",
+    "department": "EWM",
+    "phone": 8130004645,
+    "birth_date": "25TH MAY"
+  },
+  {
+    "sn": 122,
+    "name": "ONIBI ABISOLA O.",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 7062427374,
+    "e_mail_add": "Onibiabisola1@yahoo.com",
+    "gender": "F",
+    "birth_date": "27TH MAY"
+  },
+  {
+    "sn": 123,
+    "name": "AKINMABOGUNJE ADELAJA",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 8100257430,
+    "birth_date": "27TH M AY"
+  },
+  {
+    "sn": 124,
+    "name": "JOLAOYE SAMUEL O",
+    "school": "SMAT",
+    "department": "TMT",
+    "phone": 8162846503,
+    "e_mail_add": "jolaoyesamuel12@gmail.com",
+    "gender": "M",
+    "birth_date": "27TH MAY"
+  },
+  {
+    "sn": 125,
+    "name": "ADEYEYE SAMUEL A",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 7030563936,
+    "e_mail_add": "Sadeyeye44@yahoo.com",
+    "birth_date": "28TH MAY"
+  },
+  {
+    "sn": 126,
+    "name": "ADARAMOLA OLUWASEYI",
+    "school": "SEET",
+    "department": "MNE",
+    "phone": 8186798622,
+    "e_mail_add": "oluwaseyiadaramola@yahoo.com",
+    "gender": "M",
+    "birth_date": "29TH MAY"
+  },
+  {
+    "sn": 127,
+    "name": "EWEBAJO OLUWASEYI",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 8179058217,
+    "e_mail_add": "seyiewebajo@gmail.com",
+    "gender": "M",
+    "birth_date": "31ST MAY"
+  },
+  {
+    "sn": 128
+  },
+  {
+    "sn": 129,
+    "name": "JAGUN OMOLARA",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 7084970736,
+    "e_mail_add": "Larryluv4christ@yahoo.com",
+    "gender": "F",
+    "birth_date": "2ND JUNE"
+  },
+  {
+    "sn": 130,
+    "name": "IJANUSI IYINTITO",
+    "school": "SAAT",
+    "department": "CSP",
+    "phone": 8181624364,
+    "e_mail_add": "iyintitoijanusi@gmail.com",
+    "gender": "F",
+    "birth_date": "8TH JUNE"
+  },
+  {
+    "sn": 131,
+    "name": "ADEGBOLA BAYO",
+    "school": "SEET",
+    "department": "AGE",
+    "phone": 8161378656,
+    "birth_date": "8TH JUNE"
+  },
+  {
+    "sn": 132,
+    "name": "OLUMIDE ABIMBOLA",
+    "school": "SAAT",
+    "department": "FST",
+    "phone": 8130963932,
+    "birth_date": "8TH JUNE"
+  },
+  {
+    "sn": 133,
+    "name": "AKINDELE BABATUNDE",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 7065850070,
+    "birth_date": "9TH JUNE"
+  },
+  {
+    "sn": 134,
+    "name": "OLAJIDE ABIMBOLA",
+    "school": "SMAT",
+    "department": "EMT",
+    "phone": 8102308036,
+    "birth_date": "11TH JUNE"
+  },
+  {
+    "sn": 135,
+    "name": "OGUNLOKUN SAMUEL",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 7039396068,
+    "birth_date": "13TH JUNE"
+  },
+  {
+    "sn": 136,
+    "name": "AKINWANDE PRECIOUS",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 8062133105,
+    "birth_date": "19TH JUNE"
+  },
+  {
+    "sn": 137,
+    "name": "ADEJUMO OLAJIDE",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 8187718821,
+    "e_mail_add": "Adejumo_olajide@yahoo.com",
+    "gender": "M",
+    "birth_date": "22ND JUNE"
+  },
+  {
+    "sn": 138,
+    "name": "ADEDOKUN MARIA KEHINDE",
+    "school": "SET",
+    "department": "SVG",
+    "phone": 8102483789,
+    "e_mail_add": "kadedokunmaria@yahoo.com",
+    "gender": "F",
+    "birth_date": "22ND JUNE"
+  },
+  {
+    "sn": 139,
+    "name": "OLAWAIYE OLUWASEYI",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 7066039722,
+    "birth_date": "23RD JUNE"
+  },
+  {
+    "sn": 140,
+    "name": "IRIKEFE ONORIODE",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 8071160555,
+    "e_mail_add": "onosiaeffe@gmail.com",
+    "gender": "M",
+    "birth_date": "24TH JUNE"
+  },
+  {
+    "sn": 141,
+    "name": "OLUWABUYI ABIMBOLA",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 8063121221,
+    "e_mail_add": "bimbowande@gmail.com",
+    "birth_date": "24TH JUNE"
+  },
+  {
+    "sn": 142,
+    "name": "ADEPOJU ADEDAYO",
+    "school": "SET",
+    "department": "BDG",
+    "phone": 8161133757,
+    "e_mail_add": "adedayoelizabeth@yahoo.com",
+    "gender": "F",
+    "birth_date": "24TH JUNE"
+  },
+  {
+    "sn": 143,
+    "name": "ADEDUGBE IREOLUWA",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 9032985942,
+    "e_mail_add": "ireoluwaenoch@gmail.com",
+    "gender": "M",
+    "birth_date": "28TH JUNE"
+  },
+  {
+    "sn": 144,
+    "name": "ARAYELA JESUTOFUNMI",
+    "school": "SOS",
+    "department": "BIO",
+    "phone": 8163788912,
+    "birth_date": "28TH JUNE"
+  },
+  {
+    "sn": 145,
+    "name": "OKONTA EVELYN N",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 7037808375,
+    "birth_date": "30TH JUNE"
+  },
+  {
+    "sn": 146,
+    "name": "OLAGUNJU TOSIN",
+    "school": "SET",
+    "department": "IDD",
+    "phone": 8100991362,
+    "birth_date": "30TH JUNE"
+  },
+  {
+    "sn": 147
+  },
+  {
+    "sn": 148,
+    "name": "AYIYI HARRY",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 8131387552,
+    "birth_date": "1ST JULY"
+  },
+  {
+    "sn": 149,
+    "name": "MAKINDE SAMUEL B",
+    "school": "SEET",
+    "department": "AGE",
+    "phone": 8139279193,
+    "e_mail_add": "samakkybest@gmail.com",
+    "gender": "M",
+    "birth_date": "1ST JULY"
+  },
+  {
+    "sn": 150,
+    "name": "IDRIS OLUWATOSIN D",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 8062084964,
+    "e_mail_add": "Edrisedris09@yahoo.com",
+    "gender": "M",
+    "birth_date": "1ST JULY"
+  },
+  {
+    "sn": 151,
+    "name": "OKOYE PATRICK",
+    "school": "SEET",
+    "department": "MEE",
+    "phone": 8103436020,
+    "e_mail_add": "Pokoye91@gmail.com",
+    "birth_date": "3RD JULY"
+  },
+  {
+    "sn": 152,
+    "name": "OYEDIRAN OYEWOLE",
+    "school": "SEMS",
+    "department": "MST",
+    "phone": 8167237626,
+    "e_mail_add": "oyediraoyewole@gmail.com",
+    "gender": "M",
+    "birth_date": "5TH JULY"
+  },
+  {
+    "sn": 153,
+    "name": "ADESANYA SEUN",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 8081430332,
+    "birth_date": "5TH JULY"
+  },
+  {
+    "sn": 154,
+    "name": "OLUREMI SAMUEL",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8136617017,
+    "e_mail_add": "Samyom1995@yahoo.com",
+    "gender": "M",
+    "birth_date": "10TH  JULY"
+  },
+  {
+    "sn": 155,
+    "name": "TAIWO OMOWUYI",
+    "school": "SAAT",
+    "department": "CSP",
+    "phone": 8136058141,
+    "birth_date": "11TH JULY"
+  },
+  {
+    "sn": 156,
+    "name": "OLOYEDE ITUNUOLUWA",
+    "school": "SET",
+    "department": "BDG",
+    "phone": 7037186252,
+    "e_mail_add": "Highteewzy.mo@gmail.com",
+    "gender": "M",
+    "birth_date": "11TH JULY"
+  },
+  {
+    "sn": 157,
+    "name": "ADELUSI BUSAYO",
+    "school": "SAAT",
+    "department": "ARE",
+    "phone": 8065170937,
+    "e_mail_add": "floxybright@rocketmail.com",
+    "gender": "F",
+    "birth_date": "11TH JULY"
+  },
+  {
+    "sn": 158,
+    "name": "ADENIRAN S FRANSIS",
+    "school": "SOS",
+    "department": "BCH",
+    "phone": 8169819600,
+    "e_mail_add": "franciscares4u@gmail.com",
+    "gender": "M",
+    "birth_date": "12TH JULY"
+  },
+  {
+    "sn": 159,
+    "name": "OYEGUN GABRIEL",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 8176497044,
+    "e_mail_add": "Talk2mcgcleff@yahoomail.com",
+    "birth_date": "12TH JULY"
+  },
+  {
+    "sn": 160,
+    "name": "OLUGOSI OLUSOLA",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 8108658225,
+    "e_mail_add": "olabayomisola@yahoo.com",
+    "gender": "M",
+    "birth_date": "13TH JULY"
+  },
+  {
+    "sn": 161,
+    "name": "AYENIYO OLAYEMI",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 7033416630,
+    "e_mail_add": "ayeniyoolayemi@gmail.com",
+    "birth_date": "13TH JULY"
+  },
+  {
+    "sn": 162,
+    "name": "AYEBAMERU DOYINSOLA",
+    "school": "SET",
+    "department": "ESM",
+    "phone": 7036266050,
+    "e_mail_add": "ayebamerudoyin@yahoo.com",
+    "gender": "F",
+    "birth_date": "14TH JULY"
+  },
+  {
+    "sn": 163,
+    "name": "ALAO SUNDAY",
+    "school": "SET",
+    "department": "URP",
+    "phone": 8034543960,
+    "birth_date": "14TH JULY"
+  },
+  {
+    "sn": 164,
+    "name": "AJAYI MOYINOLUWA",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 8025116947,
+    "e_mail_add": "Ajayimoyinoluwa895@yahoo.com",
+    "gender": "M",
+    "birth_date": "14TH JULY"
+  },
+  {
+    "sn": 165,
+    "name": "DIXON OLUWATOSIN",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 8135356264,
+    "birth_date": "15TH JULY"
+  },
+  {
+    "sn": 166,
+    "name": "AJALA AFOLABI NIYI",
+    "school": "SOS",
+    "department": "STA",
+    "phone": 8108461584,
+    "e_mail_add": "Andy_valentino007@yahoo.com",
+    "gender": "M",
+    "birth_date": "15TH JULY"
+  },
+  {
+    "sn": 167,
+    "name": "AKINKUNMI TOLULOPE",
+    "school": "SAAT",
+    "department": "FWT",
+    "phone": 8036957592,
+    "e_mail_add": "tolulopeakinkunmi@yahoo.com",
+    "gender": "F",
+    "birth_date": "16TH JULY"
+  },
+  {
+    "sn": 168,
+    "name": "OLAJIDE DAMILOLA",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 8135945669,
+    "e_mail_add": "damilola.olajide@yahoo.com",
+    "gender": "M",
+    "birth_date": "18TH JULY"
+  },
+  {
+    "sn": 169,
+    "name": "ADEYONNU ADETOYE",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 8035897857,
+    "birth_date": "19TH JULY"
+  },
+  {
+    "sn": 170,
+    "name": "OLUWANIYI BLESSING",
+    "school": "SMAT",
+    "department": "TMT",
+    "phone": 8136563699,
+    "birth_date": "20TH JULY"
+  },
+  {
+    "sn": 171,
+    "name": "OLAPADE SEGUN",
+    "school": "SOS",
+    "department": "CHE",
+    "phone": 8132354454,
+    "e_mail_add": "isaacolap@yahoo.com",
+    "birth_date": "20TH JULY"
+  },
+  {
+    "sn": 172,
+    "name": "OYEKOLA OLAITAN",
+    "school": "SAAT",
+    "department": "CSP",
+    "phone": 8108623249,
+    "e_mail_add": "oyekolapetr@yahoo.com",
+    "gender": "M",
+    "birth_date": "22ND JULY"
+  },
+  {
+    "sn": 173,
+    "name": "BABFEMI AYODELE",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 8085240192,
+    "e_mail_add": "josephbabafemi@yahoo.com",
+    "birth_date": "23RD JULY"
+  },
+  {
+    "sn": 174,
+    "name": "ADEJUMOBI VICTORIA",
+    "school": "SAAT",
+    "department": "FAT",
+    "phone": 8072498752,
+    "birth_date": "25TH JULY"
+  },
+  {
+    "sn": 175,
+    "name": "ADEKUNLE DAMILARE",
+    "school": "SET",
+    "department": "ARC",
+    "phone": 8160248430,
+    "e_mail_add": "Adekunle21952@gmail.com",
+    "birth_date": "25TH JULY"
+  },
+  {
+    "sn": 176,
+    "name": "AKINDOLURE FOLARIN",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8103143156,
+    "e_mail_add": "Akindolure9@gmail.com",
+    "birth_date": "26TH JULY"
+  },
+  {
+    "sn": 177,
+    "name": "OGUNGBEMI OLUWASUNKANMI",
+    "school": "SAAT",
+    "department": "FST",
+    "phone": 8168338204,
+    "e_mail_add": "paulobotos@gmail.com",
+    "gender": "M",
+    "birth_date": "27TH JULY"
+  },
+  {
+    "sn": 178,
+    "name": "TITILADUNAYO SAMUEL",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 8163320776,
+    "e_mail_add": "samtitiladunayo@yahoo.com",
+    "gender": "M",
+    "birth_date": "28TH JULY"
+  },
+  {
+    "sn": 179,
+    "name": "BAMIGBOYE EMMANUEL",
+    "school": "SET",
+    "department": "ARC",
+    "phone": 8108106849,
+    "e_mail_add": "Emmabammy5@gmail.com",
+    "birth_date": "31ST JULY"
+  },
+  {
+    "sn": 180
+  },
+  {
+    "sn": 181,
+    "name": "OLALEYE OLUWASEUN",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8138312588,
+    "e_mail_add": "heritageolaleye@gmail.com",
+    "birth_date": "1ST AUG"
+  },
+  {
+    "sn": 182,
+    "name": "OPEYEMI GIDEON O.",
+    "school": "SOS",
+    "department": "STA",
+    "phone": 8108094431,
+    "e_mail_add": "opeyemigideon@yahoo.com",
+    "birth_date": "3RD AUG"
+  },
+  {
+    "sn": 183,
+    "name": "AKINYEMI AKINJIDE",
+    "school": "SEET",
+    "department": "MME",
+    "phone": 8134005802,
+    "birth_date": "8TH AUG"
+  },
+  {
+    "sn": 184,
+    "name": "ADENOLA EMMANUEL",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 8025241332,
+    "birth_date": "11TH AUG"
+  },
+  {
+    "sn": 185,
+    "name": "ASHOLA OLUWASEYI",
+    "school": "SET",
+    "department": "ESM",
+    "phone": 8107213453,
+    "e_mail_add": "Asholadavid@ymail.com",
+    "birth_date": "11TH AUG"
+  },
+  {
+    "sn": 186,
+    "name": "OMONIYI OLUWATOBILOBA M.",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 8137592285,
+    "e_mail_add": "Tobiloba.omoniyi@yahoo.com",
+    "birth_date": "15TH AUG"
+  },
+  {
+    "sn": 187,
+    "name": "‘DIMIPE BAYO",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 7030508174,
+    "birth_date": "16TH AUG"
+  },
+  {
+    "sn": 188,
+    "name": "IHUA GBUBEMI PETER",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 8039465943,
+    "e_mail_add": "Atomicwave2009@yahoo.com",
+    "birth_date": "19TH AUG"
+  },
+  {
+    "sn": 189,
+    "name": "OJO OLUWATAYO",
+    "school": "SEET",
+    "department": "AGE",
+    "phone": 7063316028,
+    "birth_date": "19TH AUG"
+  },
+  {
+    "sn": 190,
+    "name": "FALEYE OLADAYO",
+    "school": "SOS",
+    "department": "BCH",
+    "phone": 8188641225,
+    "birth_date": "20TH AUG"
+  },
+  {
+    "sn": 191,
+    "name": "ADELUMO TEMITOPE",
+    "school": "SEMS",
+    "department": "RSG",
+    "phone": 8060489016,
+    "birth_date": "20TH AUG"
+  },
+  {
+    "sn": 192,
+    "name": "OMOLEYE DAMILOLA",
+    "school": "SAAT",
+    "department": "CSP",
+    "phone": 7034865800,
+    "e_mail_add": "Daryeleen485510@gmail.com",
+    "gender": "F",
+    "birth_date": "20TH AUG"
+  },
+  {
+    "sn": 193,
+    "name": "OLANIPEKUN OLOLADE",
+    "school": "SAAT",
+    "department": "APH",
+    "phone": 8111912228,
+    "birth_date": "24TH AUG"
+  },
+  {
+    "sn": 194,
+    "name": "AGBOOLA OLUWASEUN PETER",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 7038278974,
+    "e_mail_add": "Niflex000@gmail.com",
+    "birth_date": "26TH AUG"
+  },
+  {
+    "sn": 185,
+    "name": "ONIBI ABISOLA",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 7062427374,
+    "e_mail_add": "onibiabisola1@yahoo.com",
+    "gender": "F",
+    "birth_date": "27TH AUG"
+  },
+  {
+    "sn": 196,
+    "name": "ALUFA SOLA",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 8135387664,
+    "birth_date": "28TH AUG"
+  },
+  {
+    "sn": 197,
+    "name": "ALMAROOF OLAITAN",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 8166495561,
+    "e_mail_add": "horlaitejrocker@gmail.com",
+    "gender": "M",
+    "birth_date": "29TH  AUG"
+  },
+  {
+    "sn": 198
+  },
+  {
+    "sn": 199
+  },
+  {
+    "sn": 200,
+    "name": "ADUBI TEMITOPE",
+    "school": "SEET",
+    "department": "AGE",
+    "phone": 7065597080,
+    "e_mail_add": "adubitemitope@gmail.com",
+    "gender": "F",
+    "birth_date": "3RD SEPT"
+  },
+  {
+    "sn": 201,
+    "name": "SHITTU OLUWASEUN A.",
+    "school": "SAAT",
+    "department": "CSP",
+    "phone": 8104281382,
+    "birth_date": "4TH SEPT"
+  },
+  {
+    "sn": 202,
+    "name": "OGUNNEYE SAMUEL",
+    "school": "SAAT",
+    "department": "FWT",
+    "phone": 8068081313,
+    "birth_date": "4TH SEPT"
+  },
+  {
+    "sn": 203,
+    "name": "QUADRI OLAYINKA REUBEN",
+    "school": "SAAT",
+    "department": "ARE",
+    "phone": 8095317051,
+    "e_mail_add": "Reubenquadri5@gmail.com",
+    "birth_date": "5TH SEPT"
+  },
+  {
+    "sn": 204,
+    "name": "AYEBODE VICTOR O",
+    "school": "SOS",
+    "department": "STA",
+    "phone": 8167997025,
+    "e_mail_add": "Excelvictosin19@gmail.com",
+    "gender": "M",
+    "birth_date": "6TH SEPT"
+  },
+  {
+    "sn": 205,
+    "name": "ODEPIDAN JOSHUA  O.",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8183048484,
+    "e_mail_add": "joushman@yahoo.com",
+    "birth_date": "7TH SEPT"
+  },
+  {
+    "sn": 206,
+    "name": "OYEYEMI OLUWAPELUMI",
+    "school": "SET",
+    "department": "URP",
+    "phone": 8139619664,
+    "birth_date": "11TH SEPT"
+  },
+  {
+    "sn": 207,
+    "name": "AMOWE BUSAYO",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 8062897222,
+    "e_mail_add": "amoweolubusayo@gmail.com",
+    "gender": "F",
+    "birth_date": "12TH SEPT"
+  },
+  {
+    "sn": 208,
+    "name": "OLATIMILEYIN SUNDAY",
+    "school": "SET",
+    "department": "URP",
+    "phone": 9034438582,
+    "e_mail_add": "olatimileyindamilola@gmail.com",
+    "gender": "M",
+    "birth_date": "13TH SEPT"
+  },
+  {
+    "sn": 209,
+    "name": "ADEYEYE VICTORIA B",
+    "school": "SOS",
+    "department": "BIO",
+    "phone": 7065177225,
+    "e_mail_add": "V_adeyeye@yahoo.com",
+    "gender": "F",
+    "birth_date": "15TH SEPT"
+  },
+  {
+    "sn": 210,
+    "name": "OLAIYA OLUSOLA",
+    "school": "SEET",
+    "department": "EEE",
+    "phone": 8167405294,
+    "e_mail_add": "Olusola.olaya@yahoo.com",
+    "birth_date": "18TH SEPT"
+  },
+  {
+    "sn": 211,
+    "name": "ADELEYE ADEDAPO",
+    "school": "SOS",
+    "department": "CHE",
+    "phone": 7062328929,
+    "e_mail_add": "dapsjoe@yahoo.com",
+    "birth_date": "21ST SEPT"
+  },
+  {
+    "sn": 212,
+    "name": "ADIGUN AYOMIPOSI",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 7064390598,
+    "e_mail_add": "Ayomiposiabiola@yahoo.com",
+    "gender": "F",
+    "birth_date": "23RD SEPT"
+  },
+  {
+    "sn": 203,
+    "name": "AKEREJOLA OLUWATOSIN",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 8166617155,
+    "e_mail_add": "Jolatosin23@yahoo.com",
+    "birth_date": "23RD SEPT"
+  },
+  {
+    "sn": 214,
+    "name": "SUNDAY EMMANUEL ADAH",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 8076499607,
+    "e_mail_add": "emmydissolis@yahoo.com",
+    "birth_date": "23RD SEPT"
+  },
+  {
+    "sn": 215,
+    "name": "POWE JOHN",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 8065703007,
+    "e_mail_add": "Powe74@gmail.com",
+    "gender": "M",
+    "birth_date": "24TH SEPT"
+  },
+  {
+    "sn": 216,
+    "name": "OGUNLEYE SUNDAY",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 8165349401,
+    "e_mail_add": "Fdalex09@yahoo.com",
+    "birth_date": "26TH SEPT"
+  },
+  {
+    "sn": 217,
+    "name": "ADEFISOYE KAYODE",
+    "school": "SAAT",
+    "department": "CSP",
+    "phone": 9030985746,
+    "e_mail_add": "Adefisoyeblessing@rocketmail.com",
+    "gender": "M",
+    "birth_date": "26TH SEPT"
+  },
+  {
+    "sn": 218,
+    "name": "OLADOYINBO BABATUNDE",
+    "school": "SAAT",
+    "department": "FWT",
+    "phone": 8189348692,
+    "birth_date": "26TH SEPT"
+  },
+  {
+    "sn": 219,
+    "name": "OLAGUNJU DESMOND",
+    "school": "SEET",
+    "department": "EEE",
+    "phone": 7062598295,
+    "birth_date": "27TH SEPT"
+  },
+  {
+    "sn": 220,
+    "name": "TEMITOPE PHILLIPS",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 8101079657,
+    "e_mail_add": "temitopephil@gmail.com",
+    "birth_date": "27TH SEPT"
+  },
+  {
+    "sn": 221,
+    "name": "MICHAEL ALADETAN",
+    "school": "SOS",
+    "department": "PMT",
+    "phone": 8111786976,
+    "e_mail_add": "alaskaaladetan@yahoo.com",
+    "birth_date": "29TH SEPT"
+  },
+  {
+    "sn": 222
+  },
+  {
+    "sn": 223,
+    "name": "BALOGUN OYEWUNMI FAITH",
+    "school": "SOS",
+    "department": "STA",
+    "phone": 7063872166,
+    "e_mail_add": "aderinsolaoyewunmi@gmail.com",
+    "birth_date": "1ST OCT"
+  },
+  {
+    "sn": 224,
+    "name": "MEDOYE OLUSOJI I.",
+    "school": "SEET",
+    "department": "MNE",
+    "phone": 8033487856,
+    "e_mail_add": "Medoye.olusoji@yahoo.com",
+    "gender": "M",
+    "birth_date": "3RD OCT"
+  },
+  {
+    "sn": 225,
+    "name": "AMOKADE TAIWO",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8062888230,
+    "birth_date": "4TH OCT"
+  },
+  {
+    "sn": 226,
+    "name": "DOSUNMU ADEYINKA",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 8188641263,
+    "e_mail_add": "Adeyinkaolusegun29@gmail.com",
+    "birth_date": "4TH OCT"
+  },
+  {
+    "sn": 227,
+    "name": "ABIDOYE OMOLARA.V",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 8133661991,
+    "e_mail_add": "abidoyeomolara11@yahoo.com",
+    "gender": "F",
+    "birth_date": "4TH OCT"
+  },
+  {
+    "sn": 228,
+    "name": "HAMMOND OLUWOLE",
+    "school": "SET",
+    "department": "URP",
+    "phone": 8031186934,
+    "e_mail_add": "holuwole@yahoo.com",
+    "gender": "M",
+    "birth_date": "5TH OCT"
+  },
+  {
+    "sn": 229,
+    "name": "FAGBOHUN TEMITAYO",
+    "school": "SOS",
+    "department": "BCH",
+    "phone": 8169344883,
+    "e_mail_add": "Jtayo1@yahoo.com",
+    "gender": "M",
+    "birth_date": "7TH OCT"
+  },
+  {
+    "sn": 230,
+    "name": "DAHUNSI JOY",
+    "school": "SAAT",
+    "department": "APH",
+    "phone": 8127626604,
+    "birth_date": "8TH OCT."
+  },
+  {
+    "sn": 231,
+    "name": "ABIDAKUN IFEDAYO AYOMIDE",
+    "school": "SAAT",
+    "department": "EWM",
+    "phone": 8131812707,
+    "e_mail_add": "abidakunifedayo@yahoo.com",
+    "gender": "M",
+    "birth_date": "11TH OCT"
+  },
+  {
+    "sn": 232,
+    "name": "COKER IFEOLUWA GREGORY",
+    "school": "SET",
+    "department": "URP",
+    "phone": 8168566711,
+    "e_mail_add": "Ifecoker03@gmail.com",
+    "gender": "M",
+    "birth_date": "11TH OCT"
+  },
+  {
+    "sn": 233,
+    "name": "OLALEYE ISRAEL",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 8166722949,
+    "birth_date": "12TH OCT"
+  },
+  {
+    "sn": 234,
+    "name": "NZETEH NWAKAEGO",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 7034072256,
+    "e_mail_add": "nwakaegonzeteh@yahoo.com",
+    "gender": "F",
+    "birth_date": "12TH OCT"
+  },
+  {
+    "sn": 235,
+    "name": "JIMOH OMOWUNMI",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 8169153372,
+    "e_mail_add": "bjmary@gmail.com",
+    "gender": "F",
+    "birth_date": "12TH OCT"
+  },
+  {
+    "sn": 236,
+    "name": "ADEYEMO OLUBUNMI",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8136121401,
+    "e_mail_add": "Supergal0001@yahoo.com",
+    "gender": "F",
+    "birth_date": "13TH OCT"
+  },
+  {
+    "sn": 237,
+    "name": "OLABODE EMMANUEL",
+    "school": "SOS",
+    "department": "BIO",
+    "phone": 7069248190,
+    "birth_date": "13TH OCT"
+  },
+  {
+    "sn": 238,
+    "name": "OYEBAMIJI FOLAHANMI",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 8139459145,
+    "birth_date": "13TH OCT"
+  },
+  {
+    "sn": 239,
+    "name": "ADEYEYE BOSEDE",
+    "school": "SOS",
+    "department": "BIO",
+    "phone": 7065174225,
+    "birth_date": "15TH 0CT"
+  },
+  {
+    "sn": 240,
+    "name": "ADENIGBA SAMUEL",
+    "school": "SOS",
+    "department": "STA",
+    "phone": 7069697442,
+    "e_mail_add": "Samuelforgod@yahoo.com",
+    "birth_date": "21ST OCT"
+  },
+  {
+    "sn": 241,
+    "name": "FAMOSAYA ADEDAYO",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 8161874828,
+    "birth_date": "22ND OCT"
+  },
+  {
+    "sn": 242,
+    "name": "DARAMOLA TOLU",
+    "school": "SOS",
+    "department": "STA",
+    "phone": 8132808685,
+    "e_mail_add": "Daramola_tolu@yahoo.com",
+    "birth_date": "22ND OCT"
+  },
+  {
+    "sn": 243,
+    "name": "ADEGBITE OLUWAFEMI",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 7065256580,
+    "e_mail_add": "adegbitefemisamson@gmail.com",
+    "birth_date": "24TH OCT"
+  },
+  {
+    "sn": 244,
+    "name": "AYEGORO OLUWABOR",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 7066736598,
+    "e_mail_add": "oluwabori@gmail.com",
+    "birth_date": "25TH OCT"
+  },
+  {
+    "sn": 245,
+    "name": "AWOSANMI DAMILARE NAOMI",
+    "school": "SAAT",
+    "department": "FST",
+    "phone": 7035644633,
+    "e_mail_add": "Dami_tunbi@yahoo.com",
+    "gender": "F",
+    "birth_date": "26TH OCT"
+  },
+  {
+    "sn": 246,
+    "name": "OLUKOJU AYOMIDE",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 7039139808,
+    "e_mail_add": "johnolukoju@gmail.com",
+    "birth_date": "26TH OCT"
+  },
+  {
+    "sn": 247,
+    "name": "IGE WLSON T",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 8101075333,
+    "e_mail_add": "Ige.wilson.tosin@gmail.com",
+    "birth_date": "27th OCT"
+  },
+  {
+    "sn": 248,
+    "name": "OGUNFOLAJU OLALEKAN",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 8050383611,
+    "e_mail_add": "ogunfolajuolalekan94@yahoo.com",
+    "gender": "M",
+    "birth_date": "30TH OCT"
+  },
+  {
+    "sn": 249,
+    "name": "OGAGBAYI OLUMUYIWA",
+    "school": "SOS",
+    "department": "BCH",
+    "phone": 8130809883,
+    "e_mail_add": "Muyiwaogagbayi @yahoo.com",
+    "gender": "M",
+    "birth_date": "30TH OCT"
+  },
+  {
+    "sn": 250
+  },
+  {
+    "sn": 251,
+    "name": "AJAYI WURAOLA",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 8062521771,
+    "e_mail_add": "olufolayemi@gmail.com",
+    "gender": "F",
+    "birth_date": "2ND NOV"
+  },
+  {
+    "sn": 252,
+    "name": "FAMILONI OLAJUMOKE",
+    "school": "SOS",
+    "department": "BCH",
+    "phone": 8130700540,
+    "birth_date": "6TH NOV"
+  },
+  {
+    "sn": 253,
+    "name": "OJELADE PELUMI",
+    "school": "SEMS",
+    "department": "AGY",
+    "phone": 8188233946,
+    "e_mail_add": "Pelumi_pelumi@yahoo.co.uk",
+    "gender": "M",
+    "birth_date": "7TH NOV"
+  },
+  {
+    "sn": 254,
+    "name": "ADENIYI MATTEUW",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 7067433046,
+    "birth_date": "13TH NOV"
+  },
+  {
+    "sn": 255,
+    "name": "OWON FAARI TEMITOPE",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 9039572491,
+    "e_mail_add": "topzy@gmail.com",
+    "gender": "M",
+    "birth_date": "15TH NOV"
+  },
+  {
+    "sn": 256,
+    "name": "AJIBOYE YETUNDE",
+    "school": "SAAT",
+    "department": "FAT",
+    "phone": 7038604105,
+    "e_mail_add": "D2dmama@yahoo.com",
+    "gender": "F",
+    "birth_date": "15TH NOV"
+  },
+  {
+    "sn": 257,
+    "name": "ADEWUYI ADEBIMPE",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 7069732071,
+    "e_mail_add": "Bimpay2013@yahoo.com",
+    "gender": "F",
+    "birth_date": "16TH NOV"
+  },
+  {
+    "sn": 258,
+    "name": "MOHAMMED IDRIS OLUSESI",
+    "school": "SET",
+    "department": "QSV",
+    "phone": 8034105165,
+    "e_mail_add": "meedris@yahoo.com",
+    "gender": "M",
+    "birth_date": "17TH NOV"
+  },
+  {
+    "sn": 259,
+    "name": "JEGEDE SEUN",
+    "school": "SET",
+    "department": "BDG",
+    "phone": 8109791041,
+    "e_mail_add": "Seunjege4christ@yahoo.com",
+    "gender": "M",
+    "birth_date": "19TH NOV"
+  },
+  {
+    "sn": 260,
+    "name": "OMOTOSHO SEGUN S",
+    "school": "SMAT",
+    "department": "TMT",
+    "phone": 8065957752,
+    "birth_date": "27TH NOV"
+  },
+  {
+    "sn": 261,
+    "name": "ABGETOLA OLUWAFEMI",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 8164635963,
+    "e_mail_add": "Agbetola24@gmail.com",
+    "gender": "M",
+    "birth_date": "27TH NOV"
+  },
+  {
+    "sn": 262,
+    "name": "AKINRO AYODEJI",
+    "school": "SAAT",
+    "department": "ARE",
+    "phone": 8100001064,
+    "e_mail_add": "akinroayodeji@yahoo.com",
+    "birth_date": "28TH NOV"
+  },
+  {
+    "sn": 263,
+    "name": "USIFO MARY",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 8100075253,
+    "e_mail_add": "hardesuwa@yahoo.com",
+    "birth_date": "24TH NOV"
+  },
+  {
+    "sn": 264,
+    "name": "OLAFASAKIN OLATUNJI",
+    "school": "SET",
+    "department": "IDD",
+    "phone": 8026067235,
+    "e_mail_add": "Fashtee92@gmail.com",
+    "birth_date": "24TH NOV"
+  },
+  {
+    "sn": 265,
+    "name": "AGBETOLA OLUWAFEMI",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 8164635963,
+    "e_mail_add": "Oluwafemi4me@gmail.com",
+    "birth_date": "27TH NOV"
+  },
+  {
+    "sn": 266,
+    "name": "SOBOWALE RAPHEAL. A",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 8178146047,
+    "e_mail_add": "raphealsobowale@gmail.com",
+    "gender": "M",
+    "birth_date": "29TH NOV"
+  },
+  {
+    "sn": 267
+  },
+  {
+    "sn": 268,
+    "name": "KAYODE SHERIF A",
+    "school": "SEET",
+    "department": "AGE",
+    "phone": 7065179782,
+    "e_mail_add": "Kayodesherifadebayo@gmail.com",
+    "gender": "M",
+    "birth_date": "1ST DEC"
+  },
+  {
+    "sn": 269,
+    "name": "AYENI  TEMIDAYO",
+    "school": "SOS",
+    "department": "CSC",
+    "phone": 8030422426,
+    "e_mail_add": "Dayuscharity2003@yahoo.com",
+    "birth_date": "2ND DEC"
+  },
+  {
+    "sn": 270,
+    "name": "ADEYA ADEKUNLE",
+    "school": "SAAT",
+    "department": "FAT",
+    "phone": 7037967499,
+    "e_mail_add": "Adeya_mccoy@yahoo.com",
+    "birth_date": "4TH DEC"
+  },
+  {
+    "sn": 271,
+    "name": "ATANLUSI EMMANUELLA",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 8147120929,
+    "e_mail_add": "thayutha@yahoo.com",
+    "gender": "F",
+    "birth_date": "7TH DEC"
+  },
+  {
+    "sn": 272,
+    "name": "FAJULUGBE OPEYEMI",
+    "school": "SOS",
+    "department": "PHY",
+    "phone": 8134669711,
+    "e_mail_add": "Clavicord4jazz@gmail.com",
+    "birth_date": "7TH DEC"
+  },
+  {
+    "sn": 273,
+    "name": "ASIGOH ODUNAYO",
+    "school": "SEMS",
+    "department": "AGP",
+    "phone": 8101651717,
+    "e_mail_add": "asigoh2@gmail.com",
+    "gender": "M",
+    "birth_date": "8TH DEC"
+  },
+  {
+    "sn": 274,
+    "name": "TAYLOR OLUWASEYI",
+    "school": "SAAT",
+    "department": "APH",
+    "phone": 8162017900,
+    "e_mail_add": "Taylotseyi45@yahoo.com",
+    "birth_date": "9TH DEC"
+  },
+  {
+    "sn": 275,
+    "name": "AKINGBOYE PATRICIA",
+    "school": "SAAT",
+    "department": "CSP",
+    "phone": 8168678954,
+    "e_mail_add": "Odunayo4path@yahoo.com",
+    "birth_date": "9TH DEC"
+  },
+  {
+    "sn": 276,
+    "name": "FALADE SIMILEOLUWA",
+    "school": "SOS",
+    "department": "BCH",
+    "phone": 7038305040,
+    "e_mail_add": "simileoluwafalade@yahoo.co.uk",
+    "gender": "F",
+    "birth_date": "12TH DEC"
+  },
+  {
+    "sn": 277,
+    "name": "OKEBUNMI ODUNAYO",
+    "school": "SOS",
+    "department": "MTS",
+    "phone": 8081811957,
+    "birth_date": "13TH DEC"
+  },
+  {
+    "sn": 278,
+    "name": "OLASANMI OLAYINKA",
+    "school": "SEET",
+    "department": "CVE",
+    "phone": 7030429334,
+    "e_mail_add": "olasphushorolasphushor@yahoo.c",
+    "birth_date": "15TH DEC"
+  },
+  {
+    "sn": 279,
+    "name": "FADEBI OLADOTUN O",
+    "school": "SOS",
+    "department": "CHE",
+    "phone": 8175172180,
+    "e_mail_add": "keluvdoyun@gmail.com",
+    "gender": "M",
+    "birth_date": "15TH DEC"
+  },
+  {
+    "sn": 280,
+    "name": "DARAMOLA ADEKUNLE",
+    "school": "SEET",
+    "department": "EEE",
+    "phone": 8107536436,
+    "e_mail_add": "Kunledorams @ovi.com",
+    "birth_date": "15TH DEC"
+  },
+  {
+    "sn": 281,
+    "name": "KEHINDE ABIODUN",
+    "school": "SET",
+    "department": "ESM",
+    "phone": 8052792996,
+    "e_mail_add": "Toallmypals2005@yahoo.com",
+    "gender": "M",
+    "birth_date": "16TH DEC"
+  },
+  {
+    "sn": 282,
+    "name": "AJIBUWA BENEDICT",
+    "school": "SAAT",
+    "department": "ARE",
+    "phone": 8130949540,
+    "e_mail_add": "obewediet@yahoo.com",
+    "birth_date": "16TH DEC"
+  },
+  {
+    "sn": 283,
+    "name": "BAKARE RAMOTA O",
+    "school": "SOS",
+    "department": "BCH",
+    "phone": 8107070880,
+    "e_mail_add": "Littlerammy4luv@yahoo.com",
+    "gender": "F",
+    "birth_date": "17TH DEC"
+  },
+  {
+    "sn": 284,
+    "name": "ADEGBAYE BIDEMI",
+    "school": "SEET",
+    "department": "MNE",
+    "phone": 8036075659,
+    "birth_date": "18TH DEC"
+  },
+  {
+    "sn": 285,
+    "name": "AKINNUGBA DEBORAH",
+    "school": "SET",
+    "department": "ESM",
+    "phone": 8067499229,
+    "e_mail_add": "akindebrah@gmail.com",
+    "gender": "F",
+    "birth_date": "20TH DEC"
+  },
+  {
+    "sn": 286,
+    "name": "OMOGUNLOYE SUNDAY",
+    "school": "SAAT",
+    "department": "FAT",
+    "phone": 8162322002,
+    "birth_date": "22ND DEC"
+  },
+  {
+    "sn": 287,
+    "name": "OLALERE OLAPEGBA",
+    "school": "SEMS",
+    "department": "MET",
+    "phone": 7032929535,
+    "birth_date": "27TH DEC"
+  },
+  {
+    "sn": 288,
+    "name": "ADEGORIOYE DAVID",
+    "school": "SOS",
+    "department": "MCB",
+    "phone": 7062174036,
+    "e_mail_add": "adegborioyedavid@gmail.com",
+    "gender": "M",
+    "birth_date": "27TH DEC"
+  },
+  {
+    "sn": 289,
+    "name": "OYEWOLE KAYODE",
+    "school": "SMAT",
+    "department": "PMT",
+    "phone": 9033481448,
+    "e_mail_add": "Oyewole.kayode@yahoo.com",
+    "birth_date": "28TH DEC"
+  },
+  {
+    "sn": 290,
+    "name": "QUIST OLAJUMOKE",
+    "school": "SAAT",
+    "department": "AEC",
+    "phone": 8094233447,
+    "birth_date": "30TH DEC"
+  }
+]
