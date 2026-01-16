@@ -1,0 +1,5 @@
+- remove all python excel and json data files
+- tenure view doesn't have family name
+- tenure start date and end date is having issues in the edit form
+- create a front facing view where alumni's can view and update their data without being authenticated
+- departments in the seeder data are supossed to match the department id in the database
