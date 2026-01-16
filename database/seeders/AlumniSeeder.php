@@ -2,6 +2,25 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\AlumniSeeder\Alumni2001_2002Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2002_2003Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2003_2004Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2004_2005Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2005_2006Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2006_2007Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2007_2008Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2008_2009Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2009_2010Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2010_2011Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2011_2012Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2012_2013Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2013_2014Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2014_2015Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2015_2016Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2016_2017Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2017_2018Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2018_2019Seeder;
+use Database\Seeders\AlumniSeeder\Alumni2000_2001Seeder;
 use Illuminate\Database\Seeder;
 
 class AlumniSeeder extends Seeder
@@ -13,7 +32,7 @@ class AlumniSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            
+
             Alumni2000_2001Seeder::class,
             Alumni2001_2002Seeder::class,
             Alumni2002_2003Seeder::class,

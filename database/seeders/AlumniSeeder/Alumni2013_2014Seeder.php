@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\AlumniSeeder;
 
 use App\Models\Alumnus;
 use App\Models\Tenure;
@@ -789,16 +789,8 @@ class Alumni2013_2014Seeder extends Seeder
                 'state' => null,
                 'address' => null,
             ],
-            [
-                'name' => 'SUNDAY OLUSOLA A.',
-                'email' => 'm.shawly@yahoo.com',
-                'phones' => null,
-                'department' => 'CSC',
-                'gender' => 'M',
-                'birth_date' => '2000-12-23',
-                'state' => null,
-                'address' => null,
-            ],
+
+
             [
                 'name' => 'SHOFOLABO OLUSEGUN',
                 'email' => 'shopolaboadewale@yahoo.com',

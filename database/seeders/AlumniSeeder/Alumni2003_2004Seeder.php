@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\AlumniSeeder;
 
 use App\Models\Alumnus;
 use App\Models\Tenure;

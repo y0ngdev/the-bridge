@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\AlumniSeeder;
 
 use App\Models\Alumnus;
 use App\Models\Tenure;
@@ -2041,7 +2041,7 @@ class Alumni2018_2019Seeder extends Seeder
             ],
             [
                 'name' => 'OJO OLALEKAN',
-                'email' => 'cephaxokeowo@gmail.com',
+                'email' => null,
                 'phones' => ['08104444512'],
                 'department' => 'TMT',
                 'gender' => 'M',
