@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class AlumniDataSeeder extends Seeder
+class AlumniSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,7 @@ class AlumniDataSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            
             Alumni2000_2001Seeder::class,
             Alumni2001_2002Seeder::class,
             Alumni2002_2003Seeder::class,

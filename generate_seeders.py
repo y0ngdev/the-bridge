@@ -9,7 +9,7 @@ Database alumni table structure:
 - department: string|null
 - gender: enum('M', 'F')|null
 - is_futa_staff: boolean (default false)
-- birth_date: date|null (not in JSON data)
+- birth_date: date|null
 - past_exco_office: string|null
 - current_exco_office: string|null
 - unit: string|null
@@ -21,6 +21,7 @@ Database alumni table structure:
 import json
 import os
 import re
+from datetime import datetime
 
 # Nigerian states for matching (from NigerianState enum)
 NIGERIAN_STATES = [
@@ -42,15 +43,45 @@ STATE_VARIATIONS = {
     'federal capital territory': 'FCT',
 }
 
+# Month name to number mapping
+MONTH_MAP = {
+    'jan': 1, 'january': 1,
+    'feb': 2, 'february': 2,
+    'mar': 3, 'march': 3,
+    'apr': 4, 'april': 4,
+    'may': 5,
+    'jun': 6, 'june': 6,
+    'jul': 7, 'july': 7,
+    'aug': 8, 'august': 8,
+    'sep': 9, 'sept': 9, 'september': 9,
+    'oct': 10, 'october': 10,
+    'nov': 11, 'november': 11,
+    'dec': 12, 'december': 12,
+}
+
 # Column mappings for different sheet formats
 # Each mapping specifies which numeric key corresponds to which field
 COLUMN_MAPPINGS = {
     # Format: "1": NO., "2": NAME, "3": PHONE, "4": DEPT, "5": GENDER, "6": DOB
-    '2017_2018': {'name': '2', 'phone': '3', 'department': '4', 'gender': '5'},
-    '2015_2016': {'name': '1', 'department': '2', 'address': '3', 'phone': '5', 'gender': '6'},
-    '2004_2005': {'name': '2', 'department': '3', 'gender': '4'},  # Guessing based on pattern
+    '2017_2018': {'name': '2', 'phone': '3', 'department': '4', 'gender': '5', 'birth_date': '6'},
+    '2015_2016': {'name': '1', 'department': '2', 'address': '3', 'birth_date': '4', 'phone': '5', 'gender': '6'},
+    # 2008_2009: "1": S/N, "2": NAME, "3": SEX, "4": DEPT., "5": PHONE NO, "6": D.O.B
+    '2008_2009': {'name': '2', 'gender': '3', 'department': '4', 'phone': '5', 'birth_date': '6'},
+    # 2012_2013: "2": S/N, "5": NAME, "6": SEX, "7": DEPT, "9": PHONE NO., "10": D.O.B
+    '2012_2013': {'name': '5', 'gender': '6', 'department': '7', 'phone': '9', 'birth_date': '10'},
+    '2004_2005': {'name': '2', 'department': '3', 'gender': '4'},
     # Default fallback for sheets with named columns
-    'default': {'name': 'name', 'department': 'department', 'phone': 'phone', 'gender': 'gender', 'email': 'email', 'address': 'address', 'state': 'extracted_state'}
+    'default': {
+        'name': 'name', 
+        'department': 'department', 
+        'phone': 'phone', 
+        'gender': 'gender', 
+        'email': 'email', 
+        'address': 'address', 
+        'state': 'extracted_state',
+        'birth_date': 'birth_date',
+        'birth_month': 'birth_month',
+    }
 }
 
 def extract_state_from_address(address):
@@ -117,6 +148,67 @@ def normalize_gender(gender):
         return 'F'
     return None
 
+def parse_birth_date(birth_date_value, birth_month_value=None):
+    """
+    Parse birth date from various formats.
+    Returns date string in 'Y-m-d' format or None.
+    
+    Formats handled:
+    - "1ST JAN", "21ST JAN", "9TH FEB" (day + month in one string)
+    - Separate day and month values
+    - "2001-06-01 00:00:00" (datetime string)
+    """
+    if not birth_date_value:
+        return None
+    
+    birth_str = str(birth_date_value).strip()
+    
+    # Check if it's already a datetime string like "2001-06-01 00:00:00"
+    if re.match(r'^\d{4}-\d{2}-\d{2}', birth_str):
+        try:
+            # Parse and return just the date part
+            dt = datetime.strptime(birth_str[:10], '%Y-%m-%d')
+            # Use a reasonable year range check (birth years shouldn't be in future or too far past)
+            if dt.year > 2000:
+                # Likely a formatting error - we can only use month and day
+                return f"2000-{dt.month:02d}-{dt.day:02d}"
+            return dt.strftime('%Y-%m-%d')
+        except:
+            pass
+    
+    # Try to extract day and month from combined string like "1ST JAN" or "21ST JANUARY"
+    day = None
+    month = None
+    
+    # Pattern for day like "1ST", "2ND", "3RD", "21ST", etc.
+    day_match = re.search(r'(\d{1,2})(?:ST|ND|RD|TH)?', birth_str, re.IGNORECASE)
+    if day_match:
+        day = int(day_match.group(1))
+    
+    # Find month in the string
+    for month_name, month_num in MONTH_MAP.items():
+        if month_name in birth_str.lower():
+            month = month_num
+            break
+    
+    # If no month found in birth_date_value but we have birth_month_value
+    if not month and birth_month_value:
+        month_str = str(birth_month_value).strip().lower()
+        month = MONTH_MAP.get(month_str)
+    
+    # If we have day and month, construct a date
+    # We don't have year, so we'll use a placeholder year (2000)
+    if day and month:
+        try:
+            # Validate the date
+            dt = datetime(2000, month, day)
+            return f"2000-{month:02d}-{day:02d}"
+        except ValueError:
+            # Invalid date like Feb 30
+            pass
+    
+    return None
+
 def escape_php_string(s):
     """Escape a string for PHP single-quoted string."""
     if s is None:
@@ -173,6 +265,8 @@ def normalize_record(record, year_code):
         'address': None,
         'state': None,
         'unit': None,
+        'birth_date': None,
+        'birth_month': None,
     }
     
     # Check if this is a numeric-keyed record or named-keyed record
@@ -219,6 +313,8 @@ def normalize_record(record, year_code):
         )
         result['state'] = record.get('extracted_state')
         result['unit'] = record.get('unit')
+        result['birth_date'] = record.get('birth_date')
+        result['birth_month'] = record.get('birth_month')
     
     return result
 
@@ -275,6 +371,12 @@ def convert_record(record, year_code):
     # Get unit
     unit = normalized.get('unit')
     
+    # Get birth_date
+    birth_date = parse_birth_date(
+        normalized.get('birth_date'), 
+        normalized.get('birth_month')
+    )
+    
     return {
         'name': name_str,
         'email': email,
@@ -284,6 +386,7 @@ def convert_record(record, year_code):
         'state': state,
         'address': address,
         'unit': unit,
+        'birth_date': birth_date,
     }
 
 def generate_seeder_content(year_code, year_display, records):
@@ -301,6 +404,7 @@ def generate_seeder_content(year_code, year_display, records):
                 'phones' => {format_php_array(converted['phones'])},
                 'department' => {escape_php_string(converted['department']) if converted['department'] else 'null'},
                 'gender' => {escape_php_string(converted['gender']) if converted['gender'] else 'null'},
+                'birth_date' => {escape_php_string(converted['birth_date']) if converted['birth_date'] else 'null'},
                 'state' => {escape_php_string(converted['state']) if converted['state'] else 'null'},
                 'address' => {escape_php_string(converted['address']) if converted['address'] else 'null'},
             ],"""

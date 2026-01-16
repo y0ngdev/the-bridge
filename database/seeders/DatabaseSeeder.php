@@ -6,9 +6,9 @@ use App\Models\Alumnus;
 use App\Models\Department;
 use App\Models\Tenure;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 use Illuminate\Database\Seeder;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
         $this->seedIfEmpty(User::class, UserSeeder::class);
         $this->seedIfEmpty(Tenure::class, TenureSeeder::class);
         $this->seedIfEmpty(Department::class, DepartmentSeeder::class);
- $this->seedIfEmpty(Alumnus::class, AlumnusSeeder::class);
+        $this->seedIfEmpty(Alumnus::class, AlumniSeeder::class);
 
-      
+
     }
 
     protected function seedIfEmpty(string $model, string $seeder): void

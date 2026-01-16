@@ -13,7 +13,7 @@ class TenureSeeder extends Seeder
     public function run(): void
     {
         $startYear = 1987;
-        $endYear = 2025;
+        $endYear = 2090;
 
         for ($year = $startYear; $year <= $endYear; $year++) {
             Tenure::create([

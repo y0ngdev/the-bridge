@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "my-mcp-server-20cd3f67": {
+      "command": "php",
+      "args": [
+        "artisan",
+        "boost:mcp"
+      ]
+    },
+    "my-mcp-server-bda1bc5c": {
+      "command": "php",
+      "args": [
+        "artisan",
+        "boost:mcp"
+      ]
+    }
+  }
+}
