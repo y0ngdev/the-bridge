@@ -14,7 +14,7 @@ class TenureController extends Controller
     public function index(): Response
     {
         return Inertia::render('tenures/Index', [
-            'tenures' => Tenure::latest()->paginate(),
+            'tenures' => Tenure::orderBy('tenures.start_date')->paginate(),
         ]);
     }
 

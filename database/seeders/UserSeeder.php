@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
         User::factory()->admin()->create([
             'name' => 'Unit Coordinator',
             'email' => 'aru@rcffuta.com',
-            'password' => Hash::make('alumnirelations'),
+                'password' => Hash::make('alumnirelations'),
         ]);
 
         // Normal member user (for logging calls)

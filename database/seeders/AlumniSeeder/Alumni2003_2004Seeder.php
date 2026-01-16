@@ -13,7 +13,7 @@ class Alumni2003_2004Seeder extends Seeder
      */
     public function run(): void
     {
-        $tenure = Tenure::firstOrCreate(
+        $tenure = Tenure::updateOrCreate(
             ['year' => '2003-2004'],
             ['name' => '2003-2004 Set']
         );

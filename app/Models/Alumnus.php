@@ -33,13 +33,16 @@ class Alumnus extends Model
      */
     public function getInitialsAttribute(): string
     {
+        // Use mb_split or regular explode (explode is usually fine if names are space-separated)
         $words = explode(' ', $this->name ?? '');
         $initials = '';
+
         foreach ($words as $w) {
-            $initials .= strtoupper($w[0] ?? '');
+            // mb_substr(string, start, length) is multi-byte safe
+            $initials .= mb_strtoupper(mb_substr($w, 0, 1));
         }
 
-        return substr($initials, 0, 2);
+        return mb_substr($initials, 0, 2);
     }
 
     /**

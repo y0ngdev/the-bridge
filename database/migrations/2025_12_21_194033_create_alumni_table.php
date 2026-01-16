@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->nullable()->unique();
             $table->json('phones')->nullable();
-            $table->string('department')->nullable();
+            $table->foreignId('department_id')->nullable()->after('phones')->constrained()->nullOnDelete();
             $table->enum('gender', ['M', 'F'])->nullable();
 
             $table->boolean('is_futa_staff')->default(false);
