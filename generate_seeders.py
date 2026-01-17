@@ -43,6 +43,66 @@ STATE_VARIATIONS = {
     'federal capital territory': 'FCT',
 }
 
+# Unit mapping based on Unit enum (app/Enums/Unit.php)
+UNIT_MAPPINGS = {
+    # Academic Unit
+    'academic': 'Academic Unit',
+    'academi': 'Academic Unit',
+    # Alumni Relations Unit
+    'alumni': 'Alumni Relations Unit',
+    'alumni relations': 'Alumni Relations Unit',
+    # Bible Study Unit
+    'bible study': 'Bible Study Unit',
+    'b/study': 'Bible Study Unit',
+    'b/ study': 'Bible Study Unit',
+    # Choir Unit (TVM = Technical Video Ministry was the old name)
+    'choir': 'Choir Unit',
+    'tvm': 'Choir Unit',
+    'technical video ministry': 'Choir Unit',
+    # Drama Unit (DDF = Drama and Dance Fellowship was the old name)
+    'ddf': 'Drama Unit',
+    'drama and dance fellowship': 'Drama Unit',
+    'drama': 'Drama Unit',
+    # Editorial Unit
+    'editorial': 'Editorial Unit',
+    # Evangelism Unit
+    'evangelism': 'Evangelism Unit',
+    'evang': 'Evangelism Unit',
+    # Follow up/Counselling Unit
+    'follow-up': 'Follow up/Counselling Unit',
+    'follow-': 'Follow up/Counselling Unit',
+    'follow up': 'Follow up/Counselling Unit',
+    'counselling': 'Follow up/Counselling Unit',
+    # Library Unit
+    'library': 'Library Unit',
+    # Media and Ambience Unit
+    'media': 'Media and Ambience Unit',
+    'media and ambience': 'Media and Ambience Unit',
+    'publicity': 'Media and Ambience Unit',
+    'publicit': 'Media and Ambience Unit',
+    'puplicit': 'Media and Ambience Unit',
+    # Organising Unit
+    'organizing': 'Organising Unit',
+    'organising': 'Organising Unit',
+    'organis': 'Organising Unit',
+    # Prayer Unit
+    'prayer': 'Prayer Unit',
+    # President's Unit
+    "president's unit": "President's Unit",
+    'presidents unit': "President's Unit",
+    # Sanctuary Keeping Unit
+    'sanctuary': 'Sanctuary Keeping Unit',
+    'sanctuary keeping': 'Sanctuary Keeping Unit',
+    'santuary keepers': 'Sanctuary Keeping Unit',
+    'santuary': 'Sanctuary Keeping Unit',
+    # Ushering Unit
+    'ushering': 'Ushering Unit',
+    'usher': 'Ushering Unit',
+    'usherin': 'Ushering Unit',
+    # Welfare Unit
+    'welfare': 'Welfare Unit',
+}
+
 # Month name to number mapping
 MONTH_MAP = {
     'jan': 1, 'january': 1,
@@ -146,6 +206,20 @@ def normalize_gender(gender):
         return 'M'
     elif g in ['F', 'FEMALE']:
         return 'F'
+    return None
+
+def normalize_unit(unit):
+    """Normalize unit to match Unit enum values."""
+    if not unit:
+        return None
+    
+    unit_lower = str(unit).strip().lower()
+    
+    # Check for exact or partial matches in the mapping
+    for key, value in UNIT_MAPPINGS.items():
+        if key in unit_lower or unit_lower in key:
+            return value
+    
     return None
 
 def parse_birth_date(birth_date_value, birth_month_value=None):
@@ -368,8 +442,8 @@ def convert_record(record, year_code):
     if not state and address:
         state = extract_state_from_address(address)
     
-    # Get unit
-    unit = normalized.get('unit')
+    # Get and normalize unit
+    unit = normalize_unit(normalized.get('unit'))
     
     # Get birth_date
     birth_date = parse_birth_date(
@@ -405,6 +479,7 @@ def generate_seeder_content(year_code, year_display, records):
                 'department' => {escape_php_string(converted['department']) if converted['department'] else 'null'},
                 'gender' => {escape_php_string(converted['gender']) if converted['gender'] else 'null'},
                 'birth_date' => {escape_php_string(converted['birth_date']) if converted['birth_date'] else 'null'},
+                'unit' => {escape_php_string(converted['unit']) if converted['unit'] else 'null'},
                 'state' => {escape_php_string(converted['state']) if converted['state'] else 'null'},
                 'address' => {escape_php_string(converted['address']) if converted['address'] else 'null'},
             ],"""
