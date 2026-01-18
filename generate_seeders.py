@@ -113,10 +113,37 @@ MONTH_MAP = {
     'jun': 6, 'june': 6,
     'jul': 7, 'july': 7,
     'aug': 8, 'august': 8,
-    'sep': 9, 'sept': 9, 'september': 9,
+    'sep': 9, 'sept': 9, 'september': 9, 
     'oct': 10, 'october': 10,
     'nov': 11, 'november': 11,
     'dec': 12, 'december': 12,
+}
+
+# Department code to ID mapping based on departments table
+DEPARTMENT_CODE_TO_ID = {
+    # SAAT - School of Agriculture and Agricultural Technology
+    'AEC': 1, 'ARE': 2, 'APH': 3, 'CSP': 4, 'EWM': 5, 'FAT': 6, 'FST': 7, 'FWT': 8, 'NDT': 9,
+    # SEET - School of Engineering and Engineering Technology
+    'AGE': 10, 'CVE': 11, 'CPE': 12, 'EEE': 13, 'IPE': 14, 'ICT': 15, 'MEE': 16, 'MME': 17, 'MNE': 18,
+    # SOC - School of Computing
+    'CSC': 19, 'CYS': 20, 'IFS': 21, 'IFT': 22, 'SEN': 23, 'DSC': 24,
+    # SEMS - School of Earth and Mineral Sciences
+    'AGP': 25, 'AGY': 26, 'MST': 27, 'MCS': 28, 'RSG': 29,
+    # SET - School of Environmental Technology
+    'ARC': 30, 'BDG': 31, 'ESM': 32, 'IDD': 33, 'QSV': 34, 'SVG': 35, 'URP': 36,
+    # SLS - School of Life Sciences
+    'BCH': 37, 'BIO': 38, 'BTH': 39, 'MCB': 40,
+    # SPS - School of Physical Sciences
+    'CHE': 41, 'GNS': 42, 'MTS': 43, 'PHY': 44, 'STA': 45,
+    # SLIT - School of Logistics and Innovation Technology
+    'BIT': 46, 'EMT': 47, 'LTT': 48, 'PMT': 49, 'SIMT': 50, 'LMT': 51, 'TMT': 52,
+    # SBMS - School of Basic Medical Sciences
+    'ANA': 53, 'BMT': 54, 'MLS': 55, 'PHS': 56, 'MBBS': 57, 'PUH': 58,
+    # Legacy/alternate codes found in old data
+    'AEE': 10,  # Agricultural Engineering -> AGE
+    'STAT': 45, # Statistics -> STA
+    'FWL': 8,   # Forestry & Wildlife -> FWT
+    'MET': 17,  # Metallurgical -> MME (old code)
 }
 
 # Column mappings for different sheet formats
@@ -221,6 +248,14 @@ def normalize_unit(unit):
             return value
     
     return None
+
+def get_department_id(department_code):
+    """Get department ID from department code."""
+    if not department_code:
+        return None
+    
+    code = str(department_code).strip().upper()
+    return DEPARTMENT_CODE_TO_ID.get(code)
 
 def parse_birth_date(birth_date_value, birth_month_value=None):
     """
@@ -455,7 +490,7 @@ def convert_record(record, year_code):
         'name': name_str,
         'email': email,
         'phones': phones,
-        'department': department,
+        'department_id': get_department_id(department),
         'gender': gender,
         'state': state,
         'address': address,
@@ -476,7 +511,7 @@ def generate_seeder_content(year_code, year_display, records):
                 'name' => {escape_php_string(converted['name'])},
                 'email' => {escape_php_string(converted['email']) if converted['email'] else 'null'},
                 'phones' => {format_php_array(converted['phones'])},
-                'department' => {escape_php_string(converted['department']) if converted['department'] else 'null'},
+                'department_id' => {converted['department_id'] if converted['department_id'] else 'null'},
                 'gender' => {escape_php_string(converted['gender']) if converted['gender'] else 'null'},
                 'birth_date' => {escape_php_string(converted['birth_date']) if converted['birth_date'] else 'null'},
                 'unit' => {escape_php_string(converted['unit']) if converted['unit'] else 'null'},

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('alumni', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            //REMOVE UNIQUE EMAILS
             $table->string('email')->nullable()->unique();
             $table->json('phones')->nullable();
             $table->foreignId('department_id')->nullable()->after('phones')->constrained()->nullOnDelete();

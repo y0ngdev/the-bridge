@@ -35,6 +35,8 @@ class OutreachController extends Controller
                 $successfulLogs = $logsQuery->clone()->where('outcome', 'successful')->count();
                 $successRate = $totalLogs > 0 ? round(($successfulLogs / $totalLogs) * 100) : 0;
 
+                
+dd(round((30 / $totalAlumni) * 100) );
                 return [
                     'total_reached' => $totalReached,
                     'total_logs' => $totalLogs,
