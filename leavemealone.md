@@ -10,5 +10,5 @@
 Log Awoyemi Glory Tolulope,Adetunji Korede(number cannot receive calls)8:42 unsucessful,
 Onabowale Onabode Elijah(sucessful 8:43) 
 
-
+- ability to indicate redundant data   
 - add marital status, occupation, current employer to alumni table
