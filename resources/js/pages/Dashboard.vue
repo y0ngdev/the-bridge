@@ -15,7 +15,7 @@ import {
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 
-import { create } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index } from '@/actions/App/Http/Controllers/AlumnusController';
 import { birthdays, distribution, index as alumniIndex } from '@/actions/App/Http/Controllers/AlumnusController';
 import { index as analyticsOutreach } from '@/actions/App/Http/Controllers/OutreachController';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
@@ -108,7 +108,7 @@ const totalGender = computed(() =>
 );
 
 const quickActions = [
-    { title: 'Add Alumni', href: create().url, icon: UserPlus, color: 'bg-blue-500' },
+    { title: 'Add Alumni', href: index().url, icon: UserPlus, color: 'bg-blue-500' },
     { title: 'View Birthdays', href: birthdays().url, icon: Cake, color: 'bg-pink-500' },
     { title: 'Location Distribution', href: distribution().url, icon: Eye, color: 'bg-purple-500' },
     { title: 'Outreach', href: analyticsOutreach().url, icon: Activity, color: 'bg-green-500' },

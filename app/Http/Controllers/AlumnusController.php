@@ -155,25 +155,33 @@ class AlumnusController extends Controller
 
     public function distribution(Request $request): Response
     {
+        $isOverseas = $request->boolean('overseas');
+
         return Inertia::render('alumni/Distribution', [
             'alumni' => Inertia::defer(fn() => Alumnus::with('tenure')
                 ->search($request->search)
                 ->byTenure($request->tenure_id)
                 ->byUnit($request->unit)
-                ->byState($request->state)
+                ->when($isOverseas, fn($q) => $q->where('is_overseas', true))
+                ->when(!$isOverseas && $request->state, fn($q) => $q->byState($request->state))
                 ->latest()
                 ->paginate(20)
                 ->withQueryString()),
             'stateDistribution' => Inertia::defer(fn() => Alumnus::selectRaw('state, COUNT(*) as count')
                 ->whereNotNull('state')
+                ->where('is_overseas', false)
                 ->groupBy('state')
                 ->orderBy('state')
                 ->get()
                 ->mapWithKeys(fn($item) => [$item->state->value => $item->count])),
+            'overseasCount' => Inertia::defer(fn() => Alumnus::where('is_overseas', true)->count()),
+            'overseasAlumni' => Inertia::defer(fn() => Alumnus::with('tenure')
+                ->where('is_overseas', true)
+                ->get()),
             'units' => collect(Unit::cases())->map(fn($u) => ['value' => $u->value, 'label' => $u->value]),
             'states' => collect(NigerianState::cases())->map(fn($s) => ['value' => $s->value, 'label' => $s->value]),
             'tenures' => Tenure::orderBy('year', 'desc')->get()->map(fn($t) => ['value' => $t->id, 'label' => $t->year]),
-            'filters' => $request->only(['state', 'unit', 'tenure_id', 'search']),
+            'filters' => $request->only(['state', 'unit', 'tenure_id', 'search', 'overseas']),
         ]);
     }
 

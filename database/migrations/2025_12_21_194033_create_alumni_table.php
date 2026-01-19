@@ -27,6 +27,7 @@ return new class extends Migration {
 
             $table->string('unit')->nullable();
             $table->string('state')->nullable();
+            $table->boolean('is_overseas')->default(false);
             $table->text('address')->nullable();
 
             $table->string('marital_status')->nullable();

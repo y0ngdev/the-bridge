@@ -318,11 +318,12 @@ class AlumniFormSeeder extends Seeder
                 'name' => 'Samuel Makinde',
                 'email' => 'samakkybest@gmail.com',
                 'phones' => ['+17788147390'],
-                'gender' => 'F',
+                'gender' => 'M',
                 'address' => 'Lower Mall, Marine Drive, Vancouver, BC, Canada',
                 'department' => 'Agricultural and Environmental Engineering',
                 'unit' => null,
                 'year' => '2017-2018',
+                'is_overseas' => true,
             ],
             [
                 'name' => 'Dada Boluwatife',
@@ -822,6 +823,9 @@ class AlumniFormSeeder extends Seeder
                 }
                 if (($data['department_id'] ?? null) && empty($alumnus->department_id)) {
                     $updateData['department_id'] = $data['department_id'];
+                }
+                if ($data['is_overseas'] ?? false) {
+                    $updateData['is_overseas'] = true;
                 }
                 if (!empty($updateData)) {
                     $alumnus->update($updateData);

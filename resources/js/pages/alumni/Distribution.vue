@@ -20,7 +20,7 @@ import { type BreadcrumbItem, type Tenure, type EnumOption, type AlumnusSummary,
 import { Head, Link, router, Deferred } from '@inertiajs/vue3';
 import { Skeleton } from '@/components/ui/skeleton';
 import { index, distribution, exportMethod, show } from '@/actions/App/Http/Controllers/AlumnusController';
-import { MapPin, Search, Download, Eye, Filter, Check } from 'lucide-vue-next';
+import { MapPin, Search, Download, Eye, Filter, Check, Globe } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 import { toast } from 'vue-sonner';
 
@@ -29,6 +29,8 @@ type PaginatedAlumni = SimplePaginatedResponse<AlumnusSummary>;
 const props = defineProps<{
     alumni?: PaginatedAlumni;
     stateDistribution?: Record<string, number>;
+    overseasCount?: number;
+    overseasAlumni?: AlumnusSummary[];
     units: EnumOption[];
     states: EnumOption[];
     tenures: EnumOption[];
@@ -37,6 +39,7 @@ const props = defineProps<{
         unit?: string;
         tenure_id?: number;
         search?: string;
+        overseas?: string;
     };
 }>();
 
@@ -49,6 +52,7 @@ const searchQuery = ref(props.filters.search || '');
 const selectedState = ref(props.filters.state || '');
 const selectedUnit = ref(props.filters.unit || '');
 const selectedTenure = ref(props.filters.tenure_id || '');
+const showOverseas = ref(props.filters.overseas === 'true');
 const isExportDialogOpen = ref(false);
 
 // Export field selection
@@ -112,10 +116,11 @@ const applyFilters = () => {
     router.get(
         distribution().url,
         {
-            state: selectedState.value || undefined,
+            state: showOverseas.value ? undefined : selectedState.value || undefined,
             unit: selectedUnit.value || undefined,
             tenure_id: selectedTenure.value || undefined,
             search: searchQuery.value || undefined,
+            overseas: showOverseas.value ? 'true' : undefined,
         },
         {
             preserveState: true,
@@ -129,11 +134,19 @@ const clearFilters = () => {
     selectedUnit.value = '';
     selectedTenure.value = '';
     searchQuery.value = '';
+    showOverseas.value = false;
     router.get(distribution().url);
 };
 
 const selectState = (state: string) => {
+    showOverseas.value = false;
     selectedState.value = state;
+    applyFilters();
+};
+
+const selectOverseas = () => {
+    showOverseas.value = true;
+    selectedState.value = '';
     applyFilters();
 };
 
@@ -207,18 +220,30 @@ const paginationLinks = computed(() => {
                                 <Button
                                     variant="ghost"
                                     class="w-full justify-between"
-                                    :class="{ 'bg-accent': !selectedState }"
+                                    :class="{ 'bg-accent': !selectedState && !showOverseas }"
                                     @click="selectState('')"
                                 >
                                     <span>All States</span>
                                     <span class="text-muted-foreground">{{ totalAlumni }}</span>
                                 </Button>
                                 <Button
+                                    variant="ghost"
+                                    class="w-full justify-between"
+                                    :class="{ 'bg-accent': showOverseas }"
+                                    @click="selectOverseas"
+                                >
+                                    <span class="flex items-center gap-2">
+                                        <Globe class="h-4 w-4" />
+                                        Overseas
+                                    </span>
+                                    <span class="text-muted-foreground">{{ overseasCount ?? 0 }}</span>
+                                </Button>
+                                <Button
                                     v-for="(count, state) in stateDistribution"
                                     :key="String(state)"
                                     variant="ghost"
                                     class="w-full justify-between"
-                                    :class="{ 'bg-accent': selectedState === String(state) }"
+                                    :class="{ 'bg-accent': selectedState === String(state) && !showOverseas }"
                                     @click="selectState(String(state))"
                                 >
                                     <span>{{ String(state) }}</span>
