@@ -40,10 +40,8 @@ class AlumnusController extends Controller
         ]);
     }
 
-    public function create(): RedirectResponse
-    {
-        return redirect()->route('alumni.index');
-    }
+
+
 
     public function show(Alumnus $alumnus): Response
     {
