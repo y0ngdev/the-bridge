@@ -161,7 +161,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => '32 , Ibrahim iyiola street community road ijegun-Ikotun ,Lagos',
                 'department' => 'Estate Management',
-                'unit' => 'Follow Up Unit',
+                'unit' => 'Follow up/Counselling Unit',
                 'year' => '2013-2014',
             ],
             [
@@ -301,7 +301,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => 'Ojulari close, laketu ikorodu,',
                 'department' => 'Surveying and geo-informatics',
-                'unit' => 'Follow Up Unit',
+                'unit' => 'Follow up/Counselling Unit',
                 'year' => '2014-2015',
             ],
             [
@@ -317,7 +317,7 @@ class AlumniFormSeeder extends Seeder
             [
                 'name' => 'Samuel Makinde',
                 'email' => 'samakkybest@gmail.com',
-                'phones' => ['7788147390'],
+                'phones' => ['+17788147390'],
                 'gender' => 'F',
                 'address' => 'Lower Mall, Marine Drive, Vancouver, BC, Canada',
                 'department' => 'Agricultural and Environmental Engineering',
@@ -371,7 +371,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => '8 kayode street lafe Akure',
                 'department' => 'Animal Production and Health',
-                'unit' => 'Ushering Unit Unit',
+                'unit' => 'Ushering Unit',
                 'year' => '2011-2012',
             ],
             [
@@ -381,7 +381,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => '1, asefon street ayobo-ipaja, Lagos',
                 'department' => 'Agricultural and Environmental Engineering',
-                'unit' => 'Organizing Unit Unit',
+                'unit' => 'Organising Unit',
                 'year' => '2016-2017',
             ],
             [
@@ -411,7 +411,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => '7, Ofuya Close, FUTA Road, Akure, Ondo State',
                 'department' => 'Crop, Soil and Pest Management (CSP)',
-                'unit' => 'Editorial Unit Unit',
+                'unit' => 'Editorial Unit',
                 'year' => '2016-2017',
             ],
             [
@@ -571,7 +571,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => '9, babalola ige street, Ojo Lagos.',
                 'department' => 'Transport Management Technology',
-                'unit' => 'Evangelism Unit Unit',
+                'unit' => 'Evangelism Unit',
                 'year' => '2016-2017',
             ],
             [
@@ -601,7 +601,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => null,
                 'department' => 'Civil engineering',
-                'unit' => 'Editorial Unit And Academic Unit Unit',
+                'unit' => 'Editorial Unit',
                 'year' => '2009-2010',
             ],
             [
@@ -641,7 +641,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => 'Apatapiti, Futa South gate, Akure.',
                 'department' => 'Statistics',
-                'unit' => 'Bible Study Unit Unit',
+                'unit' => 'Bible Study Unit',
                 'year' => '2016-2017',
             ],
             [
@@ -681,7 +681,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => 'Ndemili, Ndokwa West, Delta state',
                 'department' => 'Meteorology',
-                'unit' => 'Bible Study Unit Unit',
+                'unit' => 'Bible Study Unit',
                 'year' => '2016-2017',
             ],
             [
@@ -741,7 +741,7 @@ class AlumniFormSeeder extends Seeder
                 'gender' => 'F',
                 'address' => 'No74 Ibadan Street, Jedo Investment Estate, Sabon Lugbe Abuja',
                 'department' => 'Agricultural Engineering',
-                'unit' => 'Love Will Always Unite Us. Unit',
+                'unit' => null,
                 'year' => '2001-2002',
             ],
             [
@@ -789,8 +789,14 @@ class AlumniFormSeeder extends Seeder
                 }
             }
 
-            // Find existing alumnus by name
-            $alumnus = Alumnus::where('name', $data['name'])->first();
+            // Find existing alumnus by email or name
+            $alumnus = null;
+            if (!empty($data['email'])) {
+                $alumnus = Alumnus::where('email', $data['email'])->first();
+            }
+            if (!$alumnus) {
+                $alumnus = Alumnus::where('name', $data['name'])->first();
+            }
 
             if ($alumnus) {
                 // Update with new data
@@ -807,8 +813,12 @@ class AlumniFormSeeder extends Seeder
                 if (($data['unit'] ?? null) && empty($alumnus->unit)) {
                     $updateData['unit'] = $data['unit'];
                 }
-                if (($data['phones'] ?? null) && empty($alumnus->phones)) {
-                    $updateData['phones'] = $data['phones'];
+                if ($data['phones'] ?? null) {
+                    $existingPhones = $alumnus->phones ?? [];
+                    $newPhones = array_unique(array_merge($existingPhones, $data['phones']));
+                    if (count($newPhones) > count($existingPhones)) {
+                        $updateData['phones'] = $newPhones;
+                    }
                 }
                 if (($data['department_id'] ?? null) && empty($alumnus->department_id)) {
                     $updateData['department_id'] = $data['department_id'];

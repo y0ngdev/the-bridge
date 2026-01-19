@@ -22,8 +22,15 @@ class DatabaseSeeder extends Seeder
         $this->seedIfEmpty(Tenure::class, TenureSeeder::class);
         $this->seedIfEmpty(Department::class, DepartmentSeeder::class);
         $this->seedIfEmpty(Alumnus::class, AlumniSeeder::class);
-        $this->seedIfEmpty(Alumnus::class, TvmAlumniSeeder::class);
-        $this->seedIfEmpty(Alumnus::class, AlumniLocationSeeder::class);
+        
+
+$this->call([
+    TvmAlumniSeeder::class,
+    AlumniLocationSeeder::class,
+    AlumniFormSeeder::class,
+    FutaStaffSeeder::class,
+    HeirsOfPromiseSeeder::class,
+]);
     }
 
     protected function seedIfEmpty(string $model, string $seeder): void

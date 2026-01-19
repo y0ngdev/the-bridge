@@ -58,7 +58,7 @@ UNIT_MAP = {
     'editorial': 'Editorial Unit',
     'alumni relations unit': 'Alumni Relations Unit',
     'evangelism': 'Evangelism Unit',
-    'follow up': 'Follow Up Unit',
+    'follow up': 'Follow up/Counselling Unit',
     'president': None,  # Not a unit
 }
 

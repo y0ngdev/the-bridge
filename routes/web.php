@@ -37,9 +37,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('alumni/executives', [AlumnusController::class, 'executives'])->name('alumni.executives');
         Route::get('alumni/export', [AlumnusController::class, 'export'])->name('alumni.export');
         Route::post('alumni/import', [AlumnusController::class, 'importStore'])->name('alumni.import.store');
-        Route::get('alumni/create', [AlumnusController::class, 'create'])->name('alumni.create');
+
         Route::post('alumni', [AlumnusController::class, 'store'])->name('alumni.store');
-        Route::get('alumni/{alumnus}/edit', [AlumnusController::class, 'edit'])->name('alumni.edit');
+
         Route::put('alumni/{alumnus}', [AlumnusController::class, 'update'])->name('alumni.update');
         Route::delete('alumni/{alumnus}', [AlumnusController::class, 'destroy'])->name('alumni.destroy');
         Route::delete('communications/{log}', [\App\Http\Controllers\CommunicationLogController::class, 'destroy'])->name('communications.destroy');
@@ -85,11 +85,14 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('settings/Appearance');
     })->name('appearance.edit');
 
-    Route::get('settings/backup', [\App\Http\Controllers\Settings\BackupController::class, 'index'])->name('backup.index');
-    Route::post('settings/backup', [\App\Http\Controllers\Settings\BackupController::class, 'store'])->name('backup.store');
-    Route::get('settings/backup/download/{filename}', [\App\Http\Controllers\Settings\BackupController::class, 'download'])->name('backup.download');
+    // Admin-only settings routes
+    Route::middleware('admin')->group(function () {
+        Route::get('settings/backup', [\App\Http\Controllers\Settings\BackupController::class, 'index'])->name('backup.index');
+        Route::post('settings/backup', [\App\Http\Controllers\Settings\BackupController::class, 'store'])->name('backup.store');
+        Route::get('settings/backup/download/{filename}', [\App\Http\Controllers\Settings\BackupController::class, 'download'])->name('backup.download');
 
-    Route::get('settings/calendar', [\App\Http\Controllers\Settings\CalendarController::class, 'index'])->name('calendar.index');
-    Route::post('settings/calendar/sync', [\App\Http\Controllers\Settings\CalendarController::class, 'sync'])->name('calendar.sync');
-    Route::post('settings/calendar/unsync', [\App\Http\Controllers\Settings\CalendarController::class, 'unsync'])->name('calendar.unsync');
+        Route::get('settings/calendar', [\App\Http\Controllers\Settings\CalendarController::class, 'index'])->name('calendar.index');
+        Route::post('settings/calendar/sync', [\App\Http\Controllers\Settings\CalendarController::class, 'sync'])->name('calendar.sync');
+        Route::post('settings/calendar/unsync', [\App\Http\Controllers\Settings\CalendarController::class, 'unsync'])->name('calendar.unsync');
+    });
 });

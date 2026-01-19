@@ -33,7 +33,7 @@ return new class extends Migration {
             $table->string('occupation')->nullable();
             $table->string('current_employer')->nullable();
 
-            $table->foreignId('tenure_id')->constrained()->onDelete('cascade');
+            $table->foreignId('tenure_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -1009,8 +1009,14 @@ class AlumniLocationSeeder extends Seeder
             $year = $data['year'] ?? null;
             unset($data['year']);
 
-            // Try to find existing alumnus by name
-            $alumnus = Alumnus::where('name', $data['name'])->first();
+            // Try to find existing alumnus by email or name
+            $alumnus = null;
+            if (!empty($data['email'])) {
+                $alumnus = Alumnus::where('email', $data['email'])->first();
+            }
+            if (!$alumnus) {
+                $alumnus = Alumnus::where('name', $data['name'])->first();
+            }
 
             if ($alumnus) {
                 // Update state and address
@@ -1018,8 +1024,12 @@ class AlumniLocationSeeder extends Seeder
                 if ($data['address']) {
                     $updateData['address'] = $data['address'];
                 }
-                if ($data['phones'] && empty($alumnus->phones)) {
-                    $updateData['phones'] = $data['phones'];
+                if ($data['phones']) {
+                    $existingPhones = $alumnus->phones ?? [];
+                    $newPhones = array_unique(array_merge($existingPhones, $data['phones']));
+                    if (count($newPhones) > count($existingPhones)) {
+                        $updateData['phones'] = $newPhones;
+                    }
                 }
                 $alumnus->update($updateData);
                 $updated++;

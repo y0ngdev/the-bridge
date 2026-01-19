@@ -1301,9 +1301,15 @@ class TvmAlumniSeeder extends Seeder
                 continue;
             }
 
-            // Try to find existing alumnus by name and update unit
-            $alumnus = Alumnus::where('name', $data['name'])->first();
-            
+            // Try to find existing alumnus by phones or name
+            $alumnus = null;
+            if (!empty($data['phones'][0])) {
+                $alumnus = Alumnus::whereJsonContains('phones', $data['phones'][0])->first();
+            }
+            if (!$alumnus) {
+                $alumnus = Alumnus::where('name', $data['name'])->first();
+            }
+
             if ($alumnus) {
                 // Update unit to Choir Unit (TVM)
                 $alumnus->update(['unit' => 'Choir Unit']);

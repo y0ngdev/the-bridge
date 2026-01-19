@@ -7,9 +7,13 @@ import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editProfile } from '@/routes/profile';
 import { edit as editPassword } from '@/routes/user-password';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
-const sidebarNavItems: NavItem[] = [
+const page = usePage();
+const isAdmin = computed(() => page.props.auth?.user?.is_admin ?? false);
+
+const allNavItems: (NavItem & { adminOnly?: boolean })[] = [
     {
         title: 'Profile',
         href: editProfile(),
@@ -25,12 +29,18 @@ const sidebarNavItems: NavItem[] = [
     {
         title: 'Backup',
         href: '/settings/backup',
+        adminOnly: true,
     },
     {
         title: 'Calendar',
         href: '/settings/calendar',
+        adminOnly: true,
     },
 ];
+
+const sidebarNavItems = computed(() => 
+    allNavItems.filter(item => !item.adminOnly || isAdmin.value)
+);
 
 const currentPath = typeof window !== undefined ? window.location.pathname : '';
 </script>

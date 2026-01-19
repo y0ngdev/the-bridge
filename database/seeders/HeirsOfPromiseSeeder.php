@@ -17,7 +17,7 @@ class HeirsOfPromiseSeeder extends Seeder
     {
         // Get the 2021-2022 tenure
         $tenure = Tenure::where('year', '2021-2022')->first();
-        
+
         $alumni = [
             [
                 'name' => 'Olabayiwa Olayemi',
@@ -1251,9 +1251,15 @@ In front of why lodge',
                 }
             }
 
-            // Find existing alumnus by name
-            $alumnus = Alumnus::where('name', $data['name'])->first();
-            
+            // Find existing alumnus by phone or name
+            $alumnus = null;
+            if (!empty($data['phones'][0])) {
+                $alumnus = Alumnus::whereJsonContains('phones', $data['phones'][0])->first();
+            }
+            if (!$alumnus) {
+                $alumnus = Alumnus::where('name', $data['name'])->first();
+            }
+
             if ($alumnus) {
                 // Update with new data
                 $updateData = [];
@@ -1263,8 +1269,12 @@ In front of why lodge',
                 if (($data['address'] ?? null) && empty($alumnus->address)) {
                     $updateData['address'] = $data['address'];
                 }
-                if (($data['phones'] ?? null) && empty($alumnus->phones)) {
-                    $updateData['phones'] = $data['phones'];
+                if ($data['phones'] ?? null) {
+                    $existingPhones = $alumnus->phones ?? [];
+                    $newPhones = array_unique(array_merge($existingPhones, $data['phones']));
+                    if (count($newPhones) > count($existingPhones)) {
+                        $updateData['phones'] = $newPhones;
+                    }
                 }
                 if (($data['birth_date'] ?? null) && empty($alumnus->birth_date)) {
                     $updateData['birth_date'] = $data['birth_date'];

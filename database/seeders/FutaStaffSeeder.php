@@ -797,7 +797,7 @@ class FutaStaffSeeder extends Seeder
                 'year' => '2017-2018',
             ],
         ];
-        08128907713
+
 
         $updated = 0;
         $created = 0;
@@ -810,9 +810,15 @@ class FutaStaffSeeder extends Seeder
             $year = $data['year'] ?? null;
             unset($data['year']);
 
-            // Find existing alumnus by name
-            $alumnus = Alumnus::where('name', $data['name'])->first();
-            
+            // Find existing alumnus by email or name
+            $alumnus = null;
+            if (!empty($data['email'])) {
+                $alumnus = Alumnus::where('email', $data['email'])->first();
+            }
+            if (!$alumnus) {
+                $alumnus = Alumnus::where('name', $data['name'])->first();
+            }
+
             if ($alumnus) {
                 // Update with new data
                 $updateData = [];
@@ -825,8 +831,12 @@ class FutaStaffSeeder extends Seeder
                 if (($data['state'] ?? null) && empty($alumnus->state)) {
                     $updateData['state'] = $data['state'];
                 }
-                if (($data['phones'] ?? null) && empty($alumnus->phones)) {
-                    $updateData['phones'] = $data['phones'];
+                if ($data['phones'] ?? null) {
+                    $existingPhones = $alumnus->phones ?? [];
+                    $newPhones = array_unique(array_merge($existingPhones, $data['phones']));
+                    if (count($newPhones) > count($existingPhones)) {
+                        $updateData['phones'] = $newPhones;
+                    }
                 }
                 if ($data['is_futa_staff']) {
                     $updateData['is_futa_staff'] = true;
