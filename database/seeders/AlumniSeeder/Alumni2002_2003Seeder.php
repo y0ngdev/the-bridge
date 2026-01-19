@@ -1,5 +1,7 @@
 <?php
+
 namespace Database\Seeders\AlumniSeeder;
+
 use App\Models\Alumnus;
 use App\Models\Tenure;
 use Illuminate\Database\Seeder;
@@ -11,9 +13,11 @@ class Alumni2002_2003Seeder extends Seeder
      */
     public function run(): void
     {
-        $tenure = Tenure::updateOrCreate(
+        $tenure = Tenure::firstOrCreate(
             ['year' => '2002-2003'],
-            ['name' => '2002-2003 Set']
+             ['name' => 'In the Portters Hand Generation',
+           ]
+
         );
 
         $alumni = [
@@ -31,6 +35,6 @@ class Alumni2002_2003Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
+        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
     }
 }

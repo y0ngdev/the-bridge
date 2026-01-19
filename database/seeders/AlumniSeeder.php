@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\AlumniSeeder\Alumni2000_2001Seeder;
 use Database\Seeders\AlumniSeeder\Alumni2001_2002Seeder;
 use Database\Seeders\AlumniSeeder\Alumni2002_2003Seeder;
 use Database\Seeders\AlumniSeeder\Alumni2003_2004Seeder;
@@ -20,7 +21,6 @@ use Database\Seeders\AlumniSeeder\Alumni2015_2016Seeder;
 use Database\Seeders\AlumniSeeder\Alumni2016_2017Seeder;
 use Database\Seeders\AlumniSeeder\Alumni2017_2018Seeder;
 use Database\Seeders\AlumniSeeder\Alumni2018_2019Seeder;
-use Database\Seeders\AlumniSeeder\Alumni2000_2001Seeder;
 use Illuminate\Database\Seeder;
 
 class AlumniSeeder extends Seeder

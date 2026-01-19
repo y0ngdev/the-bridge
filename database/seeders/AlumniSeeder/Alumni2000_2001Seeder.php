@@ -13,7 +13,7 @@ class Alumni2000_2001Seeder extends Seeder
      */
     public function run(): void
     {
-        $tenure = Tenure::updateOrCreate(
+        $tenure = Tenure::firstOrCreate(
             ['year' => '2000-2001'],
             ['name' => '2000-2001 Set']
         );
@@ -33,6 +33,6 @@ class Alumni2000_2001Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
+        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
     }
 }

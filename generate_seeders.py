@@ -524,7 +524,7 @@ def generate_seeder_content(year_code, year_display, records):
     
     content = f"""<?php
 
-namespace Database\\Seeders;
+namespace Database\\Seeders\\AlumniSeeder;
 
 use App\\Models\\Alumnus;
 use App\\Models\\Tenure;
@@ -565,7 +565,7 @@ class Alumni{year_code}Seeder extends Seeder
 
 def main():
     json_dir = 'app/data'
-    output_dir = 'database/seeders'
+    output_dir = 'database/seeders/AlumniSeeder'
     
     years = [
         '2000_2001', '2001_2002', '2002_2003', '2003_2004', '2004_2005',
