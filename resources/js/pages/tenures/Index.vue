@@ -54,6 +54,7 @@ const goToPage = (page: number) => {
 const addForm = useForm({
     name: '',
     year: '',
+    family_name: '',
     is_active: false,
     start_date: '',
     end_date: '',
@@ -61,6 +62,7 @@ const addForm = useForm({
 const editForm = useForm({
     name: '',
     year: '',
+    family_name: '',
     is_active: false,
     start_date: '',
     end_date: '',
@@ -89,6 +91,7 @@ const openEditDialog = (tenure: Tenure) => {
     editingTenure.value = tenure;
     editForm.name = tenure.name ?? '';
     editForm.year = tenure.year;
+    editForm.family_name = tenure.family_name ?? '';
     editForm.is_active = tenure.is_active ?? false;
     editForm.start_date = tenure.start_date ?? '';
     editForm.end_date = tenure.end_date ?? '';
@@ -163,6 +166,19 @@ function handleEditSubmit() {
                                     <InputError :message="addForm.errors.year" />
                                 </div>
                             </div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div class="space-y-2">
+                                    <Label for="family_name">Family Name</Label>
+                                    <Input
+                                        id="family_name"
+                                        v-model="addForm.family_name"
+                                        type="text"
+                                        placeholder="e.g., Heirs of Promise"
+                                        :class="addForm.errors.family_name && 'border-destructive'"
+                                    />
+                                    <InputError :message="addForm.errors.family_name" />
+                                </div>
+                            </div>
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="space-y-2">
@@ -209,6 +225,7 @@ function handleEditSubmit() {
                         <TableRow>
                             <TableHead>Name</TableHead>
                             <TableHead>Year</TableHead>
+                            <TableHead>Family Name</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead class="text-right">Actions</TableHead>
                         </TableRow>
@@ -219,6 +236,7 @@ function handleEditSubmit() {
                                 {{ tenure.name || '—' }}
                             </TableCell>
                             <TableCell>{{ tenure.year }}</TableCell>
+                            <TableCell>{{ tenure.family_name || '—' }}</TableCell>
                             <TableCell>
                                 <Badge v-if="tenure.is_active" variant="default">Active</Badge>
                                 <span v-else class="text-muted-foreground text-xs">—</span>
@@ -231,7 +249,7 @@ function handleEditSubmit() {
                             </TableCell>
                         </TableRow>
                         <TableRow v-if="tenures.data.length === 0">
-                            <TableCell colspan="3" class="py-8 text-center text-muted-foreground">
+                            <TableCell colspan="5" class="py-8 text-center text-muted-foreground">
                                 No tenures found. Create your first one!
                             </TableCell>
                         </TableRow>
@@ -302,6 +320,19 @@ function handleEditSubmit() {
                                     required
                                 />
                                 <InputError :message="editForm.errors.year" />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="space-y-2">
+                                <Label for="edit_family_name">Family Name</Label>
+                                <Input
+                                    id="edit_family_name"
+                                    v-model="editForm.family_name"
+                                    type="text"
+                                    placeholder="e.g., Heirs of Promise"
+                                    :class="editForm.errors.family_name && 'border-destructive'"
+                                />
+                                <InputError :message="editForm.errors.family_name" />
                             </div>
                         </div>
 

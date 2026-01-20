@@ -68,7 +68,11 @@ const showEditDialog = ref(false);
 const showExportDialog = ref(false);
 const showImportDialog = ref(false);
 const showLogDialog = ref(false);
+const showDeleteDialog = ref(false);
 const editingAlumnus = ref<Alumnus | null>(null);
+const deletingAlumnus = ref<Alumnus | null>(null);
+const deletePassword = ref('');
+const deletePasswordError = ref('');
 const selectedAlumnusForLog = ref<Alumnus | null>(null);
 
 const openTenureCombobox = ref(false);
@@ -153,6 +157,7 @@ const addForm = useForm({
     past_exco_office: '',
     current_exco_office: '',
     is_futa_staff: false,
+    is_overseas: false,
 });
 
 const editForm = useForm({
@@ -169,6 +174,7 @@ const editForm = useForm({
     past_exco_office: '',
     current_exco_office: '',
     is_futa_staff: false,
+    is_overseas: false,
 });
 
 const deleteForm = useForm({});
@@ -264,6 +270,7 @@ function openEditDialog(alumnus: Alumnus) {
     editForm.past_exco_office = alumnus.past_exco_office || '';
     editForm.current_exco_office = alumnus.current_exco_office || '';
     editForm.is_futa_staff = alumnus.is_futa_staff || false;
+    editForm.is_overseas = alumnus.is_overseas || false;
     showEditDialog.value = true;
 }
 
@@ -278,11 +285,37 @@ function handleEditSubmit() {
     });
 }
 
-function handleDelete(alumnus: Alumnus) {
-    if (!confirm(`Delete ${alumnus.name}?`)) return;
-    deleteForm.delete(destroy(alumnus.id).url, {
+function openDeleteDialog(alumnus: Alumnus) {
+    deletingAlumnus.value = alumnus;
+    deletePassword.value = '';
+    deletePasswordError.value = '';
+    showDeleteDialog.value = true;
+}
+
+function handleDelete() {
+    if (!deletingAlumnus.value) return;
+    
+    if (!deletePassword.value) {
+        deletePasswordError.value = 'Please enter your password.';
+        return;
+    }
+    
+    deletePasswordError.value = '';
+    
+    router.delete(destroy(deletingAlumnus.value.id).url, {
+        data: { password: deletePassword.value },
         onSuccess: () => {
+            showDeleteDialog.value = false;
+            deletingAlumnus.value = null;
+            deletePassword.value = '';
             toast.success('Alumnus deleted successfully');
+        },
+        onError: (errors) => {
+            if (errors.password) {
+                deletePasswordError.value = errors.password;
+            } else {
+                deletePasswordError.value = 'Failed to delete. Please try again.';
+            }
         },
     });
 }
@@ -682,6 +715,12 @@ function openLogDialog(alumnus: Alumnus) {
                                         Is FUTA Staff
                                     </Label>
                                 </div>
+                                <div class="flex items-center space-x-2">
+                                    <Checkbox id="is_overseas" v-model:checked="addForm.is_overseas" />
+                                    <Label for="is_overseas" class="text-sm font-normal cursor-pointer">
+                                        Lives Overseas
+                                    </Label>
+                                </div>
                                 <DialogFooter>
                                     <DialogClose as-child>
                                         <Button variant="outline" type="button">Cancel</Button>
@@ -767,7 +806,7 @@ function openLogDialog(alumnus: Alumnus) {
                                     <Button v-if="isAdmin" variant="ghost" size="icon" @click="openEditDialog(alumnus)">
                                         <Edit class="h-4 w-4" />
                                     </Button>
-                                    <Button v-if="isAdmin" variant="ghost" size="icon" @click="handleDelete(alumnus)">
+                                    <Button v-if="isAdmin" variant="ghost" size="icon" @click="openDeleteDialog(alumnus)">
                                         <Trash2 class="h-4 w-4 text-destructive" />
                                     </Button>
                                 </div>
@@ -1026,12 +1065,53 @@ function openLogDialog(alumnus: Alumnus) {
                             Is FUTA Staff
                         </Label>
                     </div>
+                    <div class="flex items-center space-x-2">
+                        <Checkbox id="edit_is_overseas" v-model:checked="editForm.is_overseas" />
+                        <Label for="edit_is_overseas" class="text-sm font-normal cursor-pointer">
+                            Lives Overseas
+                        </Label>
+                    </div>
                     <DialogFooter>
                         <DialogClose as-child>
                             <Button variant="outline" type="button">Cancel</Button>
                         </DialogClose>
                         <Button type="submit" :disabled="editForm.processing">
                             {{ editForm.processing ? 'Updating...' : 'Update Alumnus' }}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+
+        <!-- Delete Confirmation Dialog -->
+        <Dialog v-model:open="showDeleteDialog">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle class="text-destructive">Delete Alumnus</DialogTitle>
+                    <DialogDescription>
+                        Are you sure you want to delete <strong>{{ deletingAlumnus?.name }}</strong>? 
+                        This action cannot be undone.
+                    </DialogDescription>
+                </DialogHeader>
+                <form @submit.prevent="handleDelete" class="space-y-4">
+                    <div class="space-y-2">
+                        <Label for="delete_password">Type "delete" to confirm</Label>
+                        <Input
+                            id="delete_password"
+                            v-model="deletePassword"
+                            type="text"
+                            placeholder="Type 'delete' to confirm"
+                            :class="deletePasswordError && 'border-destructive'"
+                            autocomplete="off"
+                        />
+                        <p v-if="deletePasswordError" class="text-sm text-destructive">{{ deletePasswordError }}</p>
+                    </div>
+                    <DialogFooter>
+                        <DialogClose as-child>
+                            <Button variant="outline" type="button">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit" variant="destructive" :disabled="deleteForm.processing">
+                            {{ deleteForm.processing ? 'Deleting...' : 'Delete Alumnus' }}
                         </Button>
                     </DialogFooter>
                 </form>

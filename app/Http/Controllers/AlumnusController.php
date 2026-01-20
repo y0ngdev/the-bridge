@@ -13,6 +13,7 @@ use App\Models\Tenure;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
@@ -75,8 +76,13 @@ class AlumnusController extends Controller
         return back()->with('success', 'Alumnus updated successfully.');
     }
 
-    public function destroy(Alumnus $alumnus): RedirectResponse
+    public function destroy(Request $request, Alumnus $alumnus): RedirectResponse
     {
+        // Verify password
+        if (!Hash::check($request->input('password'), $request->user()->password)) {
+            return back()->withErrors(['password' => 'Invalid password.']);
+        }
+
         $alumnus->delete();
 
         return back()->with('success', 'Alumnus deleted successfully.');

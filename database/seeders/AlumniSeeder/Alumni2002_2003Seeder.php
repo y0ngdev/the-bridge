@@ -13,7 +13,7 @@ class Alumni2002_2003Seeder extends Seeder
      */
     public function run(): void
     {
-        $tenure = Tenure::firstOrCreate(
+        $tenure = Tenure::updateOrCreate(
             ['year' => '2002-2003'],
              ['name' => 'In the Portters Hand Generation',
            ]

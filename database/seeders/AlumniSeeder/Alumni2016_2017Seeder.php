@@ -13,7 +13,7 @@ class Alumni2016_2017Seeder extends Seeder
      */
     public function run(): void
     {
-        $tenure = Tenure::firstOrCreate(
+        $tenure = Tenure::updateOrCreate(
             ['year' => '2016-2017'],
         ['name' => 'Heirs of God',
             'family_name'=>'Saint in  The Light FAMILY']

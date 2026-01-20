@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Alumnus;
+use App\Models\CommunicationLog;
 use App\Models\Department;
 use App\Models\Tenure;
 use App\Models\User;
@@ -22,7 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->seedIfEmpty(Tenure::class, TenureSeeder::class);
         $this->seedIfEmpty(Department::class, DepartmentSeeder::class);
         $this->seedIfEmpty(Alumnus::class, AlumniSeeder::class);
-        
+        $this->seedIfEmpty(CommunicationLog::class, CommunicationLogSeeder::class);
 
 $this->call([
     TvmAlumniSeeder::class,

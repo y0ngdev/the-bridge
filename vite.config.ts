@@ -5,6 +5,7 @@ import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    
     plugins: [
         laravel({
             input: ['resources/js/app.ts'],
@@ -12,6 +13,7 @@ export default defineConfig({
             refresh: true,
         }),
         tailwindcss(),
+        
         vue({
             template: {
                 transformAssetUrls: {

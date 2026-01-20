@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum CommunicationOutcome: string
 {
-    case Pending = 'pending';
+    case Unsuccessful = 'unsuccessful';
     case Successful = 'successful';
     case NoAnswer = 'no_answer';
     case Busy = 'busy';
@@ -15,7 +15,7 @@ enum CommunicationOutcome: string
     public function label(): string
     {
         return match ($this) {
-            self::Pending => 'Pending',
+            self::Unsuccessful => 'Unsuccessful',
             self::Successful => 'Successful',
             self::NoAnswer => 'No Answer',
             self::Busy => 'Busy / Line Engaged',

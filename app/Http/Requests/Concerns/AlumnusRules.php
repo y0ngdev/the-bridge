@@ -25,6 +25,7 @@ trait AlumnusRules
             'past_exco_office' => 'nullable|string|max:255',
             'current_exco_office' => 'nullable|string|max:255',
             'is_futa_staff' => 'nullable|boolean',
+            'is_overseas' => 'nullable|boolean',
         ];
     }
 }
