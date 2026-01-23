@@ -1095,15 +1095,21 @@ function openLogDialog(alumnus: Alumnus) {
                 </DialogHeader>
                 <form @submit.prevent="handleDelete" class="space-y-4">
                     <div class="space-y-2">
-                        <Label for="delete_password">Type "delete" to confirm</Label>
+                        <Label for="confirmation_auth_field">to confirm</Label>
+                       
                         <Input
-                            id="delete_password"
+                            id="confirmation_auth_field"
+                            
                             v-model="deletePassword"
-                            type="text"
-                            placeholder="Type 'delete' to confirm"
+                            type="password"
+                            placeholder="Confirm"
                             :class="deletePasswordError && 'border-destructive'"
-                            autocomplete="off"
+                          autocomplete="do-not-autofill-this-field"
+                           
                         />
+
+
+                        
                         <p v-if="deletePasswordError" class="text-sm text-destructive">{{ deletePasswordError }}</p>
                     </div>
                     <DialogFooter>
