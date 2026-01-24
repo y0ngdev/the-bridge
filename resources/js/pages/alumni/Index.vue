@@ -636,6 +636,7 @@ function openLogDialog(alumnus: Alumnus) {
                                                 </Command>
                                             </PopoverContent>
                                         </Popover>
+                                        <p v-if="addForm.errors.tenure_id" class="text-sm text-destructive">{{ addForm.errors.tenure_id }}</p>
                                     </div>
                                     <div class="space-y-2 flex flex-col">
                                         <Label>Unit</Label>
@@ -661,6 +662,7 @@ function openLogDialog(alumnus: Alumnus) {
                                                 </Command>
                                             </PopoverContent>
                                         </Popover>
+                                        <p v-if="addForm.errors.unit" class="text-sm text-destructive">{{ addForm.errors.unit }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
@@ -688,25 +690,29 @@ function openLogDialog(alumnus: Alumnus) {
                                                 </Command>
                                             </PopoverContent>
                                         </Popover>
+                                        <p v-if="addForm.errors.state" class="text-sm text-destructive">{{ addForm.errors.state }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label for="address">Address</Label>
-                                        <Input id="address" v-model="addForm.address" />
+                                        <Input id="address" v-model="addForm.address" :class="addForm.errors.address && 'border-destructive'" />
+                                        <p v-if="addForm.errors.address" class="text-sm text-destructive">{{ addForm.errors.address }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="space-y-2">
                                         <Label>Past Exco Office (School)</Label>
                                         <Select v-model="addForm.past_exco_office">
-                                            <SelectTrigger><SelectValue placeholder="Select position" /></SelectTrigger>
+                                            <SelectTrigger :class="addForm.errors.past_exco_office && 'border-destructive'"><SelectValue placeholder="Select position" /></SelectTrigger>
                                             <SelectContent class="max-h-60">
                                                 <SelectItem v-for="p in pastExcoOffices" :key="p.value" :value="p.value">{{ p.label }}</SelectItem>
                                             </SelectContent>
                                         </Select>
+                                        <p v-if="addForm.errors.past_exco_office" class="text-sm text-destructive">{{ addForm.errors.past_exco_office }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label for="current_exco_office">Current Exco Office (Alumni)</Label>
-                                        <Input id="current_exco_office" v-model="addForm.current_exco_office" placeholder="e.g., President, Secretary" />
+                                        <Input id="current_exco_office" v-model="addForm.current_exco_office" placeholder="e.g., President, Secretary" :class="addForm.errors.current_exco_office && 'border-destructive'" />
+                                        <p v-if="addForm.errors.current_exco_office" class="text-sm text-destructive">{{ addForm.errors.current_exco_office }}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-2">
@@ -739,7 +745,7 @@ function openLogDialog(alumnus: Alumnus) {
             <!-- Filters -->
             <div class="mb-4 p-4 border rounded-md bg-muted/30 space-y-4">
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <Input v-model="filterSearch" placeholder="Search name/email..." @keyup.enter="applyFilters" />
+                    <Input v-model="filterSearch" placeholder="Search name/email/phone..." @keyup.enter="applyFilters" />
                     <Select v-model="filterTenureId">
                         <SelectTrigger><SelectValue placeholder="All Tenures" /></SelectTrigger>
                         <SelectContent>
@@ -986,6 +992,7 @@ function openLogDialog(alumnus: Alumnus) {
                                     </Command>
                                 </PopoverContent>
                             </Popover>
+                            <p v-if="editForm.errors.tenure_id" class="text-sm text-destructive">{{ editForm.errors.tenure_id }}</p>
                         </div>
                         <div class="space-y-2 flex flex-col">
                             <Label>Unit</Label>
@@ -1011,6 +1018,7 @@ function openLogDialog(alumnus: Alumnus) {
                                     </Command>
                                 </PopoverContent>
                             </Popover>
+                            <p v-if="editForm.errors.unit" class="text-sm text-destructive">{{ editForm.errors.unit }}</p>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -1038,25 +1046,29 @@ function openLogDialog(alumnus: Alumnus) {
                                     </Command>
                                 </PopoverContent>
                             </Popover>
+                            <p v-if="editForm.errors.state" class="text-sm text-destructive">{{ editForm.errors.state }}</p>
                         </div>
                         <div class="space-y-2">
                             <Label for="edit_address">Address</Label>
-                            <Input id="edit_address" v-model="editForm.address" />
+                            <Input id="edit_address" v-model="editForm.address" :class="editForm.errors.address && 'border-destructive'" />
+                            <p v-if="editForm.errors.address" class="text-sm text-destructive">{{ editForm.errors.address }}</p>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <Label>Past Exco Office (School)</Label>
                             <Select v-model="editForm.past_exco_office">
-                                <SelectTrigger><SelectValue placeholder="Select position" /></SelectTrigger>
+                                <SelectTrigger :class="editForm.errors.past_exco_office && 'border-destructive'"><SelectValue placeholder="Select position" /></SelectTrigger>
                                 <SelectContent class="max-h-60">
                                     <SelectItem v-for="p in pastExcoOffices" :key="p.value" :value="p.value">{{ p.label }}</SelectItem>
                                 </SelectContent>
                             </Select>
+                            <p v-if="editForm.errors.past_exco_office" class="text-sm text-destructive">{{ editForm.errors.past_exco_office }}</p>
                         </div>
                         <div class="space-y-2">
                             <Label for="edit_current_exco_office">Current Exco Office (Alumni)</Label>
-                            <Input id="edit_current_exco_office" v-model="editForm.current_exco_office" placeholder="e.g., President, Secretary" />
+                            <Input id="edit_current_exco_office" v-model="editForm.current_exco_office" placeholder="e.g., President, Secretary" :class="editForm.errors.current_exco_office && 'border-destructive'" />
+                            <p v-if="editForm.errors.current_exco_office" class="text-sm text-destructive">{{ editForm.errors.current_exco_office }}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-2">

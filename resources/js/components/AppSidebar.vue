@@ -13,66 +13,72 @@ import { home } from '@/routes';
 import { NavItem } from '@/types';
 import { Building2, Cake, Calendar, CalendarDays, HardDrive, LayoutGrid, MapPin, UserCheck, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { urlIsActive } from '@/lib/utils';
 
 const page = usePage();
 const isAdmin = computed(() => page.props.auth?.user?.is_admin ?? false);
 
-const allNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: home(),
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Tenures',
-        href: tenuresIndex().url,
-        icon: Calendar,
-        adminOnly: true,
-    },
-    {
-        title: 'Departments',
-        href: departmentsIndex().url,
-        icon: Building2,
-        adminOnly: true,
-    },
-    {
-        title: 'Alumni',
-        href: alumnusIndex().url,
-        icon: Users,
-    },
-    {
-        title: 'Redemption Week',
-        href: rwIndex().url,
-        icon: CalendarDays,
-    },
-    {
-        title: 'Birthdays',
-        href: birthdays().url,
-        icon: Cake,
-    },
-    {
-        title: 'Location Distribution',
-        href: distribution().url,
-        icon: MapPin,
-        adminOnly: true,
-    },
-    {
-        title: 'Executives',
-        href: executives().url,
-        icon: UserCheck,
-        adminOnly: true,
-    },
-    {
-        title: 'Backup',
-        href: '/settings/backup',
-        icon: HardDrive,
-        adminOnly: true,
-    },
-];
+const mainNavItems = computed(() => {
+    const items: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: home(),
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Tenures',
+            href: tenuresIndex().url,
+            icon: Calendar,
+            adminOnly: true,
+        },
+        {
+            title: 'Departments',
+            href: departmentsIndex().url,
+            icon: Building2,
+            adminOnly: true,
+        },
+        {
+            title: 'Alumni',
+            href: alumnusIndex().url,
+            icon: Users,
+            // Active if in alumni section BUT NOT in the specific sub-pages that have their own sidebar items
+            isActive: urlIsActive(alumnusIndex().url, page.url) && 
+                     !urlIsActive(distribution().url, page.url) && 
+                     !urlIsActive(executives().url, page.url) &&
+                     !urlIsActive(birthdays().url, page.url),
+        },
+        {
+            title: 'Redemption Week',
+            href: rwIndex().url,
+            icon: CalendarDays,
+        },
+        {
+            title: 'Birthdays',
+            href: birthdays().url,
+            icon: Cake,
+        },
+        {
+            title: 'Location Distribution',
+            href: distribution().url,
+            icon: MapPin,
+            adminOnly: true,
+        },
+        {
+            title: 'Executives',
+            href: executives().url,
+            icon: UserCheck,
+            adminOnly: true,
+        },
+        {
+            title: 'Backup',
+            href: '/settings/backup',
+            icon: HardDrive,
+            adminOnly: true,
+        },
+    ];
 
-const mainNavItems = computed(() => 
-    allNavItems.filter(item => !item.adminOnly || isAdmin.value)
-);
+    return items.filter(item => !item.adminOnly || isAdmin.value);
+});
 </script>
 
 <template>

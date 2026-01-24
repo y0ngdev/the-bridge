@@ -47,17 +47,18 @@ class Alumnus extends Model
     }
 
     /**
-     * Scope to search by name or email.
+     * Scope to search by name, email, or phone number.
      */
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
-        if (!$search) {
+        if (! $search) {
             return $query;
         }
 
         return $query->where(function ($q) use ($search) {
             $q->where('name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%");
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhereJsonContains('phones', $search);
         });
     }
 
@@ -66,7 +67,7 @@ class Alumnus extends Model
      */
     public function scopeByTenure(Builder $query, ?int $tenureId): Builder
     {
-        if (!$tenureId) {
+        if (! $tenureId) {
             return $query;
         }
 
@@ -78,7 +79,7 @@ class Alumnus extends Model
      */
     public function scopeByUnit(Builder $query, ?string $unit): Builder
     {
-        if (!$unit) {
+        if (! $unit) {
             return $query;
         }
 
@@ -90,7 +91,7 @@ class Alumnus extends Model
      */
     public function scopeByState(Builder $query, ?string $state): Builder
     {
-        if (!$state) {
+        if (! $state) {
             return $query;
         }
 
@@ -102,7 +103,7 @@ class Alumnus extends Model
      */
     public function scopeByGender(Builder $query, ?string $gender): Builder
     {
-        if (!$gender) {
+        if (! $gender) {
             return $query;
         }
 

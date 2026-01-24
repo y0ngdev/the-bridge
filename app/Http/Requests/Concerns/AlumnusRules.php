@@ -15,7 +15,7 @@ trait AlumnusRules
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phones' => 'nullable|array',
-            'department' => 'nullable|string|exists:departments,code',
+            'department_id' => 'nullable|exists:departments,id',
             'gender' => 'nullable|string|in:M,F',
             'birth_date' => 'nullable|string|max:50',
             'tenure_id' => 'required|exists:tenures,id',

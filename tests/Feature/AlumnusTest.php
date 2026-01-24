@@ -53,6 +53,25 @@ describe('Alumni Index', function () {
                     ->has('alumni.data', 3)
             );
     });
+
+    it('searches alumni by phone number', function () {
+        Alumnus::factory()->create([
+            'name' => 'John Doe',
+            'phones' => ['+2341234567890', '+2349876543210'],
+        ]);
+        Alumnus::factory()->create([
+            'name' => 'Jane Smith',
+            'phones' => ['+2340987654321'],
+        ]);
+
+        $this->actingAs($this->user)
+            ->get(route('alumni.index', ['search' => '+2341234567890']))
+            ->assertOk()
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->has('alumni.data', 1)
+            );
+    });
 });
 
 describe('Alumni CRUD', function () {

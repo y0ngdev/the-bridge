@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import InputError from '@/components/InputError.vue';
 import { useForm } from '@inertiajs/vue3';
 import { MessageSquarePlus } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
@@ -59,7 +60,7 @@ function submit() {
                     <div class="space-y-2">
                         <Label>Type</Label>
                         <Select v-model="form.type">
-                            <SelectTrigger>
+                            <SelectTrigger :class="form.errors.type && 'border-destructive'">
                                 <SelectValue placeholder="Select type" />
                             </SelectTrigger>
                             <SelectContent>
@@ -71,12 +72,13 @@ function submit() {
                                 <SelectItem value="other">Other</SelectItem>
                             </SelectContent>
                         </Select>
+                        <InputError :message="form.errors.type" />
                     </div>
 
                     <div class="space-y-2">
                         <Label>Outcome</Label>
                         <Select v-model="form.outcome">
-                            <SelectTrigger>
+                            <SelectTrigger :class="form.errors.outcome && 'border-destructive'">
                                 <SelectValue placeholder="Select outcome" />
                             </SelectTrigger>
                             <SelectContent>
@@ -89,17 +91,20 @@ function submit() {
                                 <SelectItem value="scheduled_callback">Scheduled Callback</SelectItem>
                             </SelectContent>
                         </Select>
+                        <InputError :message="form.errors.outcome" />
                     </div>
                 </div>
 
                 <div class="space-y-2">
                     <Label>Date & Time</Label>
-                    <Input type="datetime-local" v-model="form.occurred_at" required />
+                    <Input type="datetime-local" v-model="form.occurred_at" :class="form.errors.occurred_at && 'border-destructive'" required />
+                    <InputError :message="form.errors.occurred_at" />
                 </div>
 
                 <div class="space-y-2">
                     <Label>Notes</Label>
-                    <Textarea v-model="form.notes" placeholder="Details about the conversation..." rows="3" />
+                    <Textarea v-model="form.notes" placeholder="Details about the conversation..." rows="3" :class="form.errors.notes && 'border-destructive'" />
+                    <InputError :message="form.errors.notes" />
                 </div>
 
                 <Button type="submit" :disabled="form.processing" class="w-full">

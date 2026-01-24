@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum NigerianState: string
 {
+    case Overseas = 'Overseas';
     case Abia = 'Abia';
     case Adamawa = 'Adamawa';
     case AkwaIbom = 'Akwa Ibom';
