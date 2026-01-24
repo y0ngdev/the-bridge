@@ -744,33 +744,56 @@ function openLogDialog(alumnus: Alumnus) {
 
             <!-- Filters -->
             <div class="mb-4 p-4 border rounded-md bg-muted/30 space-y-4">
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <Input v-model="filterSearch" placeholder="Search name/email/phone..." @keyup.enter="applyFilters" />
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3">
+                    <Input 
+                        v-model="filterSearch" 
+                        placeholder="Search name/email/phone..." 
+                        @keyup.enter="applyFilters"
+                    />
+                    
                     <Select v-model="filterTenureId">
-                        <SelectTrigger><SelectValue placeholder="All Tenures" /></SelectTrigger>
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Tenures" />
+                        </SelectTrigger>
                         <SelectContent>
-                            <SelectItem v-for="t in tenures" :key="t.id" :value="String(t.id)">{{ t.year }}</SelectItem>
+                            <SelectItem v-for="t in tenures" :key="t.id" :value="String(t.id)">
+                                {{ t.year }}
+                            </SelectItem>
                         </SelectContent>
                     </Select>
+                    
                     <Select v-model="filterUnit">
-                        <SelectTrigger><SelectValue placeholder="All Units" /></SelectTrigger>
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Units" />
+                        </SelectTrigger>
                         <SelectContent>
-                            <SelectItem v-for="u in units" :key="u.value" :value="u.value">{{ u.label }}</SelectItem>
+                            <SelectItem v-for="u in units" :key="u.value" :value="u.value">
+                                {{ u.label }}
+                            </SelectItem>
                         </SelectContent>
                     </Select>
+                    
                     <Select v-model="filterState">
-                        <SelectTrigger><SelectValue placeholder="All States" /></SelectTrigger>
+                        <SelectTrigger>
+                            <SelectValue placeholder="All States" />
+                        </SelectTrigger>
                         <SelectContent>
-                            <SelectItem v-for="s in states" :key="s.value" :value="s.value">{{ s.label }}</SelectItem>
+                            <SelectItem v-for="s in states" :key="s.value" :value="s.value">
+                                {{ s.label }}
+                            </SelectItem>
                         </SelectContent>
                     </Select>
+                    
                     <Select v-model="filterGender">
-                        <SelectTrigger><SelectValue placeholder="All Genders" /></SelectTrigger>
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Genders" />
+                        </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="Male">Male</SelectItem>
                             <SelectItem value="Female">Female</SelectItem>
                         </SelectContent>
                     </Select>
+                    
                     <div class="flex gap-2">
                         <Button @click="applyFilters" class="flex-1">Filter</Button>
                         <Button variant="outline" @click="clearFilters">Clear</Button>

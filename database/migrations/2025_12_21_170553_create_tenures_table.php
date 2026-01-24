@@ -15,6 +15,10 @@ return new class extends Migration {
             $table->string('name')->nullable();
             $table->string('year');
             $table->string('family_name')->nullable();
+            $table->boolean('is_active')->default(false);
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+
             $table->timestamps();
         });
     }

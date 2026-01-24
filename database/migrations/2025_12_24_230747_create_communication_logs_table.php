@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('alumnus_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('session_id')->nullable()->constrained('tenures')->nullOnDelete();
             $table->string('type');
             $table->string('outcome');
             $table->text('notes')->nullable();
             $table->timestamp('occurred_at');
+            
             $table->timestamps();
         });
     }
