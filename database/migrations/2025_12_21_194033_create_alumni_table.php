@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -13,7 +14,7 @@ return new class extends Migration {
         Schema::create('alumni', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            //REMOVE UNIQUE EMAILS
+            // REMOVE UNIQUE EMAILS
             $table->string('email')->nullable()->unique();
             $table->json('phones')->nullable();
             $table->foreignId('department_id')->nullable()->after('phones')->constrained()->nullOnDelete();
@@ -27,7 +28,6 @@ return new class extends Migration {
 
             $table->string('unit')->nullable();
             $table->string('state')->nullable();
-            $table->boolean('is_overseas')->default(false);
             $table->text('address')->nullable();
 
             $table->string('marital_status')->nullable();

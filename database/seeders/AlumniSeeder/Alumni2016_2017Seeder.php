@@ -1593,7 +1593,7 @@ class Alumni2016_2017Seeder extends Seeder
                 'gender' => 'M',
                 'birth_date' => '2000-07-01',
                 'unit' => null,
-                'state' => null,
+                'state' => 'Overseas',
                 'address' => null,
             ],
             [

@@ -22,7 +22,6 @@ class Alumnus extends Model
         return [
             'phones' => 'array',
             'is_futa_staff' => 'boolean',
-            'is_overseas' => 'boolean',
             'birth_date' => 'datetime:Y-m-d',
             'unit' => Unit::class,
             'state' => NigerianState::class,

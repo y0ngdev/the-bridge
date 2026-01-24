@@ -157,7 +157,6 @@ const addForm = useForm({
     past_exco_office: '',
     current_exco_office: '',
     is_futa_staff: false,
-    is_overseas: false,
 });
 
 const editForm = useForm({
@@ -174,7 +173,6 @@ const editForm = useForm({
     past_exco_office: '',
     current_exco_office: '',
     is_futa_staff: false,
-    is_overseas: false,
 });
 
 const deleteForm = useForm({});
@@ -234,7 +232,10 @@ const goToPage = (page: number) => {
 };
 
 function handleAddSubmit() {
-    addForm.post(store().url, {
+    addForm.transform((data) => ({
+        ...data,
+        is_futa_staff: Boolean(data.is_futa_staff),
+    })).post(store().url, {
         onSuccess: () => {
             showAddDialog.value = false;
             addForm.reset();
@@ -269,14 +270,16 @@ function openEditDialog(alumnus: Alumnus) {
     editForm.address = alumnus.address || '';
     editForm.past_exco_office = alumnus.past_exco_office || '';
     editForm.current_exco_office = alumnus.current_exco_office || '';
-    editForm.is_futa_staff = alumnus.is_futa_staff || false;
-    editForm.is_overseas = alumnus.is_overseas || false;
+    editForm.is_futa_staff = !!alumnus.is_futa_staff;
     showEditDialog.value = true;
 }
 
 function handleEditSubmit() {
     if (!editingAlumnus.value) return;
-    editForm.put(update(editingAlumnus.value.id).url, {
+    editForm.transform((data) => ({
+        ...data,
+        is_futa_staff: Boolean(data.is_futa_staff),
+    })).put(update(editingAlumnus.value.id).url, {
         onSuccess: () => {
             showEditDialog.value = false;
             editForm.reset();
@@ -716,15 +719,9 @@ function openLogDialog(alumnus: Alumnus) {
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <Checkbox id="is_futa_staff" v-model:checked="addForm.is_futa_staff" />
+                                    <Checkbox id="is_futa_staff" v-model="addForm.is_futa_staff" />
                                     <Label for="is_futa_staff" class="text-sm font-normal cursor-pointer">
                                         Is FUTA Staff
-                                    </Label>
-                                </div>
-                                <div class="flex items-center space-x-2">
-                                    <Checkbox id="is_overseas" v-model:checked="addForm.is_overseas" />
-                                    <Label for="is_overseas" class="text-sm font-normal cursor-pointer">
-                                        Lives Overseas
                                     </Label>
                                 </div>
                                 <DialogFooter>
@@ -1095,15 +1092,9 @@ function openLogDialog(alumnus: Alumnus) {
                         </div>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <Checkbox id="edit_is_futa_staff" v-model:checked="editForm.is_futa_staff" />
+                        <Checkbox id="edit_is_futa_staff" v-model="editForm.is_futa_staff" />
                         <Label for="edit_is_futa_staff" class="text-sm font-normal cursor-pointer">
                             Is FUTA Staff
-                        </Label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <Checkbox id="edit_is_overseas" v-model:checked="editForm.is_overseas" />
-                        <Label for="edit_is_overseas" class="text-sm font-normal cursor-pointer">
-                            Lives Overseas
                         </Label>
                     </div>
                     <DialogFooter>

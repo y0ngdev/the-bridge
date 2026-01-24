@@ -165,21 +165,21 @@ class AlumnusController extends Controller
                 ->search($request->search)
                 ->byTenure($request->tenure_id)
                 ->byUnit($request->unit)
-                ->when($isOverseas, fn ($q) => $q->where('is_overseas', true))
+                ->when($isOverseas, fn ($q) => $q->where('state', 'Overseas'))
                 ->when(! $isOverseas && $request->state, fn ($q) => $q->byState($request->state))
                 ->latest()
                 ->paginate(20)
                 ->withQueryString()),
             'stateDistribution' => Inertia::defer(fn () => Alumnus::selectRaw('state, COUNT(*) as count')
                 ->whereNotNull('state')
-                ->where('is_overseas', false)
+                ->where('state', '!=', 'Overseas')
                 ->groupBy('state')
                 ->orderBy('state')
                 ->get()
                 ->mapWithKeys(fn ($item) => [$item->state->value => $item->count])),
-            'overseasCount' => Inertia::defer(fn () => Alumnus::where('is_overseas', true)->count()),
+            'overseasCount' => Inertia::defer(fn () => Alumnus::where('state', 'Overseas')->count()),
             'overseasAlumni' => Inertia::defer(fn () => Alumnus::with('tenure')
-                ->where('is_overseas', true)
+                ->where('state', 'Overseas')
                 ->get()),
             'units' => collect(Unit::cases())->map(fn ($u) => ['value' => $u->value, 'label' => $u->value]),
             'states' => collect(NigerianState::cases())->map(fn ($s) => ['value' => $s->value, 'label' => $s->value]),

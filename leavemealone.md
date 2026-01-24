@@ -16,6 +16,6 @@
 
 - format the number birthday page.
 - ability to indicate redundant data   
-- add marital status, occupation, current employer to alumni table
-- lives overseas checkbox doesn't work
-- make phone number unique
+- ability to view duplicate data and merge
+
+- add marital status, occupation, current employer to alumni table 
