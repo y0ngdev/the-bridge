@@ -11,7 +11,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import AppLogo from '@/components/AppLogo.vue';
 import { home } from '@/routes';
 import { NavItem } from '@/types';
-import { Building2, Cake, Calendar, CalendarDays, HardDrive, LayoutGrid, MapPin, UserCheck, Users } from 'lucide-vue-next';
+import { Building2, Cake, Calendar, CalendarDays, Copy, HardDrive, LayoutGrid, MapPin, UserCheck, UserCog, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { urlIsActive } from '@/lib/utils';
 
@@ -48,6 +48,12 @@ const mainNavItems = computed(() => {
                      !urlIsActive(birthdays().url, page.url),
         },
         {
+            title: 'Duplicates',
+            href: '/alumni/duplicates/detect',
+            icon: Copy,
+            adminOnly: true,
+        },
+        {
             title: 'Redemption Week',
             href: rwIndex().url,
             icon: CalendarDays,
@@ -67,6 +73,12 @@ const mainNavItems = computed(() => {
             title: 'Executives',
             href: executives().url,
             icon: UserCheck,
+            adminOnly: true,
+        },
+        {
+            title: 'User Management',
+            href: '/admin/users',
+            icon: UserCog,
             adminOnly: true,
         },
         {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alumnus;
+use App\Models\DismissedDuplicate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,9 +18,48 @@ class AlumnusDuplicateController extends Controller
     {
         $duplicateGroups = Alumnus::findDuplicates();
 
+        // Filter out dismissed pairs
+        $filteredGroups = array_filter($duplicateGroups, function ($group) {
+            if (count($group) < 2) {
+                return false;
+            }
+            // Check if this pair has been dismissed
+            $ids = array_map(fn ($a) => $a->id, $group);
+            for ($i = 0; $i < count($ids); $i++) {
+                for ($j = $i + 1; $j < count($ids); $j++) {
+                    if (DismissedDuplicate::isPairDismissed($ids[$i], $ids[$j])) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        });
+
         return Inertia::render('alumni/Duplicates', [
-            'duplicateGroups' => $duplicateGroups,
+            'duplicateGroups' => array_values($filteredGroups),
         ]);
+    }
+
+    /**
+     * Dismiss a group as not duplicates.
+     */
+    public function dismiss(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'ids' => 'required|array|min:2',
+            'ids.*' => 'exists:alumni,id',
+        ]);
+
+        $ids = $request->input('ids');
+
+        // Store all pairs
+        for ($i = 0; $i < count($ids); $i++) {
+            for ($j = $i + 1; $j < count($ids); $j++) {
+                DismissedDuplicate::dismissPair($ids[$i], $ids[$j], auth()->id());
+            }
+        }
+
+        return redirect()->route('alumni.duplicates')->with('success', 'Marked as not duplicates.');
     }
 
     /**
@@ -68,3 +108,4 @@ class AlumnusDuplicateController extends Controller
         return redirect()->route('alumni.duplicates')->with('success', 'Alumni records merged successfully.');
     }
 }
+

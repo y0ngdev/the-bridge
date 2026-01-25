@@ -4,13 +4,16 @@ import InputError from '@/components/InputError.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/SettingsLayout.vue';
 import { edit } from '@/routes/user-password';
-import { Form, Head } from '@inertiajs/vue3';
+import { Form, Head, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { type BreadcrumbItem } from '@/types';
+import { ShieldAlert } from 'lucide-vue-next';
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
@@ -18,6 +21,9 @@ const breadcrumbItems: BreadcrumbItem[] = [
         href: edit().url,
     },
 ];
+
+const page = usePage();
+const user = computed(() => page.props.auth.user);
 </script>
 
 <template>
@@ -28,7 +34,16 @@ const breadcrumbItems: BreadcrumbItem[] = [
             <div class="space-y-6">
                 <HeadingSmall title="Update password" description="Ensure your account is using a long, random password to stay secure" />
 
+                <!-- Admin-only restriction message -->
+                <Alert v-if="!user.is_admin" class="mb-6">
+                    <ShieldAlert class="h-4 w-4" />
+                    <AlertDescription>
+                        For security reasons, only administrators can change passwords. Please contact an administrator if you need to update your password.
+                    </AlertDescription>
+                </Alert>
+
                 <Form
+                    v-if="user.is_admin"
                     v-bind="update.form()"
                     :options="{
                         preserveScroll: true,
@@ -94,3 +109,4 @@ const breadcrumbItems: BreadcrumbItem[] = [
         </SettingsLayout>
     </AppLayout>
 </template>
+

@@ -7,5 +7,13 @@
 
 
 - Allow subunit alumni coordinatoer to access te bridge and manage their alumnus data.
-- Add a view for admin to add new user or update user details.
-- only admin came change email and password. Disable it for non admin.
+ 
+
+
+
+
+
+
+
+
+

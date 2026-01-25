@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { type BreadcrumbItem, type Alumnus } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
-import { index as Alumni Index, } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index as alumniIndex } from '@/actions/App/Http/Controllers/AlumnusController';
 import { AlertTriangle, Users, X, Check } from 'lucide-vue-next';
 import { ref } from 'vue';
 
@@ -31,6 +31,11 @@ function openMergeDialog(group: Alumnus[]) {
     selectedGroup.value = group;
     selectedPrimary.value = group[0].id; // Default to first
     showMergeDialog.value = true;
+}
+
+function dismissGroup(group: Alumnus[]) {
+    const ids = group.map(a => a.id);
+    router.post('/alumni/duplicates/dismiss', { ids });
 }
 
 function handleMerge() {
@@ -96,14 +101,18 @@ function handleMerge() {
                                     <p><span class="text-muted-foreground">Email:</span> {{ alumnus.email || '—' }}</p>
                                     <p><span class="text-muted-foreground">Phones:</span> {{ alumnus.phones?.join(', ') || '—' }}</p>
                                     <p><span class="text-muted-foreground">Department:</span> {{ alumnus.department?.name || '—' }}</p>
-                                    <p><span class="text-muted-foreground">Tenure:</span> {{ alumnus.tenure?.year || '—' }}</p>
+                                    <p><span class="text-muted-foreground">Tenure:</span> {{ alumnus.tenure?.year || alumnus.tenure_id || '—' }}</p>
                                     <div class="mt-2">
                                         <Badge variant="outline">ID: {{ alumnus.id }}</Badge>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-4 flex justify-end">
+                        <div class="mt-4 flex justify-end gap-2">
+                            <Button variant="outline" @click="dismissGroup(group)">
+                                <X class="h-4 w-4 mr-2" />
+                                Not Duplicates
+                            </Button>
                             <Button @click="openMergeDialog(group)">
                                 Merge Records
                             </Button>

@@ -155,87 +155,119 @@ class Alumnus extends Model
     }
 
     /**
-     * Find potential duplicate alumni records (optimized).
+     * Find potential duplicate alumni records (optimized, returns pairs only).
      */
     public static function findDuplicates(): array
     {
-        $duplicateGroups = [];
+        $duplicatePairs = [];
         $processed = [];
 
         // First, find exact email matches (fast database query)
         $emailDuplicates = self::notMerged()
             ->whereNotNull('email')
+            ->where('email', '!=', '')
             ->select('email')
             ->groupBy('email')
             ->havingRaw('COUNT(*) > 1')
             ->pluck('email');
 
         foreach ($emailDuplicates as $email) {
-            $group = self::notMerged()
+            $records = self::notMerged()
                 ->where('email', $email)
                 ->with('department', 'tenure')
                 ->get();
 
-            if ($group->count() > 1) {
-                $duplicateGroups[] = $group->all();
-                $processed = array_merge($processed, $group->pluck('id')->all());
+            // Create pairs from matching records
+            for ($i = 0; $i < $records->count(); $i++) {
+                for ($j = $i + 1; $j < $records->count(); $j++) {
+                    $id1 = $records[$i]->id;
+                    $id2 = $records[$j]->id;
+                    $pairKey = min($id1, $id2) . '-' . max($id1, $id2);
+                    
+                    if (!isset($processed[$pairKey])) {
+                        $duplicatePairs[] = [$records[$i], $records[$j]];
+                        $processed[$pairKey] = true;
+                    }
+                }
             }
         }
 
-        // Then check for name similarity and phone overlaps (limit to avoid timeout)
+        // Then check for name similarity and phone overlaps
         $alumni = self::notMerged()
-            ->whereNotIn('id', $processed)
             ->with('department', 'tenure')
-            ->limit(50) // Process only first 50 to avoid timeout
+            ->orderBy('name')
+            ->limit(200)
             ->get();
 
-        foreach ($alumni as $alumnus) {
-            if (in_array($alumnus->id, $processed)) {
-                continue;
-            }
+        foreach ($alumni as $i => $alumnus) {
+            // Only check subsequent records (avoid duplicate pairs)
+            for ($j = $i + 1; $j < $alumni->count(); $j++) {
+                $candidate = $alumni[$j];
+                $id1 = $alumnus->id;
+                $id2 = $candidate->id;
+                $pairKey = min($id1, $id2) . '-' . max($id1, $id2);
 
-            $potentialDuplicates = [];
+                if (isset($processed[$pairKey])) {
+                    continue;
+                }
 
-            // Check remaining alumni for matches
-            $candidates = self::notMerged()
-                ->where('id', '!=', $alumnus->id)
-                ->whereNotIn('id', $processed)
-                ->limit(100)
-                ->get();
-
-            foreach ($candidates as $candidate) {
                 $isDuplicate = false;
 
-                // Simple name similarity check (first 5 characters match)
-                $name1 = strtolower(substr($alumnus->name, 0, 5));
-                $name2 = strtolower(substr($candidate->name, 0, 5));
-                if ($name1 === $name2 && strlen($name1) >= 3) {
+                // Normalize names for comparison (remove titles, trim, lowercase)
+                $name1 = self::normalizeName($alumnus->name);
+                $name2 = self::normalizeName($candidate->name);
+
+                // Check if names are very similar
+                if ($name1 === $name2) {
                     $isDuplicate = true;
+                } elseif (strlen($name1) >= 5 && strlen($name2) >= 5) {
+                    // Use similar_text for fuzzy matching on longer names
+                    similar_text($name1, $name2, $percent);
+                    if ($percent >= 85) {
+                        $isDuplicate = true;
+                    }
                 }
 
                 // Phone overlap
-                if ($alumnus->phones && $candidate->phones) {
-                    $overlap = array_intersect($alumnus->phones, $candidate->phones);
-                    if (! empty($overlap)) {
+                if (!$isDuplicate && $alumnus->phones && $candidate->phones) {
+                    $overlap = array_intersect(
+                        array_map('self::normalizePhone', $alumnus->phones),
+                        array_map('self::normalizePhone', $candidate->phones)
+                    );
+                    if (!empty($overlap)) {
                         $isDuplicate = true;
                     }
                 }
 
                 if ($isDuplicate) {
-                    if (empty($potentialDuplicates)) {
-                        $potentialDuplicates[] = $alumnus;
-                    }
-                    $potentialDuplicates[] = $candidate;
-                    $processed[] = $candidate->id;
+                    $duplicatePairs[] = [$alumnus, $candidate];
+                    $processed[$pairKey] = true;
                 }
-            }
-
-            if (! empty($potentialDuplicates)) {
-                $processed[] = $alumnus->id;
-                $duplicateGroups[] = $potentialDuplicates;
             }
         }
 
-        return $duplicateGroups;
+        return $duplicatePairs;
+    }
+
+    /**
+     * Normalize a name for comparison.
+     */
+    private static function normalizeName(string $name): string
+    {
+        $name = strtolower(trim($name));
+        // Remove common titles
+        $name = preg_replace('/^(mr\.?|mrs\.?|ms\.?|dr\.?|prof\.?|engr\.?)\s*/i', '', $name);
+        // Remove extra spaces
+        $name = preg_replace('/\s+/', ' ', $name);
+        return $name;
+    }
+
+    /**
+     * Normalize a phone number for comparison.
+     */
+    private static function normalizePhone(string $phone): string
+    {
+        // Remove all non-digit characters
+        return preg_replace('/\D/', '', $phone);
     }
 }

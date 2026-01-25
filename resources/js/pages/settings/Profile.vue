@@ -194,7 +194,11 @@ function removeAvatar() {
                             required
                             autocomplete="username"
                             placeholder="Email address"
+                            :disabled="!user.is_admin"
                         />
+                        <p v-if="!user.is_admin" class="text-sm text-muted-foreground">
+                            Contact an administrator to change your email address.
+                        </p>
                         <InputError class="mt-2" :message="errors.email" />
                     </div>
 

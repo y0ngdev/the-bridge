@@ -37,7 +37,7 @@ function formatDate(date: string | null): string {
     <Head :title="alumnus.name" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="px-4 py-6 max-w-4xl mx-auto">
+        <div class="px-4 py-6 max-w-7xl mx-auto">
             <!-- Header -->
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-4">
@@ -202,7 +202,7 @@ function formatDate(date: string | null): string {
                     <div class="md:col-span-1">
                         <CommunicationLogForm :alumnus-id="alumnus.id" />
                     </div>
-                    
+
                     <Card class="md:col-span-2">
                         <CardHeader>
                             <CardTitle class="text-lg flex items-center gap-2">
@@ -213,7 +213,7 @@ function formatDate(date: string | null): string {
                         <CardContent>
                             <div v-if="alumnus.communication_logs && alumnus.communication_logs.length > 0" class="space-y-6">
                                 <div v-for="log in alumnus.communication_logs" :key="log.id" class="relative pl-6 pb-6 border-l last:pb-0 last:border-0 border-muted-foreground/30">
-                                    <div class="absolute top-0 left-0 -translate-x-1/2 w-3 h-3 rounded-full border bg-background" 
+                                    <div class="absolute top-0 left-0 -translate-x-1/2 w-3 h-3 rounded-full border bg-background"
                                         :class="{
                                             'border-green-500 bg-green-500': log.outcome === 'successful',
                                             'border-yellow-500 bg-yellow-500': ['pending', 'scheduled_callback'].includes(log.outcome),
@@ -221,18 +221,18 @@ function formatDate(date: string | null): string {
                                             'border-blue-500 bg-blue-500': log.outcome === 'voicemail',
                                         }"
                                     ></div>
-                                    
+
                                     <div class="flex flex-col gap-1 -mt-1.5">
                                         <div class="flex items-center justify-between">
                                             <p class="font-medium text-sm flex items-center gap-2 capitalize">
-                                                {{ log.type }} 
+                                                {{ log.type }}
                                                 <span class="text-muted-foreground font-normal">• {{ new Date(log.occurred_at).toLocaleString() }}</span>
                                             </p>
                                             <Button variant="ghost" size="icon" class="h-6 w-6 text-destructive" @click="router.delete(destroyLog(log.id).url)">
                                                 <Trash2 class="h-3 w-3" />
                                             </Button>
                                         </div>
-                                        <p class="text-xs font-semibold uppercase tracking-wider" 
+                                        <p class="text-xs font-semibold uppercase tracking-wider"
                                             :class="{
                                                 'text-green-600': log.outcome === 'successful',
                                                 'text-yellow-600': ['pending', 'scheduled_callback'].includes(log.outcome),

@@ -44,6 +44,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('alumni/{alumnus}', [AlumnusController::class, 'destroy'])->name('alumni.destroy');
         Route::delete('communications/{log}', [\App\Http\Controllers\CommunicationLogController::class, 'destroy'])->name('communications.destroy');
 
+        // User Management (admin only)
+        Route::get('admin/users', [\App\Http\Controllers\UserController::class, 'index'])->name('admin.users.index');
+        Route::post('admin/users', [\App\Http\Controllers\UserController::class, 'store'])->name('admin.users.store');
+        Route::put('admin/users/{user}', [\App\Http\Controllers\UserController::class, 'update'])->name('admin.users.update');
+        Route::delete('admin/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('admin.users.destroy');
+
         // Redemption Week - Admin only (session management)
         Route::post('redemption-week', [RedemptionWeekSessionController::class, 'store'])->name('redemption-week.store');
         Route::put('redemption-week/{session}', [RedemptionWeekSessionController::class, 'update'])->name('redemption-week.update');
@@ -62,6 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Duplicate management (admin only)
     Route::middleware('admin')->group(function () {
         Route::get('alumni/duplicates/detect', [\App\Http\Controllers\AlumnusDuplicateController::class, 'index'])->name('alumni.duplicates');
+        Route::post('alumni/duplicates/dismiss', [\App\Http\Controllers\AlumnusDuplicateController::class, 'dismiss'])->name('alumni.duplicates.dismiss');
         Route::post('alumni/{alumnus}/merge/{target}', [\App\Http\Controllers\AlumnusDuplicateController::class, 'merge'])->name('alumni.merge');
     });
 
