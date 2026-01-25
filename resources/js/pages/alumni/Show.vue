@@ -11,6 +11,7 @@ import { destroy as destroyLog } from '@/actions/App/Http/Controllers/Communicat
 import { ArrowLeft, Edit, Mail, Phone, MapPin, Calendar, Building, User, Briefcase, GraduationCap, History, Trash2 } from 'lucide-vue-next';
 import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
 import { router } from '@inertiajs/vue3';
+import { formatPhoneNumber } from '@/lib/utils';
 
 const props = defineProps<{
     alumnus: Alumnus;
@@ -50,9 +51,15 @@ function formatDate(date: string | null): string {
                         <p class="text-muted-foreground">{{ alumnus.tenure?.year || 'No tenure' }} &bull; {{ alumnus.department?.name || 'Unknown department' }}</p>
                     </div>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex gap-2 items-center">
                     <Badge v-if="alumnus.is_futa_staff" variant="secondary">FUTA Staff</Badge>
                     <Badge v-if="alumnus.gender" variant="outline">{{ alumnus.gender === 'M' ? 'Male' : alumnus.gender === 'F' ? 'Female' : alumnus.gender }}</Badge>
+                    <Link :href="index().url">
+                        <Button variant="outline" size="sm">
+                            <Edit class="h-4 w-4 mr-2" />
+                            Edit
+                        </Button>
+                    </Link>
                 </div>
             </div>
 
@@ -77,9 +84,11 @@ function formatDate(date: string | null): string {
                             <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
                             <div>
                                 <p class="text-sm text-muted-foreground">Phone(s)</p>
-                                <p class="font-medium" v-if="alumnus.phones && alumnus.phones.length">
-                                    {{ alumnus.phones.join(', ') }}
-                                </p>
+                                <div v-if="alumnus.phones && alumnus.phones.length" class="space-y-1">
+                                    <p v-for="phone in alumnus.phones" :key="phone" class="font-medium">
+                                        {{ formatPhoneNumber(phone) }}
+                                    </p>
+                                </div>
                                 <p class="font-medium" v-else>—</p>
                             </div>
                         </div>
@@ -157,6 +166,32 @@ function formatDate(date: string | null): string {
                             <div>
                                 <p class="text-sm text-muted-foreground">Current Exco Office (Alumni)</p>
                                 <p class="font-medium">{{ alumnus.current_exco_office || '—' }}</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <!-- Employment & Personal-->
+                <Card class="md:col-span-2">
+                    <CardHeader>
+                        <CardTitle class="text-lg flex items-center gap-2">
+                            <Briefcase class="h-5 w-5" />
+                            Employment & Personal Information
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent class="space-y-4">
+                        <div class="grid gap-4 md:grid-cols-3">
+                            <div>
+                                <p class="text-sm text-muted-foreground">Marital Status</p>
+                                <p class="font-medium">{{ alumnus.marital_status || '—' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-muted-foreground">Occupation</p>
+                                <p class="font-medium">{{ alumnus.occupation || '—' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-muted-foreground">Current Employer</p>
+                                <p class="font-medium">{{ alumnus.current_employer || '—' }}</p>
                             </div>
                         </div>
                     </CardContent>

@@ -13,13 +13,15 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    DialogFooter,
 } from '@/components/ui/dialog';
 import { type BreadcrumbItem, type BirthdayAlumnus } from '@/types';
-import { Head, Deferred } from '@inertiajs/vue3';
-import { birthdays, index } from '@/actions/App/Http/Controllers/AlumnusController';
+import { Head, Deferred, Link } from '@inertiajs/vue3';
+import { birthdays, index, show } from '@/actions/App/Http/Controllers/AlumnusController';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
-import { Cake, Mail, Phone, PartyPopper, ChevronDown, ChevronUp } from 'lucide-vue-next';
+import { Cake, Mail, Phone, PartyPopper, ChevronDown, ChevronUp, ExternalLink } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
+import { formatPhoneNumber } from '@/lib/utils';
 
 const props = defineProps<{
     today?: BirthdayAlumnus[];
@@ -143,16 +145,24 @@ const displayedMonth = computed(() =>
                                         </div>
                                         <div v-if="alumnus.email" class="flex items-center gap-3">
                                             <Mail class="h-5 w-5 text-muted-foreground" />
-                                            <a :href="`mailto:${alumnus.email}`" class=" hover:underline">{{ alumnus.email }}</a>
+                                            <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
                                         </div>
                                         <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
                                             <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
                                             <div class="space-y-1">
-                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block  hover:underline">{{ phone }}</a>
+                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
                                             </div>
                                         </div>
                                         <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
                                     </div>
+                                    <DialogFooter>
+                                        <Link :href="show(alumnus.id).url" class="w-full">
+                                            <Button variant="outline" class="w-full">
+                                                <ExternalLink class="h-4 w-4 mr-2" />
+                                                View Full Details
+                                            </Button>
+                                        </Link>
+                                    </DialogFooter>
                                 </DialogContent>
                             </Dialog>
                         </div>
@@ -224,16 +234,24 @@ const displayedMonth = computed(() =>
                                         </div>
                                         <div v-if="alumnus.email" class="flex items-center gap-3">
                                             <Mail class="h-5 w-5 text-muted-foreground" />
-                                            <a :href="`mailto:${alumnus.email}`" class=" hover:underline">{{ alumnus.email }}</a>
+                                            <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
                                         </div>
                                         <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
                                             <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
                                             <div class="space-y-1">
-                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ phone }}</a>
+                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
                                             </div>
                                         </div>
                                         <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
                                     </div>
+                                    <DialogFooter>
+                                        <Link :href="show(alumnus.id).url" class="w-full">
+                                            <Button variant="outline" class="w-full">
+                                                <ExternalLink class="h-4 w-4 mr-2" />
+                                                View Full Details
+                                            </Button>
+                                        </Link>
+                                    </DialogFooter>
                                 </DialogContent>
                             </Dialog>
                         </div>
@@ -288,11 +306,19 @@ const displayedMonth = computed(() =>
                                         <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
                                             <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
                                             <div class="space-y-1">
-                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ phone }}</a>
+                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
                                             </div>
                                         </div>
                                         <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
                                     </div>
+                                    <DialogFooter>
+                                        <Link :href="show(alumnus.id).url" class="w-full">
+                                            <Button variant="outline" class="w-full">
+                                                <ExternalLink class="h-4 w-4 mr-2" />
+                                                View Full Details
+                                            </Button>
+                                        </Link>
+                                    </DialogFooter>
                                 </DialogContent>
                             </Dialog>
                         </div>
@@ -361,16 +387,24 @@ const displayedMonth = computed(() =>
                                                     </div>
                                                     <div v-if="alumnus.email" class="flex items-center gap-3">
                                                         <Mail class="h-5 w-5 text-muted-foreground" />
-                                                        <a :href="`mailto:${alumnus.email}`" class=" hover:underline">{{ alumnus.email }}</a>
+                                                        <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
                                                     </div>
                                                     <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
                                                         <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
                                                         <div class="space-y-1">
-                                                            <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block  hover:underline">{{ phone }}</a>
+                                                            <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
                                                         </div>
                                                     </div>
                                                     <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
                                                 </div>
+                                                <DialogFooter>
+                                                    <Link :href="show(alumnus.id).url" class="w-full">
+                                                        <Button variant="outline" class="w-full">
+                                                            <ExternalLink class="h-4 w-4 mr-2" />
+                                                            View Full Details
+                                                        </Button>
+                                                    </Link>
+                                                </DialogFooter>
                                             </DialogContent>
                                         </Dialog>
                                         <span class="text-muted-foreground text-xs ml-2">

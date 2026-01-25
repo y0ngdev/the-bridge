@@ -59,6 +59,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('alumni/{alumnus}', [AlumnusController::class, 'show'])->name('alumni.show');
     Route::post('alumni/{alumnus}/communications', [\App\Http\Controllers\CommunicationLogController::class, 'store'])->name('alumni.communications.store');
 
+    // Duplicate management (admin only)
+    Route::middleware('admin')->group(function () {
+        Route::get('alumni/duplicates/detect', [\App\Http\Controllers\AlumnusDuplicateController::class, 'index'])->name('alumni.duplicates');
+        Route::post('alumni/{alumnus}/merge/{target}', [\App\Http\Controllers\AlumnusDuplicateController::class, 'merge'])->name('alumni.merge');
+    });
+
+
     // Redemption Week - Member routes (all authenticated users)
     Route::get('redemption-week', [RedemptionWeekSessionController::class, 'index'])->name('redemption-week.index');
     Route::get('redemption-week/{session}', [RedemptionWeekSessionController::class, 'show'])->name('redemption-week.show');

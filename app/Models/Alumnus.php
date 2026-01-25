@@ -129,4 +129,113 @@ class Alumnus extends Model
     {
         return $this->hasMany(CommunicationLog::class)->orderByDesc('occurred_at');
     }
+
+    /**
+     * Scope to exclude merged records.
+     */
+    public function scopeNotMerged(Builder $query): Builder
+    {
+        return $query->whereNull('merged_into');
+    }
+
+    /**
+     * Get the alumnus this record was merged into.
+     */
+    public function mergedInto(): BelongsTo
+    {
+        return $this->belongsTo(Alumnus::class, 'merged_into');
+    }
+
+    /**
+     * Get alumni that were merged into this record.
+     */
+    public function mergedRecords(): HasMany
+    {
+        return $this->hasMany(Alumnus::class, 'merged_into');
+    }
+
+    /**
+     * Find potential duplicate alumni records (optimized).
+     */
+    public static function findDuplicates(): array
+    {
+        $duplicateGroups = [];
+        $processed = [];
+
+        // First, find exact email matches (fast database query)
+        $emailDuplicates = self::notMerged()
+            ->whereNotNull('email')
+            ->select('email')
+            ->groupBy('email')
+            ->havingRaw('COUNT(*) > 1')
+            ->pluck('email');
+
+        foreach ($emailDuplicates as $email) {
+            $group = self::notMerged()
+                ->where('email', $email)
+                ->with('department', 'tenure')
+                ->get();
+
+            if ($group->count() > 1) {
+                $duplicateGroups[] = $group->all();
+                $processed = array_merge($processed, $group->pluck('id')->all());
+            }
+        }
+
+        // Then check for name similarity and phone overlaps (limit to avoid timeout)
+        $alumni = self::notMerged()
+            ->whereNotIn('id', $processed)
+            ->with('department', 'tenure')
+            ->limit(50) // Process only first 50 to avoid timeout
+            ->get();
+
+        foreach ($alumni as $alumnus) {
+            if (in_array($alumnus->id, $processed)) {
+                continue;
+            }
+
+            $potentialDuplicates = [];
+
+            // Check remaining alumni for matches
+            $candidates = self::notMerged()
+                ->where('id', '!=', $alumnus->id)
+                ->whereNotIn('id', $processed)
+                ->limit(100)
+                ->get();
+
+            foreach ($candidates as $candidate) {
+                $isDuplicate = false;
+
+                // Simple name similarity check (first 5 characters match)
+                $name1 = strtolower(substr($alumnus->name, 0, 5));
+                $name2 = strtolower(substr($candidate->name, 0, 5));
+                if ($name1 === $name2 && strlen($name1) >= 3) {
+                    $isDuplicate = true;
+                }
+
+                // Phone overlap
+                if ($alumnus->phones && $candidate->phones) {
+                    $overlap = array_intersect($alumnus->phones, $candidate->phones);
+                    if (! empty($overlap)) {
+                        $isDuplicate = true;
+                    }
+                }
+
+                if ($isDuplicate) {
+                    if (empty($potentialDuplicates)) {
+                        $potentialDuplicates[] = $alumnus;
+                    }
+                    $potentialDuplicates[] = $candidate;
+                    $processed[] = $candidate->id;
+                }
+            }
+
+            if (! empty($potentialDuplicates)) {
+                $processed[] = $alumnus->id;
+                $duplicateGroups[] = $potentialDuplicates;
+            }
+        }
+
+        return $duplicateGroups;
+    }
 }

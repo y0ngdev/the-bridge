@@ -157,6 +157,9 @@ const addForm = useForm({
     past_exco_office: '',
     current_exco_office: '',
     is_futa_staff: false,
+    marital_status: '',
+    occupation: '',
+    current_employer: '',
 });
 
 const editForm = useForm({
@@ -173,6 +176,9 @@ const editForm = useForm({
     past_exco_office: '',
     current_exco_office: '',
     is_futa_staff: false,
+    marital_status: '',
+    occupation: '',
+    current_employer: '',
 });
 
 const deleteForm = useForm({});
@@ -271,6 +277,9 @@ function openEditDialog(alumnus: Alumnus) {
     editForm.past_exco_office = alumnus.past_exco_office || '';
     editForm.current_exco_office = alumnus.current_exco_office || '';
     editForm.is_futa_staff = !!alumnus.is_futa_staff;
+    editForm.marital_status = alumnus.marital_status || '';
+    editForm.occupation = alumnus.occupation || '';
+    editForm.current_employer = alumnus.current_employer || '';
     showEditDialog.value = true;
 }
 
@@ -718,6 +727,31 @@ function openLogDialog(alumnus: Alumnus) {
                                         <p v-if="addForm.errors.current_exco_office" class="text-sm text-destructive">{{ addForm.errors.current_exco_office }}</p>
                                     </div>
                                 </div>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="space-y-2">
+                                        <Label for="marital_status">Marital Status</Label>
+                                        <Select v-model="addForm.marital_status">
+                                            <SelectTrigger :class="addForm.errors.marital_status && 'border-destructive'">
+                                                <SelectValue placeholder="Select status" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="Single">Single</SelectItem>
+                                                <SelectItem value="Married">Married</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <p v-if="addForm.errors.marital_status" class="text-sm text-destructive">{{ addForm.errors.marital_status }}</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <Label for="occupation">Occupation</Label>
+                                        <Input id="occupation" v-model="addForm.occupation" placeholder="e.g., Engineer, Teacher" :class="addForm.errors.occupation && 'border-destructive'" />
+                                        <p v-if="addForm.errors.occupation" class="text-sm text-destructive">{{ addForm.errors.occupation }}</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <Label for="current_employer">Current Employer</Label>
+                                        <Input id="current_employer" v-model="addForm.current_employer" placeholder="e.g., Company Name" :class="addForm.errors.current_employer && 'border-destructive'" />
+                                        <p v-if="addForm.errors.current_employer" class="text-sm text-destructive">{{ addForm.errors.current_employer }}</p>
+                                    </div>
+                                </div>
                                 <div class="flex items-center space-x-2">
                                     <Checkbox id="is_futa_staff" v-model="addForm.is_futa_staff" />
                                     <Label for="is_futa_staff" class="text-sm font-normal cursor-pointer">
@@ -1089,6 +1123,31 @@ function openLogDialog(alumnus: Alumnus) {
                             <Label for="edit_current_exco_office">Current Exco Office (Alumni)</Label>
                             <Input id="edit_current_exco_office" v-model="editForm.current_exco_office" placeholder="e.g., President, Secretary" :class="editForm.errors.current_exco_office && 'border-destructive'" />
                             <p v-if="editForm.errors.current_exco_office" class="text-sm text-destructive">{{ editForm.errors.current_exco_office }}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="space-y-2">
+                            <Label for="edit_marital_status">Marital Status</Label>
+                            <Select v-model="editForm.marital_status">
+                                <SelectTrigger :class="editForm.errors.marital_status && 'border-destructive'">
+                                    <SelectValue placeholder="Select status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Single">Single</SelectItem>
+                                    <SelectItem value="Married">Married</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <p v-if="editForm.errors.marital_status" class="text-sm text-destructive">{{ editForm.errors.marital_status }}</p>
+                        </div>
+                        <div class="space-y-2">
+                            <Label for="edit_occupation">Occupation</Label>
+                            <Input id="edit_occupation" v-model="editForm.occupation" placeholder="e.g., Engineer, Teacher" :class="editForm.errors.occupation && 'border-destructive'" />
+                            <p v-if="editForm.errors.occupation" class="text-sm text-destructive">{{ editForm.errors.occupation }}</p>
+                        </div>
+                        <div class="space-y-2">
+                            <Label for="edit_current_employer">Current Employer</Label>
+                            <Input id="edit_current_employer" v-model="editForm.current_employer" placeholder="e.g., Company Name" :class="editForm.errors.current_employer && 'border-destructive'" />
+                            <p v-if="editForm.errors.current_employer" class="text-sm text-destructive">{{ editForm.errors.current_employer }}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-2">

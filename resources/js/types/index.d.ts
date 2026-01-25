@@ -93,6 +93,9 @@ export interface Alumnus {
     past_exco_office: string | null;
     current_exco_office: string | null;
     is_futa_staff: boolean;
+    marital_status: string | null;
+    occupation: string | null;
+    current_employer: string | null;
     tenure?: Tenure | null;
     communication_logs?: CommunicationLog[];
 }

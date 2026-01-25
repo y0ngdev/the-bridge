@@ -20,12 +20,12 @@ return new class extends Migration
             $table->string('outcome');
             $table->text('notes')->nullable();
             $table->timestamp('occurred_at');
-            
+              
             $table->timestamps();
         });
     }
 
-    /**
+    /** 
      * Reverse the migrations.
      */
     public function down(): void

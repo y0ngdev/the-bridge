@@ -25,6 +25,9 @@ trait AlumnusRules
             'past_exco_office' => 'nullable|string|max:255',
             'current_exco_office' => 'nullable|string|max:255',
             'is_futa_staff' => 'nullable|boolean',
+            'marital_status' => 'nullable|string|in:Single,Married',
+            'occupation' => 'nullable|string|max:255',
+            'current_employer' => 'nullable|string|max:255',
         ];
     }
 }
