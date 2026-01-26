@@ -45,7 +45,8 @@ const mainNavItems = computed(() => {
             isActive: urlIsActive(alumnusIndex().url, page.url) && 
                      !urlIsActive(distribution().url, page.url) && 
                      !urlIsActive(executives().url, page.url) &&
-                     !urlIsActive(birthdays().url, page.url),
+                     !urlIsActive(birthdays().url, page.url) &&
+                     !urlIsActive('/alumni/duplicates/detect', page.url),
         },
         {
             title: 'Duplicates',
