@@ -11,7 +11,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import AppLogo from '@/components/AppLogo.vue';
 import { home } from '@/routes';
 import { NavItem } from '@/types';
-import { Building2, Cake, Calendar, CalendarDays, Copy, HardDrive, LayoutGrid, MapPin, UserCheck, UserCog, Users } from 'lucide-vue-next';
+import { Building2, Cake, Calendar, CalendarDays, Copy, FileClock, HardDrive, LayoutGrid, MapPin, UserCheck, UserCog, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { urlIsActive } from '@/lib/utils';
 
@@ -52,6 +52,12 @@ const mainNavItems = computed(() => {
             title: 'Duplicates',
             href: '/alumni/duplicates/detect',
             icon: Copy,
+            adminOnly: true,
+        },
+        {
+            title: 'Pending Updates',
+            href: '/admin/pending-updates',
+            icon: FileClock,
             adminOnly: true,
         },
         {

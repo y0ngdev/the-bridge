@@ -18,4 +18,5 @@
 
 
 - create a front facing view where alumni's can view and update their data without being authenticated
-    
+
+- add the ability to delete on of the duplicated records

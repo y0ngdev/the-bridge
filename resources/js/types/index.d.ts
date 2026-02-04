@@ -63,6 +63,12 @@ export interface Tenure {
     end_date?: string | null;
 }
 
+export interface Department {
+    id: number;
+    name: string;
+    code: string;
+}
+
 // ============================================
 // Enum Option Type
 // ============================================

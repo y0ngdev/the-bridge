@@ -23,11 +23,24 @@ Route::middleware(['guest'])->get('/', function (Request $request) {
     );
 });
 
+// Public Alumni Portal (no auth required)
+Route::prefix('portal')->group(function () {
+    Route::get('/', [\App\Http\Controllers\AlumnusPortalController::class, 'index'])->name('portal.index');
+    Route::post('/lookup', [\App\Http\Controllers\AlumnusPortalController::class, 'lookup'])->name('portal.lookup');
+    Route::post('/submit', [\App\Http\Controllers\AlumnusPortalController::class, 'store'])->name('portal.store');
+    Route::post('/update/{alumnus}', [\App\Http\Controllers\AlumnusPortalController::class, 'update'])->name('portal.update');
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
-
     // Admin-only routes
-
     Route::middleware('admin')->group(function () {
+        // ... existing admin routes ...
+        
+        // Pending Alumni Updates
+        Route::get('/admin/pending-updates', [\App\Http\Controllers\PendingAlumnusUpdateController::class, 'index'])->name('admin.pending-updates.index');
+        Route::post('/admin/pending-updates/{update}/approve', [\App\Http\Controllers\PendingAlumnusUpdateController::class, 'approve'])->name('admin.pending-updates.approve');
+        Route::post('/admin/pending-updates/{update}/reject', [\App\Http\Controllers\PendingAlumnusUpdateController::class, 'reject'])->name('admin.pending-updates.reject');
+
         Route::get('/analytics/outreach', [OutreachController::class, 'index'])->name('analytics.outreach');
 
         Route::resource('tenures', TenureController::class)->except(['show', 'destroy', 'edit', 'create']);
