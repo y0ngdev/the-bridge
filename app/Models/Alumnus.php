@@ -50,7 +50,7 @@ class Alumnus extends Model
      */
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
-        if (! $search) {
+        if (!$search) {
             return $query;
         }
 
@@ -66,7 +66,7 @@ class Alumnus extends Model
      */
     public function scopeByTenure(Builder $query, ?int $tenureId): Builder
     {
-        if (! $tenureId) {
+        if (!$tenureId) {
             return $query;
         }
 
@@ -78,7 +78,7 @@ class Alumnus extends Model
      */
     public function scopeByUnit(Builder $query, ?string $unit): Builder
     {
-        if (! $unit) {
+        if (!$unit) {
             return $query;
         }
 
@@ -90,7 +90,7 @@ class Alumnus extends Model
      */
     public function scopeByState(Builder $query, ?string $state): Builder
     {
-        if (! $state) {
+        if (!$state) {
             return $query;
         }
 
@@ -102,7 +102,7 @@ class Alumnus extends Model
      */
     public function scopeByGender(Builder $query, ?string $gender): Builder
     {
-        if (! $gender) {
+        if (!$gender) {
             return $query;
         }
 
@@ -171,22 +171,28 @@ class Alumnus extends Model
             ->havingRaw('COUNT(*) > 1')
             ->pluck('email');
 
-        foreach ($emailDuplicates as $email) {
+        if ($emailDuplicates->isNotEmpty()) {
             $records = self::notMerged()
-                ->where('email', $email)
+                ->whereIn('email', $emailDuplicates)
                 ->with('department', 'tenure')
-                ->get();
+                ->get()
+                ->groupBy('email');
 
-            // Create pairs from matching records
-            for ($i = 0; $i < $records->count(); $i++) {
-                for ($j = $i + 1; $j < $records->count(); $j++) {
-                    $id1 = $records[$i]->id;
-                    $id2 = $records[$j]->id;
-                    $pairKey = min($id1, $id2) . '-' . max($id1, $id2);
-                    
-                    if (!isset($processed[$pairKey])) {
-                        $duplicatePairs[] = [$records[$i], $records[$j]];
-                        $processed[$pairKey] = true;
+            foreach ($records as $email => $group) {
+                // Create pairs from matching records
+                $count = $group->count();
+                for ($i = 0; $i < $count; $i++) {
+                    for ($j = $i + 1; $j < $count; $j++) {
+                        $rec1 = $group[$i];
+                        $rec2 = $group[$j];
+                        $id1 = $rec1->id;
+                        $id2 = $rec2->id;
+                        $pairKey = min($id1, $id2) . '-' . max($id1, $id2);
+
+                        if (!isset($processed[$pairKey])) {
+                            $duplicatePairs[] = [$rec1, $rec2];
+                            $processed[$pairKey] = true;
+                        }
                     }
                 }
             }
@@ -198,6 +204,15 @@ class Alumnus extends Model
             ->orderBy('name')
             ->limit(200)
             ->get();
+
+        // Pre-calculate normalized values to avoid O(N^2) normalization
+        $normalizedMap = [];
+        foreach ($alumni as $a) {
+            $normalizedMap[$a->id] = [
+                'name' => self::normalizeName($a->name),
+                'phones' => array_map('self::normalizePhone', $a->phones ?? []),
+            ];
+        }
 
         foreach ($alumni as $i => $alumnus) {
             // Only check subsequent records (avoid duplicate pairs)
@@ -213,9 +228,9 @@ class Alumnus extends Model
 
                 $isDuplicate = false;
 
-                // Normalize names for comparison (remove titles, trim, lowercase)
-                $name1 = self::normalizeName($alumnus->name);
-                $name2 = self::normalizeName($candidate->name);
+                // Use pre-calculated match
+                $name1 = $normalizedMap[$id1]['name'];
+                $name2 = $normalizedMap[$id2]['name'];
 
                 // Check if names are very similar
                 if ($name1 === $name2) {
@@ -229,10 +244,10 @@ class Alumnus extends Model
                 }
 
                 // Phone overlap
-                if (!$isDuplicate && $alumnus->phones && $candidate->phones) {
+                if (!$isDuplicate && !empty($normalizedMap[$id1]['phones']) && !empty($normalizedMap[$id2]['phones'])) {
                     $overlap = array_intersect(
-                        array_map('self::normalizePhone', $alumnus->phones),
-                        array_map('self::normalizePhone', $candidate->phones)
+                        $normalizedMap[$id1]['phones'],
+                        $normalizedMap[$id2]['phones']
                     );
                     if (!empty($overlap)) {
                         $isDuplicate = true;

@@ -57,10 +57,18 @@ class AlumnusPortalController extends Controller
         // 3. Try name match (fuzzy)
         $name = $request->name;
         // Simple case-insensitive match for now
-        $match = (clone $query)->where('name', 'like', "%{$name}%")->first();
+        $matches = (clone $query)
+            ->where('name', 'like', "%{$name}%")
+            ->with(['department', 'tenure']) // Load useful context for disambiguation
+            ->limit(5)
+            ->get();
 
-        if ($match) {
-            return back()->with('match', $match);
+        if ($matches->count() === 1) {
+            return back()->with('match', $matches->first());
+        }
+
+        if ($matches->count() > 1) {
+            return back()->with('possible_matches', $matches);
         }
 
         return back()->with('no_match', true)->withInput();

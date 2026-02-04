@@ -38,6 +38,36 @@ test('portal lookup finds matching alumnus', function () {
     expect(session('match')->id)->toBe($alumnus->id);
 });
 
+test('portal lookup handles multiple matches', function () {
+    $tenure = Tenure::factory()->create();
+    // Create two similar alumni
+    $a1 = Alumnus::factory()->create(['name' => 'John A. Doe', 'tenure_id' => $tenure->id]);
+    $a2 = Alumnus::factory()->create(['name' => 'John B. Doe', 'tenure_id' => $tenure->id]);
+
+    $response = $this->post('/portal/lookup', [
+        'name' => 'John', // Partial match for both
+    ]);
+
+    $matches = session('possible_matches');
+    expect($matches)->toHaveCount(2);
+    expect($matches->pluck('id'))->toContain($a1->id);
+    expect($matches->pluck('id'))->toContain($a2->id);
+});
+
+test('portal lookup works with name only', function () {
+    $tenure = Tenure::factory()->create();
+    $alumnus = Alumnus::factory()->create(['name' => 'Name Only Target']);
+
+    $response = $this->post('/portal/lookup', [
+        'name' => 'Name Only Target',
+        // 'email' and 'phone' omitted
+    ]);
+
+    $response->assertSessionHasNoErrors();
+    $response->assertRedirect();
+    $response->assertSessionHas('match');
+});
+
 test('portal can create new alumnus with all fields', function () {
     $tenure = Tenure::factory()->create();
     $department = Department::factory()->create();

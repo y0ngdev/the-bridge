@@ -50,6 +50,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn() => $request->session()->get('success'),
                 'error' => fn() => $request->session()->get('error'),
                 'match' => fn() => $request->session()->get('match'),
+                'possible_matches' => fn() => $request->session()->get('possible_matches'),
                 'no_match' => fn() => $request->session()->get('no_match'),
                 'info' => fn() => $request->session()->get('info'),
             ],

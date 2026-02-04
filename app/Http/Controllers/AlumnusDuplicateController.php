@@ -18,20 +18,43 @@ class AlumnusDuplicateController extends Controller
     {
         $duplicateGroups = Alumnus::findDuplicates();
 
+        if (empty($duplicateGroups)) {
+            return Inertia::render('alumni/Duplicates', ['duplicateGroups' => []]);
+        }
+
+        // Collect all IDs to batch fetch dismissed records
+        $allIds = collect($duplicateGroups)->flatten(1)->pluck('id')->unique()->values()->all();
+
+        // Fetch relevant dismissed pairs
+        $dismissedPairs = DismissedDuplicate::query()
+            ->where(function ($q) use ($allIds) {
+                // Chunking for safety if thousands of IDs (SQL limit)
+                foreach (array_chunk($allIds, 1000) as $chunk) {
+                    $q->orWhereIn('alumnus_id_1', $chunk)
+                        ->orWhereIn('alumnus_id_2', $chunk);
+                }
+            })
+            ->get()
+            ->mapWithKeys(function ($d) {
+                return [$d->alumnus_id_1 . '-' . $d->alumnus_id_2 => true];
+            });
+
         // Filter out dismissed pairs
-        $filteredGroups = array_filter($duplicateGroups, function ($group) {
+        $filteredGroups = array_filter($duplicateGroups, function ($group) use ($dismissedPairs) {
             if (count($group) < 2) {
                 return false;
             }
-            // Check if this pair has been dismissed
-            $ids = array_map(fn ($a) => $a->id, $group);
-            for ($i = 0; $i < count($ids); $i++) {
-                for ($j = $i + 1; $j < count($ids); $j++) {
-                    if (DismissedDuplicate::isPairDismissed($ids[$i], $ids[$j])) {
-                        return false;
-                    }
-                }
+
+            $ids = array_map(fn($a) => $a->id, $group);
+            $id1 = $ids[0];
+            $id2 = $ids[1];
+            $min = min($id1, $id2);
+            $max = max($id1, $id2);
+
+            if ($dismissedPairs->has("$min-$max")) {
+                return false;
             }
+
             return true;
         });
 
@@ -108,4 +131,3 @@ class AlumnusDuplicateController extends Controller
         return redirect()->route('alumni.duplicates')->with('success', 'Alumni records merged successfully.');
     }
 }
-

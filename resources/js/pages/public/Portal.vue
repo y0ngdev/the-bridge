@@ -37,8 +37,9 @@ const departmentOptions = computed(() => props.departments.map(d => ({
 const pastExcoOfficeOptions = computed(() => props.pastExcoOffices);
 
 // State
-const mode = ref<'lookup' | 'update' | 'create'>('lookup');
+const mode = ref<'lookup' | 'disambiguation' | 'update' | 'create'>('lookup');
 const matchedAlumnus = ref<any>(null);
+const possibleMatches = ref<any[]>([]);
 
 // Forms
 const lookupForm = useForm({
@@ -91,38 +92,77 @@ const matchFound = computed(() => page.props.flash?.match);
 const noMatch = computed(() => page.props.flash?.no_match);
 
 // Check for session flash data on load/update
-console.log('Session Flash:', page.props.flash);
+// console.log('Session Flash:', page.props.flash);
 
 // Watch for flash messages to handle lookup results
 watch(() => page.props.flash, (flash: any) => {
+    if (flash?.possible_matches) {
+        mode.value = 'disambiguation';
+        possibleMatches.value = flash.possible_matches;
+    }
+
     if (flash?.match) {
-        matchedAlumnus.value = flash.match;
-        mode.value = 'update';
-        
-        // Populate update form
-        const m = matchedAlumnus.value;
-        updateForm.name = m.name;
-        updateForm.email = m.email;
-        updateForm.phones = m.phones && m.phones.length > 0 ? [...m.phones] : [''];
-        updateForm.tenure_id = String(m.tenure_id || '');
-        updateForm.department_id = String(m.department_id || '');
-        updateForm.address = m.address || '';
-        updateForm.current_employer = m.current_employer || '';
-        updateForm.state = m.state || '';
-        updateForm.unit = m.unit || '';
-        updateForm.gender = m.gender || '';
-        updateForm.birth_date = m.birth_date || '';
-        updateForm.past_exco_office = m.past_exco_office || '';
-        updateForm.current_exco_office = m.current_exco_office || '';
-        updateForm.is_futa_staff = Boolean(m.is_futa_staff);
-        updateForm.marital_status = m.marital_status || '';
-        updateForm.occupation = m.occupation || '';
+        selectMatch(flash.match);
     } 
     
     if (flash?.no_match) {
-        mode.value = 'create';
+        proceedToCreate();
     }
 }, { deep: true, immediate: true });
+
+function selectMatch(alumnus: any) {
+    matchedAlumnus.value = alumnus;
+    mode.value = 'update';
+    
+    // Populate update form
+    const m = matchedAlumnus.value;
+    updateForm.name = m.name;
+    updateForm.email = m.email; // Keep DB email by default
+    updateForm.phones = m.phones && m.phones.length > 0 ? [...m.phones] : [''];
+    
+    // PRESERVE INPUT: If user searched with a phone number that isn't in the list, add it
+    if (lookupForm.phone) {
+        // Normalize for comparison (basic strip)
+        const normalize = (p: string) => p.replace(/\D/g, '');
+        const searchedPhone = normalize(lookupForm.phone);
+        const exists = updateForm.phones.some((p: string) => normalize(p) === searchedPhone);
+        
+        if (!exists && searchedPhone.length > 0) {
+            // Append the new phone number from search
+            updateForm.phones.push(lookupForm.phone);
+        }
+    }
+
+    // PRESERVE INPUT: If user searched with diverse email and DB is empty, fill it
+    if (lookupForm.email && !updateForm.email) {
+        updateForm.email = lookupForm.email;
+    }
+
+    updateForm.tenure_id = String(m.tenure_id || '');
+    updateForm.department_id = String(m.department_id || '');
+    updateForm.address = m.address || '';
+    updateForm.current_employer = m.current_employer || '';
+    updateForm.state = m.state || '';
+    updateForm.unit = m.unit || '';
+    updateForm.gender = m.gender || '';
+    updateForm.birth_date = m.birth_date || '';
+    updateForm.past_exco_office = m.past_exco_office || '';
+    updateForm.current_exco_office = m.current_exco_office || '';
+    updateForm.is_futa_staff = Boolean(m.is_futa_staff);
+    updateForm.marital_status = m.marital_status || '';
+    updateForm.occupation = m.occupation || '';
+}
+
+function proceedToCreate() {
+    mode.value = 'create';
+    
+    // Prefill create form with lookup data
+    createForm.name = lookupForm.name;
+    createForm.email = lookupForm.email;
+    if (lookupForm.phone) {
+        createForm.phones = [lookupForm.phone];
+    }
+}
 
 function handleLookup() {
     lookupForm.post('/portal/lookup');
@@ -148,6 +188,7 @@ function resetToLookup() {
     mode.value = 'lookup';
     lookupForm.reset();
     matchedAlumnus.value = null;
+    possibleMatches.value = [];
     // Clear flash manually if possible or just rely on new navigation
     // router.visit('/portal') // Clean reload
 }
@@ -189,6 +230,14 @@ function resetToLookup() {
                 </CardHeader>
                 <CardContent>
                     <form @submit.prevent="handleLookup" class="space-y-4">
+                        <Alert v-if="lookupForm.hasErrors" variant="destructive" class="mb-4">
+                            <AlertCircle class="h-4 w-4" />
+                            <AlertTitle>Validation Error</AlertTitle>
+                            <AlertDescription>
+                                Please fix the errors highlighted below.
+                            </AlertDescription>
+                        </Alert>
+
                         <Alert v-if="noMatch" variant="destructive" class="mb-4">
                             <AlertCircle class="h-4 w-4" />
                             <AlertTitle>Record Not Found</AlertTitle>
@@ -203,16 +252,25 @@ function resetToLookup() {
                         <div class="space-y-2">
                             <Label for="lookup_name">Full Name (Required)</Label>
                             <Input id="lookup_name" v-model="lookupForm.name" required placeholder="e.g. John Doe" />
+                            <p v-if="lookupForm.errors.name" class="text-sm text-destructive font-medium">
+                                {{ lookupForm.errors.name }}
+                            </p>
                         </div>
 
                         <div class="grid gap-4 md:grid-cols-2">
                             <div class="space-y-2">
                                 <Label for="lookup_email">Email Address</Label>
                                 <Input id="lookup_email" type="email" v-model="lookupForm.email" placeholder="name@example.com" />
+                                <p v-if="lookupForm.errors.email" class="text-sm text-destructive font-medium">
+                                    {{ lookupForm.errors.email }}
+                                </p>
                             </div>
                             <div class="space-y-2">
                                 <Label for="lookup_phone">Phone Number</Label>
                                 <Input id="lookup_phone" v-model="lookupForm.phone" placeholder="+1234567890" />
+                                <p v-if="lookupForm.errors.phone" class="text-sm text-destructive font-medium">
+                                    {{ lookupForm.errors.phone }}
+                                </p>
                             </div>
                         </div>
                         
@@ -226,6 +284,50 @@ function resetToLookup() {
                         </Button>
                     </form>
                 </CardContent>
+            </Card>
+
+            <!-- Step 1.5: Disambiguation (Multiple Matches) -->
+            <Card v-if="mode === 'disambiguation' && !successMessage">
+                <CardHeader>
+                    <CardTitle>Multiple Records Found</CardTitle>
+                    <CardDescription>
+                        We found multiple alumni details matching your search. Please identify which one is you.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent class="grid gap-4">
+                    <div v-for="match in possibleMatches" :key="match.id" 
+                        class="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer transition-colors"
+                        @click="selectMatch(match)"
+                    >
+                        <div class="space-y-1">
+                            <p class="font-medium">{{ match.name }}</p>
+                            <p class="text-sm text-muted-foreground">
+                                <span v-if="match.department">{{ match.department.name }}</span>
+                                <span v-if="match.department && match.tenure"> • </span>
+                                <span v-if="match.tenure">{{ match.tenure.name }}</span>
+                            </p>
+                        </div>
+                        <Button size="sm" variant="secondary">This is me</Button>
+                    </div>
+
+                    <div class="relative py-2">
+                        <div class="absolute inset-0 flex items-center"><span class="w-full border-t" /></div>
+                        <div class="relative flex justify-center text-xs uppercase"><span class="bg-background px-2 text-muted-foreground">Or</span></div>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="text-sm text-muted-foreground mb-2">None of these are me?</p>
+                        <Button variant="outline" class="w-full" @click="proceedToCreate">
+                            Create a new record
+                        </Button>
+                    </div>
+                </CardContent>
+                <CardFooter>
+                     <Button variant="ghost" size="sm" class="w-full" @click="resetToLookup">
+                        <RefreshCw class="mr-2 h-4 w-4" />
+                        Back to Search
+                    </Button>
+                </CardFooter>
             </Card>
 
             <!-- Step 2A: Update Form -->
