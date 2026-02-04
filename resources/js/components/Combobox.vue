@@ -55,7 +55,9 @@ function handleSelect(selectedValue: string) {
                 class="w-full justify-between font-normal"
                 :class="!value && 'text-muted-foreground'"
             >
-                {{ value ? options.find((option) => option.value === value)?.label : placeholder }}
+                <span class="truncate">
+                    {{ value ? options.find((option) => option.value === value)?.label : placeholder }}
+                </span>
                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
         </PopoverTrigger>

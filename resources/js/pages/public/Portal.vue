@@ -10,16 +10,31 @@ import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed, watch } from 'vue';
 import { Search, UserPlus, Save, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-vue-next';
 import { type Tenure, type Department } from '@/types';
+import { Checkbox } from '@/components/ui/checkbox';
+import Combobox from '@/components/Combobox.vue';
 
 interface Props {
     tenures: Tenure[];
     departments: Department[];
     states: { value: string; label: string }[];
     units: { value: string; label: string }[];
+    pastExcoOffices: { value: string; label: string }[];
 }
 
 const props = defineProps<Props>();
 const page = usePage<any>();
+
+const tenureOptions = computed(() => props.tenures.map(t => ({
+    value: String(t.id),
+    label: `${t.name} (${t.year})`
+})));
+
+const departmentOptions = computed(() => props.departments.map(d => ({
+    value: String(d.id),
+    label: d.name
+})));
+
+const pastExcoOfficeOptions = computed(() => props.pastExcoOffices);
 
 // State
 const mode = ref<'lookup' | 'update' | 'create'>('lookup');
@@ -38,11 +53,17 @@ const updateForm = useForm({
     phones: [''],
     tenure_id: '',
     department_id: '',
-    current_location: '',
+    address: '',
     current_employer: '',
     state: '',
     unit: '',
     gender: '',
+    birth_date: '',
+    past_exco_office: '',
+    current_exco_office: '',
+    is_futa_staff: false,
+    marital_status: '',
+    occupation: '',
 });
 
 const createForm = useForm({
@@ -51,11 +72,17 @@ const createForm = useForm({
     phones: [''],
     tenure_id: '',
     department_id: '',
-    current_location: '',
+    address: '',
     current_employer: '',
     state: '',
     unit: '',
     gender: '',
+    birth_date: '',
+    past_exco_office: '',
+    current_exco_office: '',
+    is_futa_staff: false,
+    marital_status: '',
+    occupation: '',
 });
 
 // Computed from session
@@ -79,11 +106,17 @@ watch(() => page.props.flash, (flash: any) => {
         updateForm.phones = m.phones && m.phones.length > 0 ? [...m.phones] : [''];
         updateForm.tenure_id = String(m.tenure_id || '');
         updateForm.department_id = String(m.department_id || '');
-        updateForm.current_location = m.current_location || '';
+        updateForm.address = m.address || '';
         updateForm.current_employer = m.current_employer || '';
         updateForm.state = m.state || '';
         updateForm.unit = m.unit || '';
         updateForm.gender = m.gender || '';
+        updateForm.birth_date = m.birth_date || '';
+        updateForm.past_exco_office = m.past_exco_office || '';
+        updateForm.current_exco_office = m.current_exco_office || '';
+        updateForm.is_futa_staff = Boolean(m.is_futa_staff);
+        updateForm.marital_status = m.marital_status || '';
+        updateForm.occupation = m.occupation || '';
     } 
     
     if (flash?.no_match) {
@@ -242,36 +275,28 @@ function resetToLookup() {
                         <div class="grid gap-4 md:grid-cols-2">
                             <div class="space-y-2">
                                 <Label>Tenure Year</Label>
-                                <Select v-model="updateForm.tenure_id">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Tenure" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem v-for="t in tenures" :key="t.id" :value="String(t.id)">
-                                            {{ t.name }} ({{ t.year }})
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Combobox 
+                                    v-model="updateForm.tenure_id" 
+                                    :options="tenureOptions"
+                                    placeholder="Select Tenure"
+                                    search-placeholder="Search tenure..."
+                                />
                             </div>
                             <div class="space-y-2">
                                 <Label>Department</Label>
-                                <Select v-model="updateForm.department_id">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Department" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem v-for="d in departments" :key="d.id" :value="String(d.id)">
-                                            {{ d.name }}
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Combobox 
+                                    v-model="updateForm.department_id" 
+                                    :options="departmentOptions"
+                                    placeholder="Select Department"
+                                    search-placeholder="Search department..."
+                                />
                             </div>
                         </div>
 
                         <div class="grid gap-4 md:grid-cols-2">
                             <div class="space-y-2">
-                                <Label>Current Location</Label>
-                                <Input v-model="updateForm.current_location" placeholder="City, Country" />
+                                <Label>Address</Label>
+                                <Input v-model="updateForm.address" placeholder="Residential Address" />
                             </div>
                             <div class="space-y-2">
                                 <Label>Current Employer</Label>
@@ -279,32 +304,35 @@ function resetToLookup() {
                             </div>
                         </div>
 
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <Label>Occupation</Label>
+                                <Input v-model="updateForm.occupation" placeholder="Your Occupation" />
+                            </div>
+                            <div class="space-y-2">
+                                <Label>Birth Date</Label>
+                                <Input type="date" v-model="updateForm.birth_date" />
+                            </div>
+                        </div>
+
                          <div class="grid gap-4 md:grid-cols-3">
                             <div class="space-y-2">
                                 <Label>State</Label>
-                                <Select v-model="updateForm.state">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select State" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem v-for="s in states" :key="s.value" :value="s.value">
-                                            {{ s.label }}
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Combobox 
+                                    v-model="updateForm.state" 
+                                    :options="states"
+                                    placeholder="Select State"
+                                    search-placeholder="Search state..."
+                                />
                             </div>
                             <div class="space-y-2">
                                 <Label>Unit</Label>
-                                <Select v-model="updateForm.unit">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Unit" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem v-for="u in units" :key="u.value" :value="u.value">
-                                            {{ u.label }}
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Combobox 
+                                    v-model="updateForm.unit" 
+                                    :options="units"
+                                    placeholder="Select Unit"
+                                    search-placeholder="Search unit..."
+                                />
                             </div>
                             <div class="space-y-2">
                                 <Label>Gender</Label>
@@ -313,10 +341,49 @@ function resetToLookup() {
                                         <SelectValue placeholder="Select Gender" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="male">Male</SelectItem>
-                                        <SelectItem value="female">Female</SelectItem>
+                                        <SelectItem value="M">Male</SelectItem>
+                                        <SelectItem value="F">Female</SelectItem>
                                     </SelectContent>
                                 </Select>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 md:grid-cols-2">
+                             <div class="space-y-2">
+                                <Label>Past Exco Office</Label>
+                                <Combobox 
+                                    v-model="updateForm.past_exco_office" 
+                                    :options="pastExcoOfficeOptions"
+                                    placeholder="Select Exco Office"
+                                    search-placeholder="Search office..."
+                                />
+                            </div>
+                            <div class="space-y-2">
+                                <Label>Current Exco Office</Label>
+                                <Input v-model="updateForm.current_exco_office" placeholder="If applicable" />
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <Label>Marital Status</Label>
+                                <Select v-model="updateForm.marital_status">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Single">Single</SelectItem>
+                                        <SelectItem value="Married">Married</SelectItem>
+                                        <SelectItem value="Divorced">Divorced</SelectItem>
+                                        <SelectItem value="Widowed">Widowed</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div class="flex items-end space-x-2 pb-2">
+                                <Checkbox id="is_futa_staff" :checked="updateForm.is_futa_staff" @update:checked="(v: boolean) => updateForm.is_futa_staff = v" />
+                                <Label for="is_futa_staff" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    I am currently a FUTA Staff
+                                </Label>
                             </div>
                         </div>
 
@@ -377,36 +444,28 @@ function resetToLookup() {
                         <div class="grid gap-4 md:grid-cols-2">
                             <div class="space-y-2">
                                 <Label>Tenure Year *</Label>
-                                <Select v-model="createForm.tenure_id" required>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Tenure" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem v-for="t in tenures" :key="t.id" :value="String(t.id)">
-                                            {{ t.name }} ({{ t.year }})
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Combobox 
+                                    v-model="createForm.tenure_id" 
+                                    :options="tenureOptions"
+                                    placeholder="Select Tenure"
+                                    search-placeholder="Search tenure..."
+                                />
                             </div>
                             <div class="space-y-2">
                                 <Label>Department</Label>
-                                <Select v-model="createForm.department_id">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Department" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem v-for="d in departments" :key="d.id" :value="String(d.id)">
-                                            {{ d.name }}
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Combobox 
+                                    v-model="createForm.department_id" 
+                                    :options="departmentOptions"
+                                    placeholder="Select Department"
+                                    search-placeholder="Search department..."
+                                />
                             </div>
                         </div>
 
                         <div class="grid gap-4 md:grid-cols-2">
                             <div class="space-y-2">
-                                <Label>Current Location</Label>
-                                <Input v-model="createForm.current_location" placeholder="City, Country" />
+                                <Label>Address</Label>
+                                <Input v-model="createForm.address" placeholder="Residential Address" />
                             </div>
                             <div class="space-y-2">
                                 <Label>Current Employer</Label>
@@ -414,32 +473,35 @@ function resetToLookup() {
                             </div>
                         </div>
 
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <Label>Occupation</Label>
+                                <Input v-model="createForm.occupation" placeholder="Your Occupation" />
+                            </div>
+                            <div class="space-y-2">
+                                <Label>Birth Date</Label>
+                                <Input type="date" v-model="createForm.birth_date" />
+                            </div>
+                        </div>
+
                         <div class="grid gap-4 md:grid-cols-3">
                             <div class="space-y-2">
                                 <Label>State</Label>
-                                <Select v-model="createForm.state">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select State" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem v-for="s in states" :key="s.value" :value="s.value">
-                                            {{ s.label }}
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Combobox 
+                                    v-model="createForm.state" 
+                                    :options="states"
+                                    placeholder="Select State"
+                                    search-placeholder="Search state..."
+                                />
                             </div>
                             <div class="space-y-2">
                                 <Label>Unit</Label>
-                                <Select v-model="createForm.unit">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Unit" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem v-for="u in units" :key="u.value" :value="u.value">
-                                            {{ u.label }}
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Combobox 
+                                    v-model="createForm.unit" 
+                                    :options="units"
+                                    placeholder="Select Unit"
+                                    search-placeholder="Search unit..."
+                                />
                             </div>
                             <div class="space-y-2">
                                 <Label>Gender</Label>
@@ -448,10 +510,49 @@ function resetToLookup() {
                                         <SelectValue placeholder="Select Gender" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="male">Male</SelectItem>
-                                        <SelectItem value="female">Female</SelectItem>
+                                        <SelectItem value="M">Male</SelectItem>
+                                        <SelectItem value="F">Female</SelectItem>
                                     </SelectContent>
                                 </Select>
+                            </div>
+                        </div>
+
+                         <div class="grid gap-4 md:grid-cols-2">
+                             <div class="space-y-2">
+                                <Label>Past Exco Office</Label>
+                                <Combobox 
+                                    v-model="createForm.past_exco_office" 
+                                    :options="pastExcoOfficeOptions"
+                                    placeholder="Select Exco Office"
+                                    search-placeholder="Search office..."
+                                />
+                            </div>
+                            <div class="space-y-2">
+                                <Label>Current Exco Office</Label>
+                                <Input v-model="createForm.current_exco_office" placeholder="If applicable" />
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <Label>Marital Status</Label>
+                                <Select v-model="createForm.marital_status">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Single">Single</SelectItem>
+                                        <SelectItem value="Married">Married</SelectItem>
+                                        <SelectItem value="Divorced">Divorced</SelectItem>
+                                        <SelectItem value="Widowed">Widowed</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                             <div class="flex items-end space-x-2 pb-2">
+                                <Checkbox id="create_is_futa_staff" :checked="createForm.is_futa_staff" @update:checked="(v: boolean) => createForm.is_futa_staff = v" />
+                                <Label for="create_is_futa_staff" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    I am currently a FUTA Staff
+                                </Label>
                             </div>
                         </div>
 

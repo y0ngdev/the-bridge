@@ -23,6 +23,7 @@ class AlumnusPortalController extends Controller
             'departments' => Department::orderBy('name')->get(),
             'units' => collect(\App\Enums\Unit::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
             'states' => collect(\App\Enums\NigerianState::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
+            'pastExcoOffices' => collect(\App\Enums\PastExcoOffice::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
         ]);
     }
 
@@ -77,11 +78,17 @@ class AlumnusPortalController extends Controller
             'phones.*' => 'string',
             'tenure_id' => 'required|exists:tenures,id',
             'department_id' => 'nullable|exists:departments,id',
-            'current_location' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:1000',
             'current_employer' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
             'unit' => 'nullable|string|max:255',
-            'gender' => 'nullable|string|in:male,female',
+            'gender' => 'nullable|string|in:M,F',
+            'birth_date' => 'nullable|date',
+            'past_exco_office' => 'nullable|string|max:255',
+            'current_exco_office' => 'nullable|string|max:255',
+            'is_futa_staff' => 'boolean',
+            'marital_status' => 'nullable|string|max:255',
+            'occupation' => 'nullable|string|max:255',
         ]);
 
         Alumnus::create($validated);
@@ -101,11 +108,17 @@ class AlumnusPortalController extends Controller
             'phones.*' => 'string',
             'tenure_id' => 'required|exists:tenures,id',
             'department_id' => 'nullable|exists:departments,id',
-            'current_location' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:1000',
             'current_employer' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
             'unit' => 'nullable|string|max:255',
-            'gender' => 'nullable|string|in:male,female',
+            'gender' => 'nullable|string|in:M,F',
+            'birth_date' => 'nullable|date',
+            'past_exco_office' => 'nullable|string|max:255',
+            'current_exco_office' => 'nullable|string|max:255',
+            'is_futa_staff' => 'boolean',
+            'marital_status' => 'nullable|string|max:255',
+            'occupation' => 'nullable|string|max:255',
         ]);
 
         // Calculate changes
