@@ -21,6 +21,8 @@ class AlumnusPortalController extends Controller
         return Inertia::render('public/Portal', [
             'tenures' => Tenure::orderBy('start_date')->get(),
             'departments' => Department::orderBy('name')->get(),
+            'units' => collect(\App\Enums\Unit::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
+            'states' => collect(\App\Enums\NigerianState::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
         ]);
     }
 
@@ -55,7 +57,7 @@ class AlumnusPortalController extends Controller
         $name = $request->name;
         // Simple case-insensitive match for now
         $match = (clone $query)->where('name', 'like', "%{$name}%")->first();
-        
+
         if ($match) {
             return back()->with('match', $match);
         }

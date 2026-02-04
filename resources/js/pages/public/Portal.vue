@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { Search, UserPlus, Save, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-vue-next';
 import { type Tenure, type Department } from '@/types';
 
@@ -64,33 +64,30 @@ const noMatch = computed(() => page.props.flash?.no_match);
 // Check for session flash data on load/update
 console.log('Session Flash:', page.props.flash);
 
-// If match found in session, switch to update mode
-if (page.props.flash?.match) {
-    matchedAlumnus.value = page.props.flash.match;
-    matchedAlumnus.value = page.props.flash.match;
-    mode.value = 'update';
+// Watch for flash messages to handle lookup results
+watch(() => page.props.flash, (flash: any) => {
+    if (flash?.match) {
+        matchedAlumnus.value = flash.match;
+        mode.value = 'update';
+        
+        // Populate update form
+        const m = matchedAlumnus.value;
+        updateForm.name = m.name;
+        updateForm.email = m.email;
+        updateForm.phones = m.phones && m.phones.length > 0 ? [...m.phones] : [''];
+        updateForm.tenure_id = String(m.tenure_id || '');
+        updateForm.department_id = String(m.department_id || '');
+        updateForm.current_location = m.current_location || '';
+        updateForm.current_employer = m.current_employer || '';
+        updateForm.state = m.state || '';
+        updateForm.unit = m.unit || '';
+        updateForm.gender = m.gender || '';
+    } 
     
-    // Populate update form
-    const m = matchedAlumnus.value;
-    updateForm.name = m.name;
-    updateForm.email = m.email;
-    updateForm.phones = m.phones && m.phones.length > 0 ? [...m.phones] : [''];
-    updateForm.tenure_id = String(m.tenure_id || '');
-    updateForm.department_id = String(m.department_id || '');
-    updateForm.current_location = m.current_location || '';
-    updateForm.current_employer = m.current_employer || '';
-    updateForm.state = m.state || '';
-    updateForm.unit = m.unit || '';
-    updateForm.gender = m.gender || '';
-}
-
-// If explicitly no match, switch to create mode
-if (page.props.flash?.no_match) {
-    mode.value = 'create';
-    // Pre-fill name from lookup if available
-    // Note: We can't access old input easily in Inertia setup this way, 
-    // but lookupForm retains values due to ref persistence if component didn't reload entirely
-}
+    if (flash?.no_match) {
+        mode.value = 'create';
+    }
+}, { deep: true, immediate: true });
 
 function handleLookup() {
     lookupForm.post('/portal/lookup');
