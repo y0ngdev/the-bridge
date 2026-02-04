@@ -198,476 +198,326 @@ function resetToLookup() {
     <PublicLayout>
         <Head title="Alumni Portal" />
 
-        <div class="max-w-3xl mx-auto space-y-8">
-            <div class="text-center space-y-4">
-                <h1 class="text-4xl font-extrabold tracking-tight lg:text-5xl">
-                    Stay Connected
+        <div class="min-h-[80vh] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <!-- Hero Section -->
+            <div class="text-center space-y-4 mb-8 max-w-2xl">
+                <h1 class="text-4xl font-extrabold tracking-tight lg:text-5xl bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                    The Bridge
                 </h1>
-                <p class="text-xl text-muted-foreground">
-                    Help us keep our records up to date. Search for your profile to update your details or add yourself to the network.
+                <p class="text-xl text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    Reconnect with your alma mater. Update your records and stay in the loop.
                 </p>
             </div>
 
-            <!-- Success Message -->
-            <Alert v-if="successMessage" class="bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300">
-                <CheckCircle2 class="h-4 w-4" />
-                <AlertTitle>Success!</AlertTitle>
-                <AlertDescription>{{ successMessage }}</AlertDescription>
-                <div class="mt-4">
-                    <Button variant="outline" size="sm" @click="resetToLookup" class="bg-transparent border-green-300 dark:border-green-700 hover:bg-green-100 dark:hover:bg-green-900/40">
-                        Back to Search
-                    </Button>
-                </div>
-            </Alert>
-
-            <!-- Step 1: Lookup Form -->
-            <Card v-if="mode === 'lookup' && !successMessage">
-                <CardHeader>
-                    <CardTitle>Find Your Record</CardTitle>
-                    <CardDescription>
-                        Enter your name and either email or phone number to look up your existing record.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form @submit.prevent="handleLookup" class="space-y-4">
-                        <Alert v-if="lookupForm.hasErrors" variant="destructive" class="mb-4">
-                            <AlertCircle class="h-4 w-4" />
-                            <AlertTitle>Validation Error</AlertTitle>
-                            <AlertDescription>
-                                Please fix the errors highlighted below.
-                            </AlertDescription>
-                        </Alert>
-
-                        <Alert v-if="noMatch" variant="destructive" class="mb-4">
-                            <AlertCircle class="h-4 w-4" />
-                            <AlertTitle>Record Not Found</AlertTitle>
-                            <AlertDescription>
-                                We couldn't find a record matching those details. You can recreate your search or 
-                                <button type="button" @click="mode = 'create'" class="underline font-bold hover:text-white">
-                                    create a new record
-                                </button>.
-                            </AlertDescription>
-                        </Alert>
-
-                        <div class="space-y-2">
-                            <Label for="lookup_name">Full Name (Required)</Label>
-                            <Input id="lookup_name" v-model="lookupForm.name" required placeholder="e.g. John Doe" />
-                            <p v-if="lookupForm.errors.name" class="text-sm text-destructive font-medium">
-                                {{ lookupForm.errors.name }}
-                            </p>
-                        </div>
-
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label for="lookup_email">Email Address</Label>
-                                <Input id="lookup_email" type="email" v-model="lookupForm.email" placeholder="name@example.com" />
-                                <p v-if="lookupForm.errors.email" class="text-sm text-destructive font-medium">
-                                    {{ lookupForm.errors.email }}
-                                </p>
+            <!-- Transition Wrapper -->
+            <Transition
+                enter-active-class="transition duration-300 ease-out"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition duration-200 ease-in"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+                mode="out-in"
+            >
+                <!-- Success State -->
+                <div v-if="successMessage" class="w-full max-w-md">
+                    <Card class="border-green-200 bg-green-50 dark:bg-green-900/10 dark:border-green-800">
+                        <CardContent class="pt-6 text-center space-y-4">
+                            <div class="mx-auto rounded-full bg-green-100 dark:bg-green-900/20 p-3 w-12 h-12 flex items-center justify-center">
+                                <CheckCircle2 class="h-6 w-6 text-green-600 dark:text-green-400" />
                             </div>
+                            <h2 class="text-2xl font-bold text-green-800 dark:text-green-400">Success!</h2>
+                            <p class="text-green-700 dark:text-green-300">{{ successMessage }}</p>
+                            <Button class="w-full mt-4" @click="resetToLookup">Return to Home</Button>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <!-- Lookup Form -->
+                <Card v-else-if="mode === 'lookup'" class="w-full max-w-md shadow-lg border-t-4 border-t-primary">
+                    <CardHeader>
+                        <CardTitle>Find Your Record</CardTitle>
+                        <CardDescription>Search by name and email or phone.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form @submit.prevent="handleLookup" class="space-y-4">
+                            <Alert v-if="lookupForm.hasErrors" variant="destructive">
+                                <AlertCircle class="h-4 w-4" />
+                                <AlertTitle>Check Details</AlertTitle>
+                                <AlertDescription>Please fix the errors below.</AlertDescription>
+                            </Alert>
+
+                             <Alert v-if="noMatch" variant="destructive">
+                                <AlertCircle class="h-4 w-4" />
+                                <AlertTitle>No Record Found</AlertTitle>
+                                <AlertDescription>
+                                    We couldn't find you. 
+                                    <button type="button" @click="proceedToCreate" class="underline font-bold">Create new?</button>
+                                </AlertDescription>
+                            </Alert>
+
                             <div class="space-y-2">
-                                <Label for="lookup_phone">Phone Number</Label>
-                                <Input id="lookup_phone" v-model="lookupForm.phone" placeholder="+1234567890" />
-                                <p v-if="lookupForm.errors.phone" class="text-sm text-destructive font-medium">
-                                    {{ lookupForm.errors.phone }}
-                                </p>
+                                <Label>Full Name</Label>
+                                <div class="relative">
+                                    <Search class="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                    <Input v-model="lookupForm.name" class="pl-9" placeholder="e.g. John Doe" required />
+                                </div>
+                                <p v-if="lookupForm.errors.name" class="text-destructive text-xs">{{ lookupForm.errors.name }}</p>
+                            </div>
+
+                            <div class="space-y-4 pt-2">
+                                <div class="relative flex items-center">
+                                    <span class="w-full border-t" />
+                                    <span class="px-2 text-xs text-muted-foreground uppercase bg-background">And</span>
+                                    <span class="w-full border-t" />
+                                </div>
+                                
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div class="space-y-2">
+                                        <Label>Email</Label>
+                                        <Input type="email" v-model="lookupForm.email" placeholder="john@example.com" />
+                                        <p v-if="lookupForm.errors.email" class="text-destructive text-xs">{{ lookupForm.errors.email }}</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <Label>Phone</Label>
+                                        <Input v-model="lookupForm.phone" placeholder="080..." />
+                                        <p v-if="lookupForm.errors.phone" class="text-destructive text-xs">{{ lookupForm.errors.phone }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Button type="submit" class="w-full mt-2" :disabled="lookupForm.processing" size="lg">
+                                {{ lookupForm.processing ? 'Searching...' : 'Search Record' }}
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
+
+                <!-- Disambiguation -->
+                <Card v-else-if="mode === 'disambiguation'" class="w-full max-w-lg shadow-lg">
+                    <CardHeader>
+                        <CardTitle>Multiple Matches Found</CardTitle>
+                        <CardDescription>Select your profile from the list below.</CardDescription>
+                    </CardHeader>
+                    <CardContent class="grid gap-3">
+                         <div v-for="match in possibleMatches" :key="match.id" 
+                            class="group flex items-center justify-between p-4 border rounded-xl hover:bg-accent/50 cursor-pointer transition-all hover:scale-[1.01] hover:shadow-sm"
+                            @click="selectMatch(match)"
+                        >
+                            <div class="flex-1 min-w-0 pr-4">
+                                <p class="font-bold text-lg truncate">{{ match.name }}</p>
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-sm text-muted-foreground mt-1">
+                                    <span class="flex items-center gap-1.5 truncat">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-primary/40 shrink-0"></span>
+                                        <span class="truncate">{{ match.department?.name || 'No Dept' }}</span>
+                                    </span>
+                                    <span class="hidden sm:inline text-muted-foreground/30">•</span>
+                                    <span class="flex items-center gap-1.5 truncate">
+                                        <span class="truncate">{{ match.tenure?.name || 'Unknown Tenure' }}</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-muted group-hover:bg-primary/10 text-muted-foreground group-hover:text-primary transition-colors">
+                                <CheckCircle2 class="h-6 w-6" />
                             </div>
                         </div>
                         
-                        <p class="text-sm text-muted-foreground">
-                            * Provide at least Name + (Email OR Phone) for best results.
-                        </p>
-
-                        <Button type="submit" class="w-full" :disabled="lookupForm.processing">
-                            <Search class="mr-2 h-4 w-4" />
-                            {{ lookupForm.processing ? 'Searching...' : 'Search Record' }}
-                        </Button>
-                    </form>
-                </CardContent>
-            </Card>
-
-            <!-- Step 1.5: Disambiguation (Multiple Matches) -->
-            <Card v-if="mode === 'disambiguation' && !successMessage">
-                <CardHeader>
-                    <CardTitle>Multiple Records Found</CardTitle>
-                    <CardDescription>
-                        We found multiple alumni details matching your search. Please identify which one is you.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent class="grid gap-4">
-                    <div v-for="match in possibleMatches" :key="match.id" 
-                        class="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer transition-colors"
-                        @click="selectMatch(match)"
-                    >
-                        <div class="space-y-1">
-                            <p class="font-medium">{{ match.name }}</p>
-                            <p class="text-sm text-muted-foreground">
-                                <span v-if="match.department">{{ match.department.name }}</span>
-                                <span v-if="match.department && match.tenure"> • </span>
-                                <span v-if="match.tenure">{{ match.tenure.name }}</span>
-                            </p>
+                        <div class="text-center pt-4">
+                            <Button variant="link" @click="proceedToCreate">None of these are me</Button>
                         </div>
-                        <Button size="sm" variant="secondary">This is me</Button>
-                    </div>
+                    </CardContent>
+                </Card>
 
-                    <div class="relative py-2">
-                        <div class="absolute inset-0 flex items-center"><span class="w-full border-t" /></div>
-                        <div class="relative flex justify-center text-xs uppercase"><span class="bg-background px-2 text-muted-foreground">Or</span></div>
-                    </div>
-
-                    <div class="text-center">
-                        <p class="text-sm text-muted-foreground mb-2">None of these are me?</p>
-                        <Button variant="outline" class="w-full" @click="proceedToCreate">
-                            Create a new record
-                        </Button>
-                    </div>
-                </CardContent>
-                <CardFooter>
-                     <Button variant="ghost" size="sm" class="w-full" @click="resetToLookup">
-                        <RefreshCw class="mr-2 h-4 w-4" />
-                        Back to Search
-                    </Button>
-                </CardFooter>
-            </Card>
-
-            <!-- Step 2A: Update Form -->
-            <Card v-if="mode === 'update' && !successMessage">
-                <CardHeader>
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <CardTitle>Update Your Information</CardTitle>
-                            <CardDescription>
-                                Found record for <strong class="text-primary">{{ matchedAlumnus.name }}</strong>. 
-                                Updates will be reviewed by an administrator.
-                            </CardDescription>
-                        </div>
-                        <Button variant="ghost" size="sm" @click="resetToLookup">
-                            <RefreshCw class="mr-2 h-4 w-4" />
-                            Not you?
-                        </Button>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <form @submit.prevent="handleUpdate" class="space-y-6">
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Full Name</Label>
-                                <Input v-model="updateForm.name" required />
+                 <!-- Update Form -->
+                <Card v-else-if="mode === 'update'" class="w-full max-w-3xl shadow-xl">
+                    <CardHeader class="border-b bg-muted/30">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <CardTitle>Update Profile</CardTitle>
+                                <CardDescription>Update your details for review.</CardDescription>
                             </div>
-                            <div class="space-y-2">
-                                <Label>Email</Label>
-                                <Input type="email" v-model="updateForm.email" />
-                            </div>
+                            <Button variant="outline" size="sm" @click="resetToLookup">Cancel</Button>
                         </div>
+                    </CardHeader>
+                    <CardContent class="p-6 md:p-8">
+                        <form @submit.prevent="handleUpdate" class="space-y-6">
+                            <!-- Personal Info -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <Label>Full Name</Label>
+                                    <Input v-model="updateForm.name" required />
+                                </div>
+                                <div class="space-y-2">
+                                    <Label>Email</Label>
+                                    <Input v-model="updateForm.email" type="email" />
+                                </div>
+                                <div class="space-y-2 md:col-span-2">
+                                    <Label>Phone Numbers</Label>
+                                    <div v-for="(phone, index) in updateForm.phones" :key="index" class="flex gap-2 mb-2">
+                                        <Input v-model="updateForm.phones[index]" />
+                                        <Button type="button" variant="ghost" size="icon" @click="removePhone(updateForm, index)" v-if="updateForm.phones.length > 1">
+                                            <span class="sr-only">Delete</span>
+                                            <span aria-hidden="true">&times;</span>
+                                        </Button>
+                                    </div>
+                                    <Button type="button" variant="outline" size="sm" @click="addPhone(updateForm)">+ Add Phone</Button>
+                                </div>
+                            </div>
 
-                        <div class="space-y-2">
-                            <Label>Phone Numbers</Label>
-                            <div v-for="(phone, index) in updateForm.phones" :key="index" class="flex gap-2">
-                                <Input v-model="updateForm.phones[index]" placeholder="Phone Number" />
-                                <Button type="button" variant="outline" size="icon" @click="removePhone(updateForm, index)" v-if="updateForm.phones.length > 1">
-                                    <span class="sr-only">Remove</span>
-                                    <span aria-hidden="true">&times;</span>
+                            <!-- Academic Info -->
+                            <div class="border-t pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <Label>Tenure</Label>
+                                    <Combobox v-model="updateForm.tenure_id" :options="tenureOptions" placeholder="Select Tenure" />
+                                </div>
+                                <div class="space-y-2">
+                                    <Label>Department</Label>
+                                    <Combobox v-model="updateForm.department_id" :options="departmentOptions" placeholder="Select Department" />
+                                </div>
+                            </div>
+                            
+                            <!-- Professional & Contact -->
+                             <div class="border-t pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2"><Label>Current Employer</Label><Input v-model="updateForm.current_employer" /></div>
+                                <div class="space-y-2"><Label>Occupation</Label><Input v-model="updateForm.occupation" /></div>
+                                <div class="space-y-2"><Label>Address</Label><Input v-model="updateForm.address" /></div>
+                                <div class="space-y-2"><Label>State</Label><Combobox v-model="updateForm.state" :options="states" placeholder="Select State" /></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="space-y-2"><Label>Unit</Label><Combobox v-model="updateForm.unit" :options="units" placeholder="Select Unit" /></div>
+                                <div class="space-y-2"><Label>Gender</Label>
+                                    <Select v-model="updateForm.gender">
+                                        <SelectTrigger><SelectValue placeholder="Select Gender" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="M">Male</SelectItem>
+                                            <SelectItem value="F">Female</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div class="space-y-2"><Label>Birth Date</Label><Input type="date" v-model="updateForm.birth_date" /></div>
+                            </div>
+
+                            <!-- Extra Info -->
+                            <div class="border-t pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2"><Label>Past Exco Office</Label><Combobox v-model="updateForm.past_exco_office" :options="pastExcoOfficeOptions" placeholder="Select Office" /></div>
+                                <div class="space-y-2"><Label>Current Exco Office</Label><Input v-model="updateForm.current_exco_office" /></div>
+                                <div class="space-y-2"><Label>Marital Status</Label>
+                                     <Select v-model="updateForm.marital_status">
+                                        <SelectTrigger><SelectValue placeholder="Select Status" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Single">Single</SelectItem>
+                                            <SelectItem value="Married">Married</SelectItem>
+                                            <SelectItem value="Divorced">Divorced</SelectItem>
+                                            <SelectItem value="Widowed">Widowed</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div class="flex items-end pb-2">
+                                    <div class="flex items-center space-x-2">
+                                        <Checkbox id="update_is_futa_staff" :checked="updateForm.is_futa_staff" @update:checked="(v: boolean) => updateForm.is_futa_staff = v" />
+                                        <Label for="update_is_futa_staff">I'm currently a FUTA Staff</Label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end pt-6">
+                                <Button type="submit" size="lg" :disabled="updateForm.processing" class="w-full md:w-auto">
+                                    Submit Updates
                                 </Button>
                             </div>
-                            <Button type="button" variant="outline" size="sm" @click="addPhone(updateForm)" class="mt-1">
-                                + Add Another Phone
-                            </Button>
-                        </div>
+                        </form>
+                    </CardContent>
+                </Card>
 
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Tenure Year</Label>
-                                <Combobox 
-                                    v-model="updateForm.tenure_id" 
-                                    :options="tenureOptions"
-                                    placeholder="Select Tenure"
-                                    search-placeholder="Search tenure..."
-                                />
+                 <!-- Create Form -->
+                <Card v-else-if="mode === 'create'" class="w-full max-w-3xl shadow-xl">
+                    <CardHeader class="border-b bg-muted/30">
+                         <div class="flex items-center justify-between">
+                            <div>
+                                <CardTitle>Join The Bridge</CardTitle>
+                                <CardDescription>Create your alumni profile.</CardDescription>
                             </div>
-                            <div class="space-y-2">
-                                <Label>Department</Label>
-                                <Combobox 
-                                    v-model="updateForm.department_id" 
-                                    :options="departmentOptions"
-                                    placeholder="Select Department"
-                                    search-placeholder="Search department..."
-                                />
-                            </div>
+                            <Button variant="ghost" @click="resetToLookup">Back</Button>
                         </div>
+                    </CardHeader>
+                    <CardContent class="p-6 md:p-8">
+                         <form @submit.prevent="handleCreate" class="space-y-6">
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-sm text-blue-800 dark:text-blue-300 mb-6">
+                                Please fill in as much information as possible to help us verify your record.
+                            </div>
+                             
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2"><Label>Full Name *</Label><Input v-model="createForm.name" required /></div>
+                                <div class="space-y-2"><Label>Email</Label><Input v-model="createForm.email" type="email" /></div>
+                                 <div class="space-y-2 md:col-span-2">
+                                    <Label>Phone Numbers</Label>
+                                    <div v-for="(phone, index) in createForm.phones" :key="index" class="flex gap-2 mb-2">
+                                        <Input v-model="createForm.phones[index]" placeholder="080..." />
+                                         <Button type="button" variant="ghost" size="icon" @click="removePhone(createForm, index)" v-if="createForm.phones.length > 1">&times;</Button>
+                                    </div>
+                                    <Button type="button" variant="outline" size="sm" @click="addPhone(createForm)">+ Add Phone</Button>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2"><Label>Tenure Year *</Label><Combobox v-model="createForm.tenure_id" :options="tenureOptions" required placeholder="Select Tenure" /></div>
+                                <div class="space-y-2"><Label>Department</Label><Combobox v-model="createForm.department_id" :options="departmentOptions" placeholder="Select Department" /></div>
+                            </div>
 
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Address</Label>
-                                <Input v-model="updateForm.address" placeholder="Residential Address" />
+                             <!-- Create Form Matching Fields -->
+                             <div class="border-t pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2"><Label>Current Employer</Label><Input v-model="createForm.current_employer" /></div>
+                                <div class="space-y-2"><Label>Occupation</Label><Input v-model="createForm.occupation" /></div>
+                                <div class="space-y-2"><Label>Address</Label><Input v-model="createForm.address" /></div>
+                                <div class="space-y-2"><Label>State</Label><Combobox v-model="createForm.state" :options="states" placeholder="Select State" /></div>
                             </div>
-                            <div class="space-y-2">
-                                <Label>Current Employer</Label>
-                                <Input v-model="updateForm.current_employer" placeholder="Company Name" />
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="space-y-2"><Label>Unit</Label><Combobox v-model="createForm.unit" :options="units" placeholder="Select Unit" /></div>
+                                <div class="space-y-2"><Label>Gender</Label>
+                                    <Select v-model="createForm.gender">
+                                        <SelectTrigger><SelectValue placeholder="Select Gender" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="M">Male</SelectItem>
+                                            <SelectItem value="F">Female</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div class="space-y-2"><Label>Birth Date</Label><Input type="date" v-model="createForm.birth_date" /></div>
                             </div>
-                        </div>
 
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Occupation</Label>
-                                <Input v-model="updateForm.occupation" placeholder="Your Occupation" />
+                            <div class="border-t pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2"><Label>Past Exco Office</Label><Combobox v-model="createForm.past_exco_office" :options="pastExcoOfficeOptions" placeholder="Select Office" /></div>
+                                <div class="space-y-2"><Label>Current Exco Office</Label><Input v-model="createForm.current_exco_office" /></div>
+                                <div class="space-y-2"><Label>Marital Status</Label>
+                                     <Select v-model="createForm.marital_status">
+                                        <SelectTrigger><SelectValue placeholder="Select Status" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Single">Single</SelectItem>
+                                            <SelectItem value="Married">Married</SelectItem>
+                                            <SelectItem value="Divorced">Divorced</SelectItem>
+                                            <SelectItem value="Widowed">Widowed</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div class="flex items-end pb-2">
+                                     <div class="flex items-center space-x-2">
+                                        <Checkbox id="create_is_futa_staff" :checked="createForm.is_futa_staff" @update:checked="(v: boolean) => createForm.is_futa_staff = v" />
+                                        <Label for="create_is_futa_staff">I'm currently a FUTA Staff</Label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="space-y-2">
-                                <Label>Birth Date</Label>
-                                <Input type="date" v-model="updateForm.birth_date" />
-                            </div>
-                        </div>
 
-                         <div class="grid gap-4 md:grid-cols-3">
-                            <div class="space-y-2">
-                                <Label>State</Label>
-                                <Combobox 
-                                    v-model="updateForm.state" 
-                                    :options="states"
-                                    placeholder="Select State"
-                                    search-placeholder="Search state..."
-                                />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Unit</Label>
-                                <Combobox 
-                                    v-model="updateForm.unit" 
-                                    :options="units"
-                                    placeholder="Select Unit"
-                                    search-placeholder="Search unit..."
-                                />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Gender</Label>
-                                <Select v-model="updateForm.gender">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Gender" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="M">Male</SelectItem>
-                                        <SelectItem value="F">Female</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div class="grid gap-4 md:grid-cols-2">
-                             <div class="space-y-2">
-                                <Label>Past Exco Office</Label>
-                                <Combobox 
-                                    v-model="updateForm.past_exco_office" 
-                                    :options="pastExcoOfficeOptions"
-                                    placeholder="Select Exco Office"
-                                    search-placeholder="Search office..."
-                                />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Current Exco Office</Label>
-                                <Input v-model="updateForm.current_exco_office" placeholder="If applicable" />
-                            </div>
-                        </div>
-
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Marital Status</Label>
-                                <Select v-model="updateForm.marital_status">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Status" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="Single">Single</SelectItem>
-                                        <SelectItem value="Married">Married</SelectItem>
-                                        <SelectItem value="Divorced">Divorced</SelectItem>
-                                        <SelectItem value="Widowed">Widowed</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div class="flex items-end space-x-2 pb-2">
-                                <Checkbox id="is_futa_staff" :checked="updateForm.is_futa_staff" @update:checked="(v: boolean) => updateForm.is_futa_staff = v" />
-                                <Label for="is_futa_staff" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    I am currently a FUTA Staff
-                                </Label>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-end gap-3 pt-4">
-                            <Button type="button" variant="outline" @click="resetToLookup">Cancel</Button>
-                            <Button type="submit" :disabled="updateForm.processing">
-                                <Save class="mr-2 h-4 w-4" />
-                                Submit Updates
-                            </Button>
-                        </div>
-                    </form>
-                </CardContent>
-            </Card>
-
-            <!-- Step 2B: Create Form -->
-            <Card v-if="mode === 'create' && !successMessage">
-                <CardHeader>
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <CardTitle>Create New Record</CardTitle>
-                            <CardDescription>
-                                Join the alumni network by submitting your details below.
-                            </CardDescription>
-                        </div>
-                        <Button variant="ghost" size="sm" @click="resetToLookup">
-                            <RefreshCw class="mr-2 h-4 w-4" />
-                            Back to Search
-                        </Button>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <form @submit.prevent="handleCreate" class="space-y-6">
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Full Name *</Label>
-                                <Input v-model="createForm.name" required />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Email</Label>
-                                <Input type="email" v-model="createForm.email" />
-                            </div>
-                        </div>
-
-                        <div class="space-y-2">
-                            <Label>Phone Numbers</Label>
-                            <div v-for="(phone, index) in createForm.phones" :key="index" class="flex gap-2">
-                                <Input v-model="createForm.phones[index]" placeholder="Phone Number" />
-                                <Button type="button" variant="outline" size="icon" @click="removePhone(createForm, index)" v-if="createForm.phones.length > 1">
-                                    <span class="sr-only">Remove</span>
-                                    <span aria-hidden="true">&times;</span>
+                             <div class="flex justify-end pt-6">
+                                <Button type="submit" size="lg" :disabled="createForm.processing" class="w-full md:w-auto">
+                                    Create Profile
                                 </Button>
                             </div>
-                            <Button type="button" variant="outline" size="sm" @click="addPhone(createForm)" class="mt-1">
-                                + Add Another Phone
-                            </Button>
-                        </div>
-
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Tenure Year *</Label>
-                                <Combobox 
-                                    v-model="createForm.tenure_id" 
-                                    :options="tenureOptions"
-                                    placeholder="Select Tenure"
-                                    search-placeholder="Search tenure..."
-                                />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Department</Label>
-                                <Combobox 
-                                    v-model="createForm.department_id" 
-                                    :options="departmentOptions"
-                                    placeholder="Select Department"
-                                    search-placeholder="Search department..."
-                                />
-                            </div>
-                        </div>
-
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Address</Label>
-                                <Input v-model="createForm.address" placeholder="Residential Address" />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Current Employer</Label>
-                                <Input v-model="createForm.current_employer" placeholder="Company Name" />
-                            </div>
-                        </div>
-
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Occupation</Label>
-                                <Input v-model="createForm.occupation" placeholder="Your Occupation" />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Birth Date</Label>
-                                <Input type="date" v-model="createForm.birth_date" />
-                            </div>
-                        </div>
-
-                        <div class="grid gap-4 md:grid-cols-3">
-                            <div class="space-y-2">
-                                <Label>State</Label>
-                                <Combobox 
-                                    v-model="createForm.state" 
-                                    :options="states"
-                                    placeholder="Select State"
-                                    search-placeholder="Search state..."
-                                />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Unit</Label>
-                                <Combobox 
-                                    v-model="createForm.unit" 
-                                    :options="units"
-                                    placeholder="Select Unit"
-                                    search-placeholder="Search unit..."
-                                />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Gender</Label>
-                                <Select v-model="createForm.gender">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Gender" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="M">Male</SelectItem>
-                                        <SelectItem value="F">Female</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
-                         <div class="grid gap-4 md:grid-cols-2">
-                             <div class="space-y-2">
-                                <Label>Past Exco Office</Label>
-                                <Combobox 
-                                    v-model="createForm.past_exco_office" 
-                                    :options="pastExcoOfficeOptions"
-                                    placeholder="Select Exco Office"
-                                    search-placeholder="Search office..."
-                                />
-                            </div>
-                            <div class="space-y-2">
-                                <Label>Current Exco Office</Label>
-                                <Input v-model="createForm.current_exco_office" placeholder="If applicable" />
-                            </div>
-                        </div>
-
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <Label>Marital Status</Label>
-                                <Select v-model="createForm.marital_status">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Status" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="Single">Single</SelectItem>
-                                        <SelectItem value="Married">Married</SelectItem>
-                                        <SelectItem value="Divorced">Divorced</SelectItem>
-                                        <SelectItem value="Widowed">Widowed</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                             <div class="flex items-end space-x-2 pb-2">
-                                <Checkbox id="create_is_futa_staff" :checked="createForm.is_futa_staff" @update:checked="(v: boolean) => createForm.is_futa_staff = v" />
-                                <Label for="create_is_futa_staff" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    I am currently a FUTA Staff
-                                </Label>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-end gap-3 pt-4">
-                            <Button type="button" variant="outline" @click="resetToLookup">Cancel</Button>
-                            <Button type="submit" :disabled="createForm.processing">
-                                <UserPlus class="mr-2 h-4 w-4" />
-                                Create Record
-                            </Button>
-                        </div>
-                    </form>
-                </CardContent>
-            </Card>
+                        </form>
+                    </CardContent>
+                </Card>
+            </Transition>
         </div>
     </PublicLayout>
 </template>
