@@ -126,3 +126,47 @@ test('portal update request submits pending update', function () {
     expect($changes)->toHaveKey('is_futa_staff', true);
     expect($changes)->toHaveKey('occupation', 'Developer');
 });
+
+test('admin can approve pending update', function () {
+    $user = \App\Models\User::factory()->create(['is_admin' => true]);
+    $tenure = Tenure::factory()->create();
+    $alumnus = Alumnus::factory()->create([
+        'tenure_id' => $tenure->id,
+        'occupation' => 'Old Job',
+        'is_futa_staff' => false,
+    ]);
+
+    $update = \App\Models\PendingAlumnusUpdate::create([
+        'alumnus_id' => $alumnus->id,
+        'changes' => [
+            'occupation' => 'New Job',
+            'is_futa_staff' => true,
+        ],
+        'status' => 'pending',
+    ]);
+
+    // $update->refresh();
+    // dump('Update Changes:', $update->changes);
+
+    $response = $this->actingAs($user)
+        ->post(route('admin.pending-updates.approve', $update));
+
+    $response->assertRedirect();
+    $response->assertSessionHas('success');
+
+    $alumnus->refresh();
+    $update->refresh();
+
+    $this->assertDatabaseHas('alumni', [
+        'id' => $alumnus->id,
+        'occupation' => 'New Job',
+    ]);
+
+    $this->assertDatabaseHas('alumni', [
+        'id' => $alumnus->id,
+        'is_futa_staff' => true,
+    ]);
+
+    expect($update->status)->toBe('approved');
+    expect($update->reviewed_by)->toBe($user->id);
+});

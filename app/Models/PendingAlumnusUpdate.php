@@ -47,8 +47,9 @@ class PendingAlumnusUpdate extends Model
             'reviewed_at' => now(),
         ]);
 
-        // Apply changes to alumnus record
-        $this->alumnus->update($this->changes);
+        // Prioritize getAttribute('changes') because accessing $this->changes 
+        // conflicts with Eloquent's internal protected $changes property.
+        $this->alumnus->update($this->getAttribute('changes') ?? []);
     }
 
     public function reject(User $reviewer): void
