@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 class TvmAlumniSeeder extends Seeder
 {
     /**
-     * Seed TVM (Technical Video Ministry / Choir) Alumni.
+     * Seed TVM (True Vine Ministers / Choir) Alumni.
      * Data source: TVM ALUMNI LIST.docx
      */
     public function run(): void

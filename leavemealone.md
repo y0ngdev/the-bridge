@@ -21,3 +21,4 @@
 
 - add the ability to delete on of the duplicated records
 - group navbars into collapsible sections
+- the edit button on the view alumni detials page isnt working

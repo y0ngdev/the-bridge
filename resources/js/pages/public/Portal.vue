@@ -14,6 +14,8 @@ import { type Tenure, type Department } from '@/types';
 interface Props {
     tenures: Tenure[];
     departments: Department[];
+    states: { value: string; label: string }[];
+    units: { value: string; label: string }[];
 }
 
 const props = defineProps<Props>();
@@ -280,11 +282,29 @@ function resetToLookup() {
                          <div class="grid gap-4 md:grid-cols-3">
                             <div class="space-y-2">
                                 <Label>State</Label>
-                                <Input v-model="updateForm.state" />
+                                <Select v-model="updateForm.state">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select State" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="s in states" :key="s.value" :value="s.value">
+                                            {{ s.label }}
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div class="space-y-2">
                                 <Label>Unit</Label>
-                                <Input v-model="updateForm.unit" />
+                                <Select v-model="updateForm.unit">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Unit" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="u in units" :key="u.value" :value="u.value">
+                                            {{ u.label }}
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div class="space-y-2">
                                 <Label>Gender</Label>
@@ -397,11 +417,29 @@ function resetToLookup() {
                         <div class="grid gap-4 md:grid-cols-3">
                             <div class="space-y-2">
                                 <Label>State</Label>
-                                <Input v-model="createForm.state" />
+                                <Select v-model="createForm.state">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select State" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="s in states" :key="s.value" :value="s.value">
+                                            {{ s.label }}
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div class="space-y-2">
                                 <Label>Unit</Label>
-                                <Input v-model="createForm.unit" />
+                                <Select v-model="createForm.unit">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Unit" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="u in units" :key="u.value" :value="u.value">
+                                            {{ u.label }}
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div class="space-y-2">
                                 <Label>Gender</Label>

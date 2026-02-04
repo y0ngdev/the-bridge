@@ -19,7 +19,6 @@ enum Unit: string
     case Prayer = 'Prayer Unit';
     case PresidentsUnit = "President's Unit";
     case Sanctuary = 'Sanctuary Keeping Unit';
-    case TVM = 'Technical Video Ministry'; // TVM - found in 2013-2014, 2011-2012 data
     case Ushering = 'Ushering Unit';
     case Welfare = 'Welfare Unit';
 
