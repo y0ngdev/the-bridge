@@ -14,6 +14,10 @@ enum PastExcoOffice: string
     case FinancialSecretary = 'Financial Secretary';
     case BrothersCoordinator = "Brother's Coordinator";
     case SistersCoordinator = "Sister's Coordinator";
+    
+    case AsstBrothersCoordinator = "Asst. Brother's Coordinator";
+    case AsstSistersCoordinator = "Asst. Sister's Coordinator";
+    case AsstGeneralSecretary = 'Asst. General Secretary';
 
     // Unit Coordinators
     case AcademicCoordinator = 'Academic Coordinator';
@@ -45,17 +49,17 @@ enum PastExcoOffice: string
     case AsstWelfareCoordinator = 'Asst. Welfare Coordinator';
 
     // Other Positions
-    case LevelCoordinator = 'Level Coordinator';
+    case Level500Coordinator = '500 Level Coordinator';
+    case Asst500LevelCoordinator = 'Asst. 500 Level Coordinator';
     case HundredLevelCoordinator = '100 Level Coordinator';
+    case AsstHundredLevelCoordinator = 'Asst. 100 Level Coordinator';
     case ICTCoordinator = 'ICT Coordinator';
-    case TransportCoordinator = 'Transport Coordinator';
-    case DirectorOfCommerce = 'Director of Commerce';
+    case TransportSecretary = 'Transport Secretary';
+    case DirectorOfCommerce = 'Director of Commerce';  
+      case AsstDirectorOfCommerce = 'Asst. Director of Commerce';
     case HallRep = 'Hall Reps Coordinator';
     case AsstHallRep = 'Asst. Hall Reps Coordinator';
 
-    case AsstBrothersCoordinator = "Asst. Brother's Coordinator";
-    case AsstSistersCoordinator = "Asst. Sister's Coordinator";
-    case AsstGeneralSecretary = 'Asst. General Secretary';
     case UABSPDS = 'UABS/PDS';
     case AsstUABSPDS = 'Asst. UABS/PDS';
 

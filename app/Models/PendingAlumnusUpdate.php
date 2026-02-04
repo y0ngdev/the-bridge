@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PendingAlumnusUpdate extends Model
 {
+    protected $table = 'pending_alumni_updates';
+
     protected $guarded = ['id'];
 
     /**
