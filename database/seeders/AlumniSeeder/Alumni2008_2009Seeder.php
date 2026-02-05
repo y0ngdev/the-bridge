@@ -16,7 +16,7 @@ class Alumni2008_2009Seeder extends Seeder
         $tenure = Tenure::updateOrCreate(
             ['year' => '2008-2009'],
             [
-                'name' => 'Humility with the tear of the  Lord Generation',
+                'name' => 'Humility with the fear of the  Lord Generation',
                 'family_name' => 'Gilgal FAMILY'
             ]
         );

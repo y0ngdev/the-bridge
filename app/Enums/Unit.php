@@ -4,6 +4,8 @@ namespace App\Enums;
 
 enum Unit: string
 {
+
+    case PresidentsUnit = "President's Unit (Non Worker)";
     case Academic = 'Academic Unit';
     case Alumni = 'Alumni Relations Unit';
     case BibleStudy = 'Bible Study Unit';
@@ -17,7 +19,6 @@ enum Unit: string
     case MediaAndAmbience = 'Media and Ambience Unit'; // Previously Publicity Unit
     case Organising = 'Organising Unit';
     case Prayer = 'Prayer Unit';
-    case PresidentsUnit = "President's Unit";
     case Sanctuary = 'Sanctuary Keeping Unit';
     case Ushering = 'Ushering Unit';
     case Welfare = 'Welfare Unit';

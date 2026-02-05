@@ -22,7 +22,7 @@ defineProps<{
         <!-- Footer -->
         <footer class="border-t bg-card py-6">
             <div class="container mx-auto px-4 text-center text-sm text-muted-foreground">
-                <p>&copy; {{ new Date().getFullYear() }} Alumni Association. All rights reserved.</p>
+                <p>&copy; {{ new Date().getFullYear() }} Alumni Relations Unit. All rights reserved.</p>
             </div>
         </footer>
     </div>
