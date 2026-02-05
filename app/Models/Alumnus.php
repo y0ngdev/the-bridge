@@ -15,7 +15,7 @@ class Alumnus extends Model
 
     protected $guarded = ['id'];
 
-    protected $appends = ['initials'];
+    protected $appends = ['initials', 'photo_url'];
 
     protected function casts(): array
     {
@@ -43,6 +43,18 @@ class Alumnus extends Model
         }
 
         return mb_substr($initials, 0, 2);
+    }
+
+    /**
+     * Get the full URL to the alumni photo.
+     */
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if (!$this->photo) {
+            return null;
+        }
+
+        return asset('storage/' . $this->photo);
     }
 
     /**

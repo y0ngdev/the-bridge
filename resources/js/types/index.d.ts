@@ -110,6 +110,9 @@ export interface Alumnus {
     marital_status: string | null;
     occupation: string | null;
     current_employer: string | null;
+    photo: string | null;
+    photo_url: string | null;
+    initials: string;
     tenure?: Tenure | null;
     communication_logs?: CommunicationLog[];
 }
@@ -122,6 +125,8 @@ export interface AlumnusSummary {
     phones: string[] | null;
     state: string | null;
     unit: string | null;
+    photo_url: string | null;
+    initials: string;
     tenure: Tenure | null;
 }
 
@@ -134,6 +139,8 @@ export interface BirthdayAlumnus {
     phones: string[] | null;
     dept: string | null;
     location: string | null;
+    photo_url: string | null;
+    initials: string;
 }
 
 // ============================================

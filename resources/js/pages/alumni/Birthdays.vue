@@ -119,8 +119,14 @@ const displayedMonth = computed(() =>
                                     <Card class="hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer border-primary/30">
                                         <CardContent class="p-6">
                                             <div class="flex items-center gap-4">
-                                                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 dark:bg-primary/30">
-                                                    <Cake class="h-7 w-7 text-foreground" />
+                                                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 dark:bg-primary/30 overflow-hidden shrink-0">
+                                                    <img 
+                                                        v-if="alumnus.photo_url" 
+                                                        :src="alumnus.photo_url" 
+                                                        :alt="`${alumnus.name}'s photo`"
+                                                        class="h-full w-full object-cover"
+                                                    />
+                                                    <span v-else class="text-lg font-semibold text-foreground/70">{{ alumnus.initials }}</span>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                         <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>
@@ -211,8 +217,14 @@ const displayedMonth = computed(() =>
                                     <Card class="hover:shadow-md hover:border-primary/50 transition-all cursor-pointer">
                                         <CardContent class="p-6">
                                             <div class="flex items-center gap-4">
-                                                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                                                    <Cake class="h-6 w-6 text-foreground" />
+                                                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted overflow-hidden shrink-0">
+                                                    <img 
+                                                        v-if="alumnus.photo_url" 
+                                                        :src="alumnus.photo_url" 
+                                                        :alt="`${alumnus.name}'s photo`"
+                                                        class="h-full w-full object-cover"
+                                                    />
+                                                    <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>
@@ -278,8 +290,14 @@ const displayedMonth = computed(() =>
                                     <Card class="hover:shadow-md hover:border-primary/50 transition-all cursor-pointer">
                                         <CardContent class="p-6">
                                             <div class="flex items-center gap-4">
-                                                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                                                    <Cake class="h-6 w-6 text-foreground" />
+                                                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted overflow-hidden shrink-0">
+                                                    <img 
+                                                        v-if="alumnus.photo_url" 
+                                                        :src="alumnus.photo_url" 
+                                                        :alt="`${alumnus.name}'s photo`"
+                                                        class="h-full w-full object-cover"
+                                                    />
+                                                    <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>

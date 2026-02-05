@@ -136,8 +136,19 @@ function handleDelete() {
                     <CardContent>
                         <div class="grid gap-4 md:grid-cols-2">
                             <div v-for="alumnus in group" :key="alumnus.id" class="p-4 border rounded-lg">
-                                <div class="flex items-start justify-between">
-                                    <h3 class="font-semibold text-lg">{{ alumnus.name }}</h3>
+                                <div class="flex items-start justify-between gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-12 w-12 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0">
+                                            <img 
+                                                v-if="alumnus.photo_url" 
+                                                :src="alumnus.photo_url" 
+                                                :alt="`${alumnus.name}'s photo`"
+                                                class="h-full w-full object-cover"
+                                            />
+                                            <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
+                                        </div>
+                                        <h3 class="font-semibold text-lg">{{ alumnus.name }}</h3>
+                                    </div>
                                     <Button variant="ghost" size="icon" class="h-8 w-8 text-destructive" @click="openDeleteDialog(alumnus)">
                                         <Trash2 class="h-4 w-4" />
                                     </Button>

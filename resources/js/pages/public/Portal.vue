@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Head, useForm, usePage, router } from '@inertiajs/vue3';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, useTemplateRef } from 'vue';
 import { Search, UserPlus, Save, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-vue-next';
 import { type Tenure, type Department } from '@/types';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -41,6 +41,76 @@ const mode = ref<'lookup' | 'disambiguation' | 'update' | 'create'>('lookup');
 const matchedAlumnus = ref<any>(null);
 const possibleMatches = ref<any[]>([]);
 
+// Photo upload state
+const updatePhotoPreview = ref<string | null>(null);
+const createPhotoPreview = ref<string | null>(null);
+const updateDragActive = ref(false);
+const createDragActive = ref(false);
+const updatePhotoInput = useTemplateRef<HTMLInputElement>('updatePhotoInput');
+const createPhotoInput = useTemplateRef<HTMLInputElement>('createPhotoInput');
+
+function processPhotoFile(file: File, form: any, previewRef: typeof updatePhotoPreview): boolean {
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+        form.setError('photo', 'Please upload a JPEG, PNG, or GIF image.');
+        return false;
+    }
+    // Validate file size (2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        form.setError('photo', 'Image must be less than 2MB.');
+        return false;
+    }
+    form.clearErrors('photo');
+    form.photo = file;
+    previewRef.value = URL.createObjectURL(file);
+    return true;
+}
+
+function handleUpdatePhotoChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (file) {
+        processPhotoFile(file, updateForm, updatePhotoPreview);
+    }
+}
+
+function handleUpdateDrop(event: DragEvent) {
+    event.preventDefault();
+    updateDragActive.value = false;
+    const file = event.dataTransfer?.files?.[0];
+    if (file) {
+        processPhotoFile(file, updateForm, updatePhotoPreview);
+    }
+}
+
+function clearUpdatePhoto() {
+    updateForm.photo = null;
+    updatePhotoPreview.value = null;
+}
+
+function handleCreatePhotoChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (file) {
+        processPhotoFile(file, createForm, createPhotoPreview);
+    }
+}
+
+function handleCreateDrop(event: DragEvent) {
+    event.preventDefault();
+    createDragActive.value = false;
+    const file = event.dataTransfer?.files?.[0];
+    if (file) {
+        processPhotoFile(file, createForm, createPhotoPreview);
+    }
+}
+
+function clearCreatePhoto() {
+    createForm.photo = null;
+    createPhotoPreview.value = null;
+}
+
 // Forms
 const lookupForm = useForm({
     name: '',
@@ -61,7 +131,7 @@ const updateForm = useForm({
     gender: '',
     birth_date: '',
     past_exco_office: '',
-    
+    photo: null as File | null,
     is_futa_staff: false,
     marital_status: '',
     occupation: '',
@@ -80,7 +150,7 @@ const createForm = useForm({
     gender: '',
     birth_date: '',
     past_exco_office: '',
-   
+    photo: null as File | null,
     is_futa_staff: false,
     marital_status: '',
     occupation: '',
@@ -445,6 +515,50 @@ function resetToLookup() {
                                         </Select>
                                         <p v-if="updateForm.errors.marital_status" class="text-destructive text-xs">{{ updateForm.errors.marital_status }}</p>
                                     </div>
+                                    <div class="space-y-2 md:col-span-2">
+                                        <Label>Recent Photo</Label>
+                                        <div 
+                                            class="relative border-2 border-dashed rounded-lg p-6 transition-colors cursor-pointer"
+                                            :class="[
+                                                updateDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 hover:border-primary/50',
+                                                updatePhotoPreview ? 'bg-muted/30' : ''
+                                            ]"
+                                            @dragover.prevent="updateDragActive = true"
+                                            @dragleave.prevent="updateDragActive = false"
+                                            @drop="handleUpdateDrop"
+                                            @click="updatePhotoInput?.click()"
+                                        >
+                                            <input 
+                                                ref="updatePhotoInput"
+                                                type="file" 
+                                                accept="image/jpeg,image/png,image/jpg,image/gif"
+                                                class="hidden"
+                                                @change="handleUpdatePhotoChange"
+                                            />
+                                            <div v-if="updatePhotoPreview" class="flex items-center gap-4">
+                                                <img :src="updatePhotoPreview" alt="Photo preview" class="w-20 h-20 rounded-full object-cover border-2 border-background shadow-md" />
+                                                <div class="flex-1">
+                                                    <p class="text-sm font-medium">Photo selected</p>
+                                                    <p class="text-xs text-muted-foreground">Click to change or drag a new photo</p>
+                                                </div>
+                                                <Button type="button" variant="outline" size="sm" @click.stop="clearUpdatePhoto">
+                                                    Remove
+                                                </Button>
+                                            </div>
+                                            <div v-else class="text-center">
+                                                <div class="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                                <p class="text-sm font-medium text-muted-foreground">
+                                                    <span class="text-primary">Click to upload</span> or drag and drop
+                                                </p>
+                                                <p class="text-xs text-muted-foreground mt-1">JPEG, PNG, GIF (max 2MB)</p>
+                                            </div>
+                                        </div>
+                                        <p v-if="updateForm.errors.photo" class="text-destructive text-xs">{{ updateForm.errors.photo }}</p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -606,6 +720,50 @@ function resetToLookup() {
                                             </SelectContent>
                                         </Select>
                                         <p v-if="createForm.errors.marital_status" class="text-destructive text-xs">{{ createForm.errors.marital_status }}</p>
+                                    </div>
+                                    <div class="space-y-2 md:col-span-2">
+                                        <Label>Recent Photo</Label>
+                                        <div 
+                                            class="relative border-2 border-dashed rounded-lg p-6 transition-colors cursor-pointer"
+                                            :class="[
+                                                createDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 hover:border-primary/50',
+                                                createPhotoPreview ? 'bg-muted/30' : ''
+                                            ]"
+                                            @dragover.prevent="createDragActive = true"
+                                            @dragleave.prevent="createDragActive = false"
+                                            @drop="handleCreateDrop"
+                                            @click="createPhotoInput?.click()"
+                                        >
+                                            <input 
+                                                ref="createPhotoInput"
+                                                type="file" 
+                                                accept="image/jpeg,image/png,image/jpg,image/gif"
+                                                class="hidden"
+                                                @change="handleCreatePhotoChange"
+                                            />
+                                            <div v-if="createPhotoPreview" class="flex items-center gap-4">
+                                                <img :src="createPhotoPreview" alt="Photo preview" class="w-20 h-20 rounded-full object-cover border-2 border-background shadow-md" />
+                                                <div class="flex-1">
+                                                    <p class="text-sm font-medium">Photo selected</p>
+                                                    <p class="text-xs text-muted-foreground">Click to change or drag a new photo</p>
+                                                </div>
+                                                <Button type="button" variant="outline" size="sm" @click.stop="clearCreatePhoto">
+                                                    Remove
+                                                </Button>
+                                            </div>
+                                            <div v-else class="text-center">
+                                                <div class="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                                <p class="text-sm font-medium text-muted-foreground">
+                                                    <span class="text-primary">Click to upload</span> or drag and drop
+                                                </p>
+                                                <p class="text-xs text-muted-foreground mt-1">JPEG, PNG, GIF (max 2MB)</p>
+                                            </div>
+                                        </div>
+                                        <p v-if="createForm.errors.photo" class="text-destructive text-xs">{{ createForm.errors.photo }}</p>
                                     </div>
                                 </div>
                             </div>

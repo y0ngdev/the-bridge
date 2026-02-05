@@ -859,7 +859,18 @@ onMounted(() => {
                     <TableBody>
                         <TableRow v-for="alumnus in alumni.data" :key="alumnus.id">
                             <TableCell class="font-medium">
-                                {{ alumnus.name }}
+                                <div class="flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0">
+                                        <img 
+                                            v-if="alumnus.photo_url" 
+                                            :src="alumnus.photo_url" 
+                                            :alt="`${alumnus.name}'s photo`"
+                                            class="h-full w-full object-cover"
+                                        />
+                                        <span v-else class="text-xs font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
+                                    </div>
+                                    <span>{{ alumnus.name }}</span>
+                                </div>
                             </TableCell>
                             <TableCell>{{ alumnus.email || '—' }}</TableCell>
                             <TableCell>{{ alumnus.department?.name || '—' }}</TableCell>

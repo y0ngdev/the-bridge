@@ -97,7 +97,13 @@ class AlumnusPortalController extends Controller
             'is_futa_staff' => 'boolean',
             'marital_status' => 'nullable|string|max:255',
             'occupation' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            $validated['photo'] = $request->file('photo')->store('alumni-photos', 'public');
+        }
 
         Alumnus::create($validated);
 
@@ -127,7 +133,13 @@ class AlumnusPortalController extends Controller
             'is_futa_staff' => 'boolean',
             'marital_status' => 'nullable|string|max:255',
             'occupation' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle photo upload - store immediately to pending folder
+        if ($request->hasFile('photo')) {
+            $validated['photo'] = $request->file('photo')->store('alumni-photos-pending', 'public');
+        }
 
         // Calculate changes
         $changes = [];

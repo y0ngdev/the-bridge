@@ -46,6 +46,16 @@ function formatDate(date: string | null): string {
                             <ArrowLeft class="h-5 w-5" />
                         </Button>
                     </Link>
+                    <!-- Photo Avatar -->
+                    <div class="relative h-16 w-16 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0 ring-2 ring-background shadow-lg">
+                        <img 
+                            v-if="alumnus.photo_url" 
+                            :src="alumnus.photo_url" 
+                            :alt="`${alumnus.name}'s photo`"
+                            class="h-full w-full object-cover"
+                        />
+                        <span v-else class="text-xl font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
+                    </div>
                     <div>
                         <h1 class="text-2xl font-bold">{{ alumnus.name }}</h1>
                         <p class="text-muted-foreground">{{ alumnus.tenure?.year || 'No tenure' }} &bull; {{ alumnus.department?.name || 'Unknown department' }}</p>
