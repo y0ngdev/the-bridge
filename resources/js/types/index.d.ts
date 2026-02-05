@@ -36,6 +36,14 @@ export interface NavItem {
     icon?: LucideIcon;
     isActive?: boolean;
     adminOnly?: boolean;
+    items?: NavItem[];
+}
+
+export interface NavGroup {
+    title: string;
+    icon?: LucideIcon;
+    items: NavItem[];
+    defaultOpen?: boolean;
 }
 
 // ============================================

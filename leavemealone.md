@@ -2,9 +2,10 @@
 
 - Allow subunit alumni coordinatoer to access the-bridge and manage their alumnus data.
 
-- add the ability to delete one of the duplicated records
-- group navbars into collapsible sections
-- the edit button on the view alumni detials page isnt working
 
+
+
+
+no use of native alert through out the project
 
 

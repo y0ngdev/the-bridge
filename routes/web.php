@@ -12,15 +12,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
-Route::middleware(['guest'])->get('/', function (Request $request) {
-    return Inertia::render(
-        'Welcome',
-        [
-            'canResetPassword' => Features::enabled(Features::resetPasswords()),
-            'canRegister' => Features::enabled(Features::registration()),
-            'status' => $request->session()->get('status'),
-        ]
-    );
+Route::get('/', function () {
+    return redirect('/portal');
 });
 
 // Public Alumni Portal (no auth required)
@@ -35,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Admin-only routes
     Route::middleware('admin')->group(function () {
         // ... existing admin routes ...
-        
+
         // Pending Alumni Updates
         Route::get('/admin/pending-updates', [\App\Http\Controllers\PendingAlumnusUpdateController::class, 'index'])->name('admin.pending-updates.index');
         Route::post('/admin/pending-updates/{update}/approve', [\App\Http\Controllers\PendingAlumnusUpdateController::class, 'approve'])->name('admin.pending-updates.approve');

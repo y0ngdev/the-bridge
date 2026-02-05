@@ -10,7 +10,6 @@ import { index as rwIndex } from '@/routes/redemption-week';
 import { Link, usePage } from '@inertiajs/vue3';
 import AppLogo from '@/components/AppLogo.vue';
 import { home } from '@/routes';
-import { NavItem } from '@/types';
 import { Building2, Cake, Calendar, CalendarDays, Copy, FileClock, HardDrive, LayoutGrid, MapPin, UserCheck, UserCog, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { urlIsActive } from '@/lib/utils';
@@ -18,85 +17,53 @@ import { urlIsActive } from '@/lib/utils';
 const page = usePage();
 const isAdmin = computed(() => page.props.auth?.user?.is_admin ?? false);
 
-const mainNavItems = computed(() => {
-    const items: NavItem[] = [
+// Navigation items with collapsible groups
+const navItems = computed(() => {
+    const items = [
         {
             title: 'Dashboard',
-            href: home(),
+            url: home(),
             icon: LayoutGrid,
         },
         {
-            title: 'Tenures',
-            href: tenuresIndex().url,
-            icon: Calendar,
-            adminOnly: true,
-        },
-        {
-            title: 'Departments',
-            href: departmentsIndex().url,
-            icon: Building2,
-            adminOnly: true,
-        },
-        {
             title: 'Alumni',
-            href: alumnusIndex().url,
+            url: '#',
             icon: Users,
-            // Active if in alumni section BUT NOT in the specific sub-pages that have their own sidebar items
-            isActive: urlIsActive(alumnusIndex().url, page.url) && 
-                     !urlIsActive(distribution().url, page.url) && 
-                     !urlIsActive(executives().url, page.url) &&
-                     !urlIsActive(birthdays().url, page.url) &&
-                     !urlIsActive('/alumni/duplicates/detect', page.url),
+            isActive: urlIsActive('/alumni', page.url),
+            items: [
+                { title: 'All Alumni', url: alumnusIndex().url },
+                { title: 'Birthdays', url: birthdays().url },
+                ...(isAdmin.value ? [
+                    { title: 'Duplicates', url: '/alumni/duplicates/detect' },
+                    { title: 'Pending Updates', url: '/admin/pending-updates' },
+                    { title: 'Location Distribution', url: distribution().url },
+                    { title: 'Executives', url: executives().url },
+                ] : []),
+            ],
         },
         {
-            title: 'Duplicates',
-            href: '/alumni/duplicates/detect',
-            icon: Copy,
-            adminOnly: true,
-        },
-        {
-            title: 'Pending Updates',
-            href: '/admin/pending-updates',
-            icon: FileClock,
-            adminOnly: true,
-        },
-        {
-            title: 'Redemption Week',
-            href: rwIndex().url,
+            title: 'Events',
+            url: '#',
             icon: CalendarDays,
+            isActive: urlIsActive('/redemption-week', page.url),
+            items: [
+                { title: 'Redemption Week', url: rwIndex().url },
+            ],
         },
-        {
-            title: 'Birthdays',
-            href: birthdays().url,
-            icon: Cake,
-        },
-        {
-            title: 'Location Distribution',
-            href: distribution().url,
-            icon: MapPin,
-            adminOnly: true,
-        },
-        {
-            title: 'Executives',
-            href: executives().url,
-            icon: UserCheck,
-            adminOnly: true,
-        },
-        {
-            title: 'User Management',
-            href: '/admin/users',
+        ...(isAdmin.value ? [{
+            title: 'Administration',
+            url: '#',
             icon: UserCog,
-            adminOnly: true,
-        },
-        {
-            title: 'Backup',
-            href: '/settings/backup',
-            icon: HardDrive,
-            adminOnly: true,
-        },
+            items: [
+                { title: 'Tenures', url: tenuresIndex().url },
+                { title: 'Departments', url: departmentsIndex().url },
+                { title: 'User Management', url: '/admin/users' },
+                { title: 'Backup', url: '/settings/backup' },
+            ],
+        }] : []),
     ];
 
-    return items.filter(item => !item.adminOnly || isAdmin.value);
+    return items;
 });
 </script>
 
@@ -114,7 +81,7 @@ const mainNavItems = computed(() => {
             </SidebarMenu>
         </SidebarHeader>
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <NavMain :items="navItems" />
         </SidebarContent>
         <SidebarFooter>
             <NavUser />

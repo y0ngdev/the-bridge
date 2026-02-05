@@ -265,7 +265,7 @@ function resetToLookup() {
                     The Bridge
                 </h1>
                 <p class="text-xl text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    Reconnect with your  RCFFUTA.Update your records and stay in the loop.
+                    Reconnect with RCFFUTA. Update your records and stay in the loop.
                 </p>
             </div>
 

@@ -34,7 +34,7 @@ import { index, store, update, destroy, show, importStore, exportMethod } from '
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import { Plus, Edit, Trash2, Check, ChevronsUpDown, Eye, Download, Upload, Info, X, MessageSquarePlus } from 'lucide-vue-next';
 import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { toast } from 'vue-sonner';
 
 const page = usePage();
@@ -336,6 +336,18 @@ function openLogDialog(alumnus: Alumnus) {
     selectedAlumnusForLog.value = alumnus;
     showLogDialog.value = true;
 }
+
+// Check for edit query param on mount (from Show.vue edit button)
+onMounted(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const editId = urlParams.get('edit');
+    if (editId) {
+        const alumnusToEdit = props.alumni.data.find(a => a.id === parseInt(editId));
+        if (alumnusToEdit) {
+            openEditDialog(alumnusToEdit);
+        }
+    }
+});
 </script>
 
 <template>

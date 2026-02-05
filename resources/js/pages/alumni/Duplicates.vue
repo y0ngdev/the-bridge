@@ -9,8 +9,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { type BreadcrumbItem, type Alumnus } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
-import { index as alumniIndex } from '@/actions/App/Http/Controllers/AlumnusController';
-import { AlertTriangle, Users, X, Check } from 'lucide-vue-next';
+import { index as alumniIndex, destroy } from '@/actions/App/Http/Controllers/AlumnusController';
+import { AlertTriangle, Users, X, Check, Trash2 } from 'lucide-vue-next';
 import { ref } from 'vue';
 
 const props = defineProps<{
@@ -58,6 +58,46 @@ function handleMerge() {
         },
     });
 }
+
+// Delete dialog state
+const showDeleteDialog = ref(false);
+const deletingAlumnus = ref<Alumnus | null>(null);
+const deletePassword = ref('');
+const deletePasswordError = ref('');
+
+function openDeleteDialog(alumnus: Alumnus) {
+    deletingAlumnus.value = alumnus;
+    deletePassword.value = '';
+    deletePasswordError.value = '';
+    showDeleteDialog.value = true;
+}
+
+function handleDelete() {
+    if (!deletingAlumnus.value) return;
+    
+    if (!deletePassword.value) {
+        deletePasswordError.value = 'Please enter your password.';
+        return;
+    }
+    
+    deletePasswordError.value = '';
+    
+    router.delete(destroy(deletingAlumnus.value.id).url, {
+        data: { password: deletePassword.value },
+        onSuccess: () => {
+            showDeleteDialog.value = false;
+            deletingAlumnus.value = null;
+            deletePassword.value = '';
+        },
+        onError: (errors) => {
+            if (errors.password) {
+                deletePasswordError.value = errors.password;
+            } else {
+                deletePasswordError.value = 'Failed to delete. Please try again.';
+            }
+        },
+    });
+}
 </script>
 
 <template>
@@ -96,7 +136,12 @@ function handleMerge() {
                     <CardContent>
                         <div class="grid gap-4 md:grid-cols-2">
                             <div v-for="alumnus in group" :key="alumnus.id" class="p-4 border rounded-lg">
-                                <h3 class="font-semibold text-lg">{{ alumnus.name }}</h3>
+                                <div class="flex items-start justify-between">
+                                    <h3 class="font-semibold text-lg">{{ alumnus.name }}</h3>
+                                    <Button variant="ghost" size="icon" class="h-8 w-8 text-destructive" @click="openDeleteDialog(alumnus)">
+                                        <Trash2 class="h-4 w-4" />
+                                    </Button>
+                                </div>
                                 <div class="mt-2 space-y-1 text-sm">
                                     <p><span class="text-muted-foreground">Email:</span> {{ alumnus.email || '—' }}</p>
                                     <p><span class="text-muted-foreground">Phones:</span> {{ alumnus.phones?.join(', ') || '—' }}</p>
@@ -173,6 +218,49 @@ function handleMerge() {
                     <Button @click="handleMerge" :disabled="!selectedPrimary">
                         <Check class="h-4 w-4 mr-2" />
                         Merge Records
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+
+        <!-- Delete Dialog -->
+        <Dialog v-model:open="showDeleteDialog">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Delete Alumni Record</DialogTitle>
+                    <DialogDescription>
+                        Are you sure you want to delete <strong>{{ deletingAlumnus?.name }}</strong>? This action cannot be undone.
+                    </DialogDescription>
+                </DialogHeader>
+                
+                <div class="space-y-4">
+                    <Alert variant="destructive">
+                        <AlertTriangle class="h-4 w-4" />
+                        <AlertDescription>
+                            This will permanently delete this record and all associated communication logs.
+                        </AlertDescription>
+                    </Alert>
+                    
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium">Confirm with your password:</label>
+                        <input 
+                            type="password" 
+                            v-model="deletePassword" 
+                            class="w-full px-3 py-2 border rounded-md text-sm"
+                            placeholder="Enter your password"
+                        />
+                        <p v-if="deletePasswordError" class="text-sm text-destructive">{{ deletePasswordError }}</p>
+                    </div>
+                </div>
+
+                <DialogFooter>
+                    <Button variant="outline" @click="showDeleteDialog = false">
+                        <X class="h-4 w-4 mr-2" />
+                        Cancel
+                    </Button>
+                    <Button variant="destructive" @click="handleDelete">
+                        <Trash2 class="h-4 w-4 mr-2" />
+                        Delete
                     </Button>
                 </DialogFooter>
             </DialogContent>

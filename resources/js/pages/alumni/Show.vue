@@ -54,7 +54,7 @@ function formatDate(date: string | null): string {
                 <div class="flex gap-2 items-center">
                     <Badge v-if="alumnus.is_futa_staff" variant="secondary">FUTA Staff</Badge>
                     <Badge v-if="alumnus.gender" variant="outline">{{ alumnus.gender === 'M' ? 'Male' : alumnus.gender === 'F' ? 'Female' : alumnus.gender }}</Badge>
-                    <Link :href="index().url">
+                    <Link :href="`${index().url}?edit=${alumnus.id}`">
                         <Button variant="outline" size="sm">
                             <Edit class="h-4 w-4 mr-2" />
                             Edit
