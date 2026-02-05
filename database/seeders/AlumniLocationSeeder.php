@@ -401,7 +401,7 @@ class AlumniLocationSeeder extends Seeder
                 'year' => '2012-2013',
             ],
             [
-                'name' => 'PstOluleye James (President)',
+                'name' => 'Pst Oluleye James (President)',
                 'state' => 'Ogun',
                 'address' => 'Federal Housing Estates, Abeokuta',
                 'phones' => ['08037722574'],

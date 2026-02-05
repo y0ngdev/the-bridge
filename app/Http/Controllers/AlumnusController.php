@@ -33,9 +33,9 @@ class AlumnusController extends Controller
         return Inertia::render('alumni/Index', [
             'alumni' => $query->latest()->paginate()->withQueryString(),
             'tenures' => Tenure::orderBy('year', 'desc')->get(['id', 'year']),
-            'units' => collect(Unit::cases())->map(fn ($u) => ['value' => $u->value, 'label' => $u->value]),
-            'states' => collect(NigerianState::cases())->map(fn ($s) => ['value' => $s->value, 'label' => $s->value]),
-            'pastExcoOffices' => collect(PastExcoOffice::cases())->map(fn ($p) => ['value' => $p->value, 'label' => $p->value]),
+            'units' => collect(Unit::cases())->map(fn($u) => ['value' => $u->value, 'label' => $u->value]),
+            'states' => collect(NigerianState::cases())->map(fn($s) => ['value' => $s->value, 'label' => $s->value]),
+            'pastExcoOffices' => collect(PastExcoOffice::cases())->map(fn($p) => ['value' => $p->value, 'label' => $p->value]),
             'departments' => Department::options(),
             'filters' => $request->only(['search', 'tenure_id', 'unit', 'state', 'gender']),
         ]);
@@ -76,7 +76,7 @@ class AlumnusController extends Controller
     public function destroy(Request $request, Alumnus $alumnus): RedirectResponse
     {
         // Verify password
-        if (! Hash::check($request->input('password'), $request->user()->password)) {
+        if (!Hash::check($request->input('password'), $request->user()->password)) {
             return back()->withErrors(['password' => 'Invalid password.']);
         }
 
@@ -111,7 +111,7 @@ class AlumnusController extends Controller
                 $filename .= "-{$tenure->year}-tenure";
             }
         }
-        $filename .= '-'.now()->format('Y-m-d').'.xlsx';
+        $filename .= '-' . now()->format('Y-m-d') . '.xlsx';
 
         return Excel::download(new AlumnusExport($fields, $filters), $filename);
     }
@@ -123,36 +123,40 @@ class AlumnusController extends Controller
                 $today = now();
 
                 return Alumnus::whereNotNull('birth_date')
-                    ->get()
-                    ->filter(fn ($alumnus) => $alumnus->birth_date->month === $today->month && $alumnus->birth_date->day === $today->day)
-                    ->values();
+                    ->whereMonth('birth_date', $today->month)
+                    ->whereDay('birth_date', $today->day)
+                    ->get();
             }),
             'thisWeek' => Inertia::defer(function () {
                 $today = now();
                 $startOfWeek = $today->copy()->startOfWeek();
                 $endOfWeek = $today->copy()->endOfWeek();
 
-                return Alumnus::whereNotNull('birth_date')
-                    ->get()
-                    ->filter(function ($alumnus) use ($startOfWeek, $endOfWeek) {
-                        $birthDate = $alumnus->birth_date->copy()->year(now()->year);
+                // Optimized query: Generate mm-dd strings for the week
+                $dates = collect(\Carbon\CarbonPeriod::create($startOfWeek, $endOfWeek))
+                    ->map(fn($date) => $date->format('m-d'))
+                    ->values()
+                    ->all();
 
-                        return $birthDate->between($startOfWeek, $endOfWeek);
-                    })
-                    ->values();
+                // Use placeholders for binding
+                $placeholders = implode(',', array_fill(0, count($dates), '?'));
+
+                return Alumnus::whereNotNull('birth_date')
+                    ->whereRaw("strftime('%m-%d', birth_date) IN ($placeholders)", $dates)
+                    ->get();
             }),
             'thisMonth' => Inertia::defer(function () {
                 $today = now();
 
                 return Alumnus::whereNotNull('birth_date')
-                    ->get()
-                    ->filter(fn ($alumnus) => $alumnus->birth_date->month === $today->month)
-                    ->values();
+                    ->whereMonth('birth_date', $today->month)
+                    ->get();
             }),
-            'allByMonth' => Inertia::defer(fn () => Alumnus::whereNotNull('birth_date')
-                ->orderByRaw("strftime('%m', birth_date), strftime('%d', birth_date)")
+            'allByMonth' => Inertia::defer(fn() => Alumnus::whereNotNull('birth_date')
+                ->select(['id', 'name', 'email', 'phones', 'birth_date', 'photo'])
                 ->get()
-                ->groupBy(fn ($alumnus) => $alumnus->birth_date->format('F'))),
+                ->sortBy(fn($alumnus) => $alumnus->birth_date->format('md'))
+                ->groupBy(fn($alumnus) => $alumnus->birth_date->format('F'))),
         ]);
     }
 
@@ -161,29 +165,29 @@ class AlumnusController extends Controller
         $isOverseas = $request->boolean('overseas');
 
         return Inertia::render('alumni/Distribution', [
-            'alumni' => Inertia::defer(fn () => Alumnus::with('tenure')
+            'alumni' => Inertia::defer(fn() => Alumnus::with('tenure')
                 ->search($request->search)
                 ->byTenure($request->tenure_id)
                 ->byUnit($request->unit)
-                ->when($isOverseas, fn ($q) => $q->where('state', 'Overseas'))
-                ->when(! $isOverseas && $request->state, fn ($q) => $q->byState($request->state))
+                ->when($isOverseas, fn($q) => $q->where('state', 'Overseas'))
+                ->when(!$isOverseas && $request->state, fn($q) => $q->byState($request->state))
                 ->latest()
                 ->paginate(20)
                 ->withQueryString()),
-            'stateDistribution' => Inertia::defer(fn () => Alumnus::selectRaw('state, COUNT(*) as count')
+            'stateDistribution' => Inertia::defer(fn() => Alumnus::selectRaw('state, COUNT(*) as count')
                 ->whereNotNull('state')
                 ->where('state', '!=', 'Overseas')
                 ->groupBy('state')
                 ->orderBy('state')
                 ->get()
-                ->mapWithKeys(fn ($item) => [$item->state->value => $item->count])),
-            'overseasCount' => Inertia::defer(fn () => Alumnus::where('state', 'Overseas')->count()),
-            'overseasAlumni' => Inertia::defer(fn () => Alumnus::with('tenure')
+                ->mapWithKeys(fn($item) => [$item->state->value => $item->count])),
+            'overseasCount' => Inertia::defer(fn() => Alumnus::where('state', 'Overseas')->count()),
+            'overseasAlumni' => Inertia::defer(fn() => Alumnus::with('tenure')
                 ->where('state', 'Overseas')
                 ->get()),
-            'units' => collect(Unit::cases())->map(fn ($u) => ['value' => $u->value, 'label' => $u->value]),
-            'states' => collect(NigerianState::cases())->map(fn ($s) => ['value' => $s->value, 'label' => $s->value]),
-            'tenures' => Tenure::orderBy('year', 'desc')->get()->map(fn ($t) => ['value' => $t->id, 'label' => $t->year]),
+            'units' => collect(Unit::cases())->map(fn($u) => ['value' => $u->value, 'label' => $u->value]),
+            'states' => collect(NigerianState::cases())->map(fn($s) => ['value' => $s->value, 'label' => $s->value]),
+            'tenures' => Tenure::orderBy('year', 'desc')->get()->map(fn($t) => ['value' => $t->id, 'label' => $t->year]),
             'filters' => $request->only(['state', 'unit', 'tenure_id', 'search', 'overseas']),
         ]);
     }
@@ -191,7 +195,7 @@ class AlumnusController extends Controller
     public function executives(): Response
     {
         return Inertia::render('alumni/Executives', [
-            'centralExco' => Inertia::defer(fn () => Alumnus::with('tenure')
+            'centralExco' => Inertia::defer(fn() => Alumnus::with('tenure')
                 ->whereNotNull('current_exco_office')
                 ->whereIn('current_exco_office', [
                     'President',
@@ -203,12 +207,12 @@ class AlumnusController extends Controller
                 ])
                 ->orderBy('current_exco_office')
                 ->get()),
-            'coordinators' => Inertia::defer(fn () => Alumnus::with('tenure')
+            'coordinators' => Inertia::defer(fn() => Alumnus::with('tenure')
                 ->whereNotNull('current_exco_office')
                 ->where('current_exco_office', 'LIKE', '%Coordinator%')
                 ->orderBy('current_exco_office')
                 ->get()),
-            'otherPositions' => Inertia::defer(fn () => Alumnus::with('tenure')
+            'otherPositions' => Inertia::defer(fn() => Alumnus::with('tenure')
                 ->whereNotNull('current_exco_office')
                 ->whereNotIn('current_exco_office', [
                     'President',
@@ -221,7 +225,7 @@ class AlumnusController extends Controller
                 ->where('current_exco_office', 'NOT LIKE', '%Coordinator%')
                 ->orderBy('current_exco_office')
                 ->get()),
-            'totalCount' => Inertia::defer(fn () => Alumnus::whereNotNull('current_exco_office')->count()),
+            'totalCount' => Inertia::defer(fn() => Alumnus::whereNotNull('current_exco_office')->count()),
         ]);
     }
 
@@ -238,7 +242,7 @@ class AlumnusController extends Controller
      */
     private function parseBirthDate(?string $value): ?Carbon
     {
-        if (! $value) {
+        if (!$value) {
             return null;
         }
 

@@ -5,7 +5,7 @@ namespace App\Enums;
 enum Unit: string
 {
 
-    case PresidentsUnit = "President's Unit (Non Worker)";
+    case PresidentsUnit = "President's Unit";
     case Academic = 'Academic Unit';
     case Alumni = 'Alumni Relations Unit';
     case BibleStudy = 'Bible Study Unit';

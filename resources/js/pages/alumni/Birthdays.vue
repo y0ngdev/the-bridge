@@ -205,234 +205,290 @@ const displayedMonth = computed(() =>
 
                 <!-- This Week -->
                 <TabsContent value="week">
-                    <div v-if="thisWeekFiltered.length === 0" class="text-center py-12 text-muted-foreground">
-                        <Cake class="mx-auto h-16 w-16 mb-4 opacity-30" />
-                        <p>No upcoming birthdays this week</p>
-                    </div>
+                    <Deferred data="thisWeek">
+                        <template #fallback>
+                            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                <Card v-for="i in 6" :key="i">
+                                    <CardContent class="p-6">
+                                        <div class="flex items-center gap-4">
+                                            <Skeleton class="h-12 w-12 rounded-full" />
+                                            <div class="space-y-2 flex-1">
+                                                <Skeleton class="h-4 w-3/4" />
+                                                <Skeleton class="h-3 w-1/2" />
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </template>
 
-                    <div v-else>
-                        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            <Dialog v-for="alumnus in displayedWeek" :key="alumnus.id">
-                                <DialogTrigger as-child>
-                                    <Card class="hover:shadow-md hover:border-primary/50 transition-all cursor-pointer">
-                                        <CardContent class="p-6">
-                                            <div class="flex items-center gap-4">
-                                                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted overflow-hidden shrink-0">
-                                                    <img 
-                                                        v-if="alumnus.photo_url" 
-                                                        :src="alumnus.photo_url" 
-                                                        :alt="`${alumnus.name}'s photo`"
-                                                        class="h-full w-full object-cover"
-                                                    />
-                                                    <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
+                        <div v-if="thisWeekFiltered.length === 0" class="text-center py-12 text-muted-foreground">
+                            <Cake class="mx-auto h-16 w-16 mb-4 opacity-30" />
+                            <p>No upcoming birthdays this week</p>
+                        </div>
+
+                        <div v-else>
+                            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                <Dialog v-for="alumnus in displayedWeek" :key="alumnus.id">
+                                    <DialogTrigger as-child>
+                                        <Card class="hover:shadow-md hover:border-primary/50 transition-all cursor-pointer">
+                                            <CardContent class="p-6">
+                                                <div class="flex items-center gap-4">
+                                                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted overflow-hidden shrink-0">
+                                                        <img 
+                                                            v-if="alumnus.photo_url" 
+                                                            :src="alumnus.photo_url" 
+                                                            :alt="`${alumnus.name}'s photo`"
+                                                            class="h-full w-full object-cover"
+                                                        />
+                                                        <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
+                                                    </div>
+                                                    <div class="flex-1 min-w-0">
+                                                        <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>
+                                                        <p class="text-sm text-muted-foreground">{{ formatDate(alumnus.birth_date) }}</p>
+                                                    </div>
                                                 </div>
-                                                <div class="flex-1 min-w-0">
-                                                    <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>
-                                                    <p class="text-sm text-muted-foreground">{{ formatDate(alumnus.birth_date) }}</p>
+                                            </CardContent>
+                                        </Card>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>{{ alumnus.name }}</DialogTitle>
+                                            <DialogDescription>Contact details</DialogDescription>
+                                        </DialogHeader>
+                                        <div class="space-y-4 pt-4">
+                                            <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                                                <Cake class="h-5 w-5 text-primary" />
+                                                <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
+                                            </div>
+                                            <div v-if="alumnus.email" class="flex items-center gap-3">
+                                                <Mail class="h-5 w-5 text-muted-foreground" />
+                                                <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
+                                            </div>
+                                            <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
+                                                <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
+                                                <div class="space-y-1">
+                                                    <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
                                                 </div>
                                             </div>
-                                        </CardContent>
-                                    </Card>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogHeader>
-                                        <DialogTitle>{{ alumnus.name }}</DialogTitle>
-                                        <DialogDescription>Contact details</DialogDescription>
-                                    </DialogHeader>
-                                    <div class="space-y-4 pt-4">
-                                        <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                                            <Cake class="h-5 w-5 text-primary" />
-                                            <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
+                                            <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
                                         </div>
-                                        <div v-if="alumnus.email" class="flex items-center gap-3">
-                                            <Mail class="h-5 w-5 text-muted-foreground" />
-                                            <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
-                                        </div>
-                                        <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
-                                            <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
-                                            <div class="space-y-1">
-                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
-                                            </div>
-                                        </div>
-                                        <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
-                                    </div>
-                                    <DialogFooter>
-                                        <Link :href="show(alumnus.id).url" class="w-full">
-                                            <Button variant="outline" class="w-full">
-                                                <ExternalLink class="h-4 w-4 mr-2" />
-                                                View Full Details
-                                            </Button>
-                                        </Link>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
+                                        <DialogFooter>
+                                            <Link :href="show(alumnus.id).url" class="w-full">
+                                                <Button variant="outline" class="w-full">
+                                                    <ExternalLink class="h-4 w-4 mr-2" />
+                                                    View Full Details
+                                                </Button>
+                                            </Link>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+                            <div v-if="thisWeekFiltered.length > INITIAL_DISPLAY_COUNT" class="text-center mt-6">
+                                <Button variant="ghost" @click="showAllWeek = !showAllWeek">
+                                    <component :is="showAllWeek ? ChevronUp : ChevronDown" class="h-4 w-4 mr-2" />
+                                    {{ showAllWeek ? 'Show less' : `Show all ${thisWeekFiltered.length}` }}
+                                </Button>
+                            </div>
                         </div>
-                        <div v-if="thisWeekFiltered.length > INITIAL_DISPLAY_COUNT" class="text-center mt-6">
-                            <Button variant="ghost" @click="showAllWeek = !showAllWeek">
-                                <component :is="showAllWeek ? ChevronUp : ChevronDown" class="h-4 w-4 mr-2" />
-                                {{ showAllWeek ? 'Show less' : `Show all ${thisWeekFiltered.length}` }}
-                            </Button>
-                        </div>
-                    </div>
+                    </Deferred>
                 </TabsContent>
 
                 <!-- This Month -->
                 <TabsContent value="month">
-                    <div v-if="thisMonthFiltered.length === 0" class="text-center py-12 text-muted-foreground">
-                        <Cake class="mx-auto h-16 w-16 mb-4 opacity-30" />
-                        <p>No upcoming birthdays this month</p>
-                    </div>
+                    <Deferred data="thisMonth">
+                        <template #fallback>
+                            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                <Card v-for="i in 6" :key="i">
+                                    <CardContent class="p-6">
+                                        <div class="flex items-center gap-4">
+                                            <Skeleton class="h-12 w-12 rounded-full" />
+                                            <div class="space-y-2 flex-1">
+                                                <Skeleton class="h-4 w-3/4" />
+                                                <Skeleton class="h-3 w-1/2" />
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </template>
 
-                    <div v-else>
-                        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            <Dialog v-for="alumnus in displayedMonth" :key="alumnus.id">
-                                <DialogTrigger as-child>
-                                    <Card class="hover:shadow-md hover:border-primary/50 transition-all cursor-pointer">
-                                        <CardContent class="p-6">
-                                            <div class="flex items-center gap-4">
-                                                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted overflow-hidden shrink-0">
-                                                    <img 
-                                                        v-if="alumnus.photo_url" 
-                                                        :src="alumnus.photo_url" 
-                                                        :alt="`${alumnus.name}'s photo`"
-                                                        class="h-full w-full object-cover"
-                                                    />
-                                                    <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
+                        <div v-if="thisMonthFiltered.length === 0" class="text-center py-12 text-muted-foreground">
+                            <Cake class="mx-auto h-16 w-16 mb-4 opacity-30" />
+                            <p>No upcoming birthdays this month</p>
+                        </div>
+
+                        <div v-else>
+                            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                <Dialog v-for="alumnus in displayedMonth" :key="alumnus.id">
+                                    <DialogTrigger as-child>
+                                        <Card class="hover:shadow-md hover:border-primary/50 transition-all cursor-pointer">
+                                            <CardContent class="p-6">
+                                                <div class="flex items-center gap-4">
+                                                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted overflow-hidden shrink-0">
+                                                        <img 
+                                                            v-if="alumnus.photo_url" 
+                                                            :src="alumnus.photo_url" 
+                                                            :alt="`${alumnus.name}'s photo`"
+                                                            class="h-full w-full object-cover"
+                                                        />
+                                                        <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
+                                                    </div>
+                                                    <div class="flex-1 min-w-0">
+                                                        <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>
+                                                        <p class="text-sm text-muted-foreground">{{ formatDate(alumnus.birth_date) }}</p>
+                                                    </div>
                                                 </div>
-                                                <div class="flex-1 min-w-0">
-                                                    <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>
-                                                    <p class="text-sm text-muted-foreground">{{ formatDate(alumnus.birth_date) }}</p>
+                                            </CardContent>
+                                        </Card>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>{{ alumnus.name }}</DialogTitle>
+                                            <DialogDescription>Contact details</DialogDescription>
+                                        </DialogHeader>
+                                        <div class="space-y-4 pt-4">
+                                            <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                                                <Cake class="h-5 w-5 text-primary" />
+                                                <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
+                                            </div>
+                                            <div v-if="alumnus.email" class="flex items-center gap-3">
+                                                <Mail class="h-5 w-5 text-muted-foreground" />
+                                                <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
+                                            </div>
+                                            <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
+                                                <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
+                                                <div class="space-y-1">
+                                                    <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
                                                 </div>
                                             </div>
-                                        </CardContent>
-                                    </Card>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogHeader>
-                                        <DialogTitle>{{ alumnus.name }}</DialogTitle>
-                                        <DialogDescription>Contact details</DialogDescription>
-                                    </DialogHeader>
-                                    <div class="space-y-4 pt-4">
-                                        <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                                            <Cake class="h-5 w-5 text-primary" />
-                                            <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
+                                            <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
                                         </div>
-                                        <div v-if="alumnus.email" class="flex items-center gap-3">
-                                            <Mail class="h-5 w-5 text-muted-foreground" />
-                                            <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
-                                        </div>
-                                        <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
-                                            <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
-                                            <div class="space-y-1">
-                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
-                                            </div>
-                                        </div>
-                                        <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
-                                    </div>
-                                    <DialogFooter>
-                                        <Link :href="show(alumnus.id).url" class="w-full">
-                                            <Button variant="outline" class="w-full">
-                                                <ExternalLink class="h-4 w-4 mr-2" />
-                                                View Full Details
-                                            </Button>
-                                        </Link>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
+                                        <DialogFooter>
+                                            <Link :href="show(alumnus.id).url" class="w-full">
+                                                <Button variant="outline" class="w-full">
+                                                    <ExternalLink class="h-4 w-4 mr-2" />
+                                                    View Full Details
+                                                </Button>
+                                            </Link>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+                            <div v-if="thisMonthFiltered.length > INITIAL_DISPLAY_COUNT" class="text-center mt-6">
+                                <Button variant="ghost" @click="showAllMonth = !showAllMonth">
+                                    <component :is="showAllMonth ? ChevronUp : ChevronDown" class="h-4 w-4 mr-2" />
+                                    {{ showAllMonth ? 'Show less' : `Show all ${thisMonthFiltered.length}` }}
+                                </Button>
+                            </div>
                         </div>
-                        <div v-if="thisMonthFiltered.length > INITIAL_DISPLAY_COUNT" class="text-center mt-6">
-                            <Button variant="ghost" @click="showAllMonth = !showAllMonth">
-                                <component :is="showAllMonth ? ChevronUp : ChevronDown" class="h-4 w-4 mr-2" />
-                                {{ showAllMonth ? 'Show less' : `Show all ${thisMonthFiltered.length}` }}
-                            </Button>
-                        </div>
-                    </div>
+                    </Deferred>
                 </TabsContent>
 
                 <!-- All Birthdays -->
                 <TabsContent value="all">
-                    <div v-if="sortedMonths.length === 0" class="text-center py-12 text-muted-foreground">
-                        <Cake class="mx-auto h-16 w-16 mb-4 opacity-30" />
-                        <p>No birthdays recorded yet</p>
-                    </div>
+                    <Deferred data="allByMonth">
+                        <template #fallback>
+                            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                <Card v-for="i in 8" :key="i">
+                                    <CardHeader class="pb-3">
+                                         <Skeleton class="h-6 w-32" />
+                                    </CardHeader>
+                                    <CardContent class="pt-0">
+                                         <div class="space-y-4">
+                                              <div v-for="j in 3" :key="j" class="flex items-center justify-between">
+                                                  <Skeleton class="h-4 w-24" />
+                                                  <Skeleton class="h-3 w-16" />
+                                              </div>
+                                         </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </template>
 
-                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        <Card
-                            v-for="month in sortedMonths"
-                            :key="month"
-                            :class="[
-                                'hover:shadow-md transition-shadow',
-                                month === currentMonth ? 'ring-2 ring-primary' : ''
-                            ]"
-                        >
-                            <CardHeader class="pb-3">
-                                <CardTitle class="flex items-center justify-between text-base">
-                                    <span class="flex items-center gap-2">
-                                        <Cake class="h-5 w-5" />
-                                        <span>{{ month }}</span>
-                                    </span>
-                                    <Badge :variant="month === currentMonth ? 'default' : 'secondary'">
-                                        {{ allByMonth[month].length }}
-                                    </Badge>
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent class="pt-0">
-                                <ul class="space-y-2">
-                                    <li
-                                        v-for="alumnus in allByMonth[month]"
-                                        :key="alumnus.id"
-                                        class="flex items-center justify-between text-sm py-2 border-b border-border/50 last:border-0"
-                                    >
-                                        <Dialog>
-                                            <DialogTrigger as-child>
-                                                <button 
-                                                    class="font-medium text-left hover:text-primary transition-colors cursor-pointer truncate flex-1"
-                                                    :class="isBirthdayToday(alumnus.birth_date) ? 'font-bold' : ''"
-                                                >
-                                                    {{ alumnus.name }}
-                                                    <span v-if="isBirthdayToday(alumnus.birth_date)" class="ml-1">🎂</span>
-                                                </button>
-                                            </DialogTrigger>
-                                            <DialogContent>
-                                                <DialogHeader>
-                                                    <DialogTitle>{{ alumnus.name }}</DialogTitle>
-                                                    <DialogDescription>Contact details</DialogDescription>
-                                                </DialogHeader>
-                                                <div class="space-y-4 pt-4">
-                                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                                                        <Cake class="h-5 w-5 text-primary" />
-                                                        <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
-                                                    </div>
-                                                    <div v-if="alumnus.email" class="flex items-center gap-3">
-                                                        <Mail class="h-5 w-5 text-muted-foreground" />
-                                                        <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
-                                                    </div>
-                                                    <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
-                                                        <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
-                                                        <div class="space-y-1">
-                                                            <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
-                                                        </div>
-                                                    </div>
-                                                    <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
-                                                </div>
-                                                <DialogFooter>
-                                                    <Link :href="show(alumnus.id).url" class="w-full">
-                                                        <Button variant="outline" class="w-full">
-                                                            <ExternalLink class="h-4 w-4 mr-2" />
-                                                            View Full Details
-                                                        </Button>
-                                                    </Link>
-                                                </DialogFooter>
-                                            </DialogContent>
-                                        </Dialog>
-                                        <span class="text-muted-foreground text-xs ml-2">
-                                            {{ formatDate(alumnus.birth_date) }}
+                        <div v-if="sortedMonths.length === 0" class="text-center py-12 text-muted-foreground">
+                            <Cake class="mx-auto h-16 w-16 mb-4 opacity-30" />
+                            <p>No birthdays recorded yet</p>
+                        </div>
+
+                        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            <Card
+                                v-for="month in sortedMonths"
+                                :key="month"
+                                :class="[
+                                    'hover:shadow-md transition-shadow',
+                                    month === currentMonth ? 'ring-2 ring-primary' : ''
+                                ]"
+                            >
+                                <CardHeader class="pb-3">
+                                    <CardTitle class="flex items-center justify-between text-base">
+                                        <span class="flex items-center gap-2">
+                                            <Cake class="h-5 w-5" />
+                                            <span>{{ month }}</span>
                                         </span>
-                                    </li>
-                                </ul>
-                            </CardContent>
-                        </Card>
-                    </div>
+                                        <Badge :variant="month === currentMonth ? 'default' : 'secondary'">
+                                            {{ allByMonth[month].length }}
+                                        </Badge>
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent class="pt-0">
+                                    <ul class="space-y-2">
+                                        <li
+                                            v-for="alumnus in allByMonth[month]"
+                                            :key="alumnus.id"
+                                            class="flex items-center justify-between text-sm py-2 border-b border-border/50 last:border-0"
+                                        >
+                                            <Dialog>
+                                                <DialogTrigger as-child>
+                                                    <button 
+                                                        class="font-medium text-left hover:text-primary transition-colors cursor-pointer truncate flex-1"
+                                                        :class="isBirthdayToday(alumnus.birth_date) ? 'font-bold' : ''"
+                                                    >
+                                                        {{ alumnus.name }}
+                                                        <span v-if="isBirthdayToday(alumnus.birth_date)" class="ml-1">🎂</span>
+                                                    </button>
+                                                </DialogTrigger>
+                                                <DialogContent>
+                                                    <DialogHeader>
+                                                        <DialogTitle>{{ alumnus.name }}</DialogTitle>
+                                                        <DialogDescription>Contact details</DialogDescription>
+                                                    </DialogHeader>
+                                                    <div class="space-y-4 pt-4">
+                                                        <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                                                            <Cake class="h-5 w-5 text-primary" />
+                                                            <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
+                                                        </div>
+                                                        <div v-if="alumnus.email" class="flex items-center gap-3">
+                                                            <Mail class="h-5 w-5 text-muted-foreground" />
+                                                            <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
+                                                        </div>
+                                                        <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
+                                                            <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
+                                                            <div class="space-y-1">
+                                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
+                                                            </div>
+                                                        </div>
+                                                        <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
+                                                    </div>
+                                                    <DialogFooter>
+                                                        <Link :href="show(alumnus.id).url" class="w-full">
+                                                            <Button variant="outline" class="w-full">
+                                                                <ExternalLink class="h-4 w-4 mr-2" />
+                                                                View Full Details
+                                                            </Button>
+                                                        </Link>
+                                                    </DialogFooter>
+                                                </DialogContent>
+                                            </Dialog>
+                                            <span class="text-muted-foreground text-xs ml-2">
+                                                {{ formatDate(alumnus.birth_date) }}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </Deferred>
                 </TabsContent>
             </Tabs>
         </div>
