@@ -606,7 +606,7 @@ onMounted(() => {
                                                 <CommandEmpty>No department found.</CommandEmpty>
                                                 <CommandList>
                                                     <CommandGroup>
-                                                        <CommandItem v-for="d in departments" :key="d.value" :value="d.label" @select="() => { addForm.department_id = d.value; openDepartmentCombobox = false; }">
+                                                        <CommandItem v-for="d in departments" :key="d.value" :value="d.value" :keywords="[d.label]" @select="() => { addForm.department_id = d.value; openDepartmentCombobox = false; }">
                                                             {{ d.label }}
                                                             <Check class="ml-auto h-4 w-4" :class="addForm.department_id === d.value ? 'opacity-100' : 'opacity-0'" />
                                                         </CommandItem>
@@ -651,7 +651,7 @@ onMounted(() => {
                                                     <CommandEmpty>No tenure found.</CommandEmpty>
                                                     <CommandList>
                                                         <CommandGroup>
-                                                            <CommandItem v-for="t in tenures" :key="t.id" :value="t.year" @select="() => { addForm.tenure_id = t.id; openTenureCombobox = false; }">
+                                                            <CommandItem v-for="t in tenures" :key="t.id" :value="String(t.id)" :keywords="[t.year]" @select="() => { addForm.tenure_id = t.id; openTenureCombobox = false; }">
                                                                 {{ t.year }}
                                                                 <Check class="ml-auto h-4 w-4" :class="addForm.tenure_id === t.id ? 'opacity-100' : 'opacity-0'" />
                                                             </CommandItem>
@@ -705,7 +705,7 @@ onMounted(() => {
                                                     <CommandEmpty>No state found.</CommandEmpty>
                                                     <CommandList>
                                                         <CommandGroup>
-                                                            <CommandItem v-for="s in states" :key="s.value" :value="s.label" @select="() => { addForm.state = s.value; openStateCombobox = false; }">
+                                                            <CommandItem v-for="s in states" :key="s.value" :value="s.value" :keywords="[s.label]" @select="() => { addForm.state = s.value; openStateCombobox = false; }">
                                                                 {{ s.label }}
                                                                 <Check class="ml-auto h-4 w-4" :class="addForm.state === s.value ? 'opacity-100' : 'opacity-0'" />
                                                             </CommandItem>
@@ -1015,7 +1015,7 @@ onMounted(() => {
                                     <CommandEmpty>No department found.</CommandEmpty>
                                     <CommandList>
                                         <CommandGroup>
-                                            <CommandItem v-for="d in departments" :key="d.value" :value="d.label" @select="() => { editForm.department_id = d.value; openEditDepartmentCombobox = false; }">
+                                            <CommandItem v-for="d in departments" :key="d.value" :value="d.value" :keywords="[d.label]" @select="() => { editForm.department_id = d.value; openEditDepartmentCombobox = false; }">
                                                 {{ d.label }}
                                                 <Check class="ml-auto h-4 w-4" :class="editForm.department_id === d.value ? 'opacity-100' : 'opacity-0'" />
                                             </CommandItem>
@@ -1060,7 +1060,7 @@ onMounted(() => {
                                         <CommandEmpty>No tenure found.</CommandEmpty>
                                         <CommandList>
                                             <CommandGroup>
-                                                <CommandItem v-for="t in tenures" :key="t.id" :value="t.year" @select="() => { editForm.tenure_id = t.id; openEditTenureCombobox = false; }">
+                                                <CommandItem v-for="t in tenures" :key="t.id" :value="String(t.id)" :keywords="[t.year]" @select="() => { editForm.tenure_id = t.id; openEditTenureCombobox = false; }">
                                                     {{ t.year }}
                                                     <Check class="ml-auto h-4 w-4" :class="editForm.tenure_id === t.id ? 'opacity-100' : 'opacity-0'" />
                                                 </CommandItem>
@@ -1114,7 +1114,7 @@ onMounted(() => {
                                         <CommandEmpty>No state found.</CommandEmpty>
                                         <CommandList>
                                             <CommandGroup>
-                                                <CommandItem v-for="s in states" :key="s.value" :value="s.label" @select="() => { editForm.state = s.value; openEditStateCombobox = false; }">
+                                                <CommandItem v-for="s in states" :key="s.value" :value="s.value" :keywords="[s.label]" @select="() => { editForm.state = s.value; openEditStateCombobox = false; }">
                                                     {{ s.label }}
                                                     <Check class="ml-auto h-4 w-4" :class="editForm.state === s.value ? 'opacity-100' : 'opacity-0'" />
                                                 </CommandItem>

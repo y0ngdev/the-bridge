@@ -10,7 +10,6 @@ enum Unit: string
     case Alumni = 'Alumni Relations Unit';
     case BibleStudy = 'Bible Study Unit';
     case Choir = 'Choir Unit';
-    case DDF = 'Drama and Dance Fellowship'; // DDF - found in 2011-2012, 2007-2008 data
     case Drama = 'Drama Unit';
     case Editorial = 'Editorial Unit';
     case Evangelism = 'Evangelism Unit';

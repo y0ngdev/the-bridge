@@ -6,4 +6,3 @@
 
 
 
-no use of native alert through out the project
