@@ -33,7 +33,10 @@ class AlumnusController extends Controller
         return Inertia::render('alumni/Index', [
             'alumni' => $query->latest()->paginate()->withQueryString(),
             'tenures' => Tenure::orderBy('year', 'desc')->get(['id', 'year']),
-            'units' => collect(Unit::cases())->map(fn($u) => ['value' => $u->value, 'label' => $u->value]),
+            'units' => collect(Unit::cases())->map(fn($u) => [
+                'value' => $u->value,
+                'label' => $u->value === "President's Unit" ? "President's Unit (Non Worker)" : $u->value,
+            ]),
             'states' => collect(NigerianState::cases())->map(fn($s) => ['value' => $s->value, 'label' => $s->value]),
             'pastExcoOffices' => collect(PastExcoOffice::cases())->map(fn($p) => ['value' => $p->value, 'label' => $p->value]),
             'departments' => Department::options(),
@@ -185,7 +188,10 @@ class AlumnusController extends Controller
             'overseasAlumni' => Inertia::defer(fn() => Alumnus::with('tenure')
                 ->where('state', 'Overseas')
                 ->get()),
-            'units' => collect(Unit::cases())->map(fn($u) => ['value' => $u->value, 'label' => $u->value]),
+            'units' => collect(Unit::cases())->map(fn($u) => [
+                'value' => $u->value,
+                'label' => $u->value === "President's Unit" ? "President's Unit (Non Worker)" : $u->value,
+            ]),
             'states' => collect(NigerianState::cases())->map(fn($s) => ['value' => $s->value, 'label' => $s->value]),
             'tenures' => Tenure::orderBy('year', 'desc')->get()->map(fn($t) => ['value' => $t->id, 'label' => $t->year]),
             'filters' => $request->only(['state', 'unit', 'tenure_id', 'search', 'overseas']),

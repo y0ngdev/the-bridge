@@ -70,7 +70,8 @@ function handleSelect(selectedValue: string) {
                         <CommandItem
                             v-for="option in options"
                             :key="option.value"
-                            :value="option.label"
+                            :value="option.value"
+                            :keywords="[option.label]"
                             @select="handleSelect(option.value)"
                         >
                             <Check

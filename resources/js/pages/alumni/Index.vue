@@ -677,7 +677,7 @@ onMounted(() => {
                                                     <CommandEmpty>No unit found.</CommandEmpty>
                                                     <CommandList>
                                                         <CommandGroup>
-                                                            <CommandItem v-for="u in units" :key="u.value" :value="u.label" @select="() => { addForm.unit = u.value; openUnitCombobox = false; }">
+                                                            <CommandItem v-for="u in units" :key="u.value" :value="u.value" :keywords="[u.label]" @select="() => { addForm.unit = u.value; openUnitCombobox = false; }">
                                                                 {{ u.label }}
                                                                 <Check class="ml-auto h-4 w-4" :class="addForm.unit === u.value ? 'opacity-100' : 'opacity-0'" />
                                                             </CommandItem>
@@ -1086,7 +1086,7 @@ onMounted(() => {
                                         <CommandEmpty>No unit found.</CommandEmpty>
                                         <CommandList>
                                             <CommandGroup>
-                                                <CommandItem v-for="u in units" :key="u.value" :value="u.label" @select="() => { editForm.unit = u.value; openEditUnitCombobox = false; }">
+                                                <CommandItem v-for="u in units" :key="u.value" :value="u.value" :keywords="[u.label]" @select="() => { editForm.unit = u.value; openEditUnitCombobox = false; }">
                                                     {{ u.label }}
                                                     <Check class="ml-auto h-4 w-4" :class="editForm.unit === u.value ? 'opacity-100' : 'opacity-0'" />
                                                 </CommandItem>
