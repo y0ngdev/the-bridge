@@ -145,10 +145,22 @@ function handleEditSubmit() {
 }
 
 // Delete Session
-function handleDelete(session: RedemptionWeekSession) {
-    if (!confirm(`Delete "${session.name}" and all its attendance records?`)) return;
-    router.delete(destroy(session.id).url, {
-        onSuccess: () => toast.success('Session deleted'),
+const showDeleteDialog = ref(false);
+const sessionToDelete = ref<RedemptionWeekSession | null>(null);
+
+function openDeleteDialog(session: RedemptionWeekSession) {
+    sessionToDelete.value = session;
+    showDeleteDialog.value = true;
+}
+
+function handleDelete() {
+    if (!sessionToDelete.value) return;
+    router.delete(destroy(sessionToDelete.value.id).url, {
+        onSuccess: () => {
+            showDeleteDialog.value = false;
+            sessionToDelete.value = null;
+            toast.success('Session deleted');
+        },
     });
 }
 
@@ -402,6 +414,23 @@ function getTotalAttendance(session: RedemptionWeekSession): number {
                             </Button>
                         </DialogFooter>
                     </form>
+                </DialogContent>
+            </Dialog>
+
+            <!-- Delete Confirmation Dialog -->
+            <Dialog v-model:open="showDeleteDialog">
+                <DialogContent class="max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>Delete Session</DialogTitle>
+                        <DialogDescription>
+                            Delete "{{ sessionToDelete?.name }}" and all its attendance records? This cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <DialogFooter>
+                        <Button variant="outline" @click="showDeleteDialog = false">Cancel</Button>
+                        <Button variant="destructive" @click="handleDelete">Confirm Delete</Button>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
         </div>

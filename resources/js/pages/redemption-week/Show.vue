@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
@@ -118,11 +119,23 @@ function markAttendance() {
 }
 
 // Remove attendance (admin only)
-function removeAttendance(attendanceId: number) {
-    if (!confirm('Remove this attendance?')) return;
-    router.delete(destroyAttendance({ session: props.session.id, attendance: attendanceId }).url, {
+const showRemoveDialog = ref(false);
+const attendanceToRemove = ref<number | null>(null);
+
+function openRemoveDialog(attendanceId: number) {
+    attendanceToRemove.value = attendanceId;
+    showRemoveDialog.value = true;
+}
+
+function handleRemoveAttendance() {
+    if (!attendanceToRemove.value) return;
+    router.delete(destroyAttendance({ session: props.session.id, attendance: attendanceToRemove.value }).url, {
         preserveScroll: true,
-        onSuccess: () => toast.success('Attendance removed'),
+        onSuccess: () => {
+            showRemoveDialog.value = false;
+            attendanceToRemove.value = null;
+            toast.success('Attendance removed');
+        },
     });
 }
 
@@ -311,7 +324,7 @@ const attendancePercentage = computed(() => {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        @click="removeAttendance(attendance.id)"
+                                                        @click="openRemoveDialog(attendance.id)"
                                                     >
                                                         <Trash2 class="h-4 w-4 text-destructive" />
                                                     </Button>
@@ -331,5 +344,22 @@ const attendancePercentage = computed(() => {
                 </TabsContent>
             </Tabs>
         </div>
+
+        <!-- Remove Attendance Confirmation Dialog -->
+        <Dialog v-model:open="showRemoveDialog">
+            <DialogContent class="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Remove Attendance</DialogTitle>
+                    <DialogDescription>
+                        Are you sure you want to remove this attendance record?
+                    </DialogDescription>
+                </DialogHeader>
+
+                <DialogFooter>
+                    <Button variant="outline" @click="showRemoveDialog = false">Cancel</Button>
+                    <Button variant="destructive" @click="handleRemoveAttendance">Confirm Remove</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </AppLayout>
 </template>

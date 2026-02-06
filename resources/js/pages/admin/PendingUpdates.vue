@@ -34,13 +34,21 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const selectedUpdate = ref<PendingUpdate | null>(null);
 const showRejectDialog = ref(false);
+const showApproveDialog = ref(false);
 
-function approve(update: PendingUpdate) {
-    if (!confirm('Are you sure you want to approve and apply these changes?')) return;
+function openApproveDialog(update: PendingUpdate) {
+    selectedUpdate.value = update;
+    showApproveDialog.value = true;
+}
+
+function handleApprove() {
+    if (!selectedUpdate.value) return;
     
-    router.post(`/admin/pending-updates/${update.id}/approve`, {}, {
+    router.post(`/admin/pending-updates/${selectedUpdate.value.id}/approve`, {}, {
         onSuccess: () => {
+            showApproveDialog.value = false;
             toast.success('Update approved successfully');
+            selectedUpdate.value = null;
         },
     });
 }
@@ -150,7 +158,7 @@ function getLabel(key: string): string {
                                 <X class="h-4 w-4 mr-2" />
                                 Reject
                             </Button>
-                            <Button class="bg-green-600 hover:bg-green-700 text-white" @click="approve(update)">
+                            <Button class="bg-green-600 hover:bg-green-700 text-white" @click="openApproveDialog(update)">
                                 <Check class="h-4 w-4 mr-2" />
                                 Approve
                             </Button>
@@ -173,6 +181,23 @@ function getLabel(key: string): string {
                 <DialogFooter>
                     <Button variant="outline" @click="showRejectDialog = false">Cancel</Button>
                     <Button variant="destructive" @click="handleReject">Confirm Reject</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+
+        <!-- Approve Confirmation Dialog -->
+        <Dialog v-model:open="showApproveDialog">
+            <DialogContent class="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Approve Update</DialogTitle>
+                    <DialogDescription>
+                        Are you sure you want to approve and apply these changes?
+                    </DialogDescription>
+                </DialogHeader>
+
+                <DialogFooter>
+                    <Button variant="outline" @click="showApproveDialog = false">Cancel</Button>
+                    <Button class="bg-green-600 hover:bg-green-700 text-white" @click="handleApprove">Confirm Approve</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

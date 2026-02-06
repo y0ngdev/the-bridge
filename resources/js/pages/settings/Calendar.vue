@@ -8,8 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Calendar, RefreshCcw, AlertTriangle, CheckCircle, Users, Clock, XCircle, Trash2 } from 'lucide-vue-next';
-import { watch } from 'vue';
+import { ref, watch } from 'vue';
 import { toast } from 'vue-sonner';
 import { index, sync, unsync } from '@/actions/App/Http/Controllers/Settings/CalendarController';
 
@@ -50,6 +51,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
 const form = useForm({});
 const unsyncForm = useForm({});
+const showUnsyncDialog = ref(false);
 
 const syncCalendar = () => {
     form.post(sync().url, {
@@ -57,12 +59,15 @@ const syncCalendar = () => {
     });
 };
 
-const unsyncCalendar = () => {
-    if (confirm('Are you sure you want to remove ALL birthday events from Google Calendar? This cannot be undone.')) {
-        unsyncForm.post(unsync().url, {
-            preserveScroll: true,
-        });
-    }
+const openUnsyncDialog = () => {
+    showUnsyncDialog.value = true;
+};
+
+const handleUnsync = () => {
+    showUnsyncDialog.value = false;
+    unsyncForm.post(unsync().url, {
+        preserveScroll: true,
+    });
 };
 
 // Watch for flash messages from server
@@ -183,7 +188,7 @@ watch(
                             <Button 
                                 variant="outline"
                                 class="text-destructive hover:text-destructive"
-                                @click="unsyncCalendar" 
+                                @click="openUnsyncDialog" 
                                 :disabled="unsyncForm.processing || !isConfigured || syncStatus?.status === 'running' || unsyncStatus?.status === 'running'"
                             >
                                 <RefreshCcw v-if="unsyncForm.processing || unsyncStatus?.status === 'running'" class="mr-2 h-4 w-4 animate-spin" />
@@ -211,6 +216,23 @@ watch(
                 </Card>
             </div>
         </SettingsLayout>
+
+        <!-- Unsync Confirmation Dialog -->
+        <Dialog v-model:open="showUnsyncDialog">
+            <DialogContent class="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Remove All Events</DialogTitle>
+                    <DialogDescription>
+                        Are you sure you want to remove ALL birthday events from Google Calendar? This cannot be undone.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <DialogFooter>
+                    <Button variant="outline" @click="showUnsyncDialog = false">Cancel</Button>
+                    <Button variant="destructive" @click="handleUnsync">Confirm Remove</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </AppLayout>
 </template>
 

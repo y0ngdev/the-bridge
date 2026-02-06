@@ -21,12 +21,12 @@ class AlumnusPortalController extends Controller
         return Inertia::render('public/Portal', [
             'tenures' => Tenure::orderBy('start_date')->get(),
             'departments' => Department::orderBy('name')->get(),
-            'units' => collect(\App\Enums\Unit::cases())->map(fn($case) => [
+            'units' => collect(\App\Enums\Unit::cases())->map(fn ($case) => [
                 'value' => $case->value,
                 'label' => $case->value === "President's Unit" ? "President's Unit (Non Worker)" : $case->value,
             ]),
-            'states' => collect(\App\Enums\NigerianState::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
-            'pastExcoOffices' => collect(\App\Enums\PastExcoOffice::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
+            'states' => collect(\App\Enums\NigerianState::cases())->map(fn ($case) => ['value' => $case->value, 'label' => $case->value]),
+            'pastExcoOffices' => collect(\App\Enums\PastExcoOffice::cases())->map(fn ($case) => ['value' => $case->value, 'label' => $case->value]),
         ]);
     }
 
@@ -139,9 +139,13 @@ class AlumnusPortalController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Handle photo upload - store immediately to pending folder
+        // Handle photo upload - only include if a file was actually uploaded
+        // This prevents null from overwriting existing photo
         if ($request->hasFile('photo')) {
             $validated['photo'] = $request->file('photo')->store('alumni-photos-pending', 'public');
+        } else {
+            // Remove photo key if no new file uploaded - preserves existing photo
+            unset($validated['photo']);
         }
 
         // Calculate changes
