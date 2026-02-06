@@ -34,7 +34,7 @@ import { toast } from 'vue-sonner';
 
 type PaginatedSessions = SimplePaginatedResponse<RedemptionWeekSession>;
 
-const props = defineProps<{
+defineProps<{
     sessions: PaginatedSessions;
     totalAlumni: number;
     eventDays: EventDay[];
@@ -149,11 +149,6 @@ function handleEditSubmit() {
 const showDeleteDialog = ref(false);
 const sessionToDelete = ref<RedemptionWeekSession | null>(null);
 
-function openDeleteDialog(session: RedemptionWeekSession) {
-    sessionToDelete.value = session;
-    showDeleteDialog.value = true;
-}
-
 function handleDelete() {
     if (!sessionToDelete.value) return;
     router.delete(destroy(sessionToDelete.value.id).url, {
@@ -164,6 +159,7 @@ function handleDelete() {
         },
     });
 }
+
 
 // Stats helpers
 function getTotalAttendance(session: RedemptionWeekSession): number {

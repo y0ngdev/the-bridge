@@ -1072,7 +1072,6 @@ onMounted(() => {
             <!-- Pagination -->
             <Pagination
                 v-if="alumni.last_page > 1"
-                v-slot="{ page }"
                 :total="alumni.last_page * 15"
                 :items-per-page="15"
                 :default-page="alumni.current_page"

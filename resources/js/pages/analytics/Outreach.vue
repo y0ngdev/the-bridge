@@ -68,7 +68,7 @@ const genderChartConfig = computed<ChartConfig>(() => {
 
 // Add fill property to gender data for coloring
 const genderDataWithFill = computed(() =>
-    (props.gender_breakdown ?? []).map((item, i) => ({
+    (props.gender_breakdown ?? []).map((item) => ({
         ...item,
         fill: `var(--color-${item.gender.toLowerCase()})`,
     })),

@@ -23,7 +23,7 @@ interface PendingUpdate {
     ip_address: string;
 }
 
-const props = defineProps<{
+defineProps<{
     updates: PendingUpdate[];
 }>();
 

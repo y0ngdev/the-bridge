@@ -162,7 +162,6 @@ const createForm = useForm({
 
 // Computed from session
 const successMessage = computed(() => page.props.flash?.success);
-const matchFound = computed(() => page.props.flash?.match);
 const noMatch = computed(() => page.props.flash?.no_match);
 
 // Check for session flash data on load/update

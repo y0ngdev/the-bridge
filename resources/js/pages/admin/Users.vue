@@ -15,7 +15,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { Pencil, Shield, Trash2, UserPlus } from 'lucide-vue-next';
 import { ref } from 'vue';
 
-const props = defineProps<{
+defineProps<{
     users: User[];
 }>();
 

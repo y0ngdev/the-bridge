@@ -13,7 +13,7 @@ import { Head, router } from '@inertiajs/vue3';
 import { AlertTriangle, Check, Trash2, Users, X } from 'lucide-vue-next';
 import { ref } from 'vue';
 
-const props = defineProps<{
+defineProps<{
     duplicateGroups: Alumnus[][];
 }>();
 

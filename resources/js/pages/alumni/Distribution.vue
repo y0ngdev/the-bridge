@@ -120,16 +120,7 @@ const toggleField = (field: ExportFieldKey, value?: boolean) => {
     }
 };
 
-// Pre-created computed models for each export field to work with reka-ui Checkbox
-const exportFieldModels = Object.fromEntries(
-    availableExportFields.map((field) => [
-        field.key,
-        computed({
-            get: () => selectedExportFields.value.includes(field.key),
-            set: (value: boolean) => toggleField(field.key, value),
-        }),
-    ]),
-) as Record<ExportFieldKey, ReturnType<typeof computed<boolean>>>;
+
 
 const totalAlumni = computed(() => {
     // Sum all counts from stateDistribution to get true total, not filtered total

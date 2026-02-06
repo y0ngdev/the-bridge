@@ -11,7 +11,7 @@ import { type Alumnus, type BreadcrumbItem } from '@/types';
 import { Deferred, Head, Link } from '@inertiajs/vue3';
 import { Briefcase, Crown, Mail, Phone, UserCircle, Users } from 'lucide-vue-next';
 
-const props = defineProps<{
+defineProps<{
     centralExco?: Alumnus[];
     coordinators?: Alumnus[];
     otherPositions?: Alumnus[];

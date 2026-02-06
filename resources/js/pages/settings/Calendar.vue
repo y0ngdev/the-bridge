@@ -35,7 +35,7 @@ interface UnsyncStatus {
     failed_at?: string;
 }
 
-const props = defineProps<{
+defineProps<{
     isConfigured: boolean;
     alumniCount: number;
     calendarId: string;
