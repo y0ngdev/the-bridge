@@ -15,9 +15,9 @@ class Alumni2004_2005Seeder extends Seeder
     {
         $tenure = Tenure::updateOrCreate(
             ['year' => '2004-2005'],
-             ['name' => 'In his peresence Generation',
+            ['name' => 'In his peresence Generation',
 
-             ]
+            ]
         );
 
         $alumni = [
@@ -463,6 +463,6 @@ class Alumni2004_2005Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

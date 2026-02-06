@@ -1,17 +1,17 @@
 <?php
 
-use App\Models\Alumnus;
-use App\Models\Tenure;
-use App\Models\Department;
-use App\Enums\PastExcoOffice;
 use App\Enums\NigerianState;
+use App\Enums\PastExcoOffice;
 use App\Enums\Unit;
+use App\Models\Alumnus;
+use App\Models\Department;
+use App\Models\Tenure;
 
 test('portal page can be rendered with all props', function () {
     $response = $this->get('/portal');
     $response->assertStatus(200);
     $response->assertInertia(
-        fn($page) => $page
+        fn ($page) => $page
             ->component('public/Portal')
             ->has('tenures')
             ->has('departments')
@@ -146,7 +146,7 @@ test('portal update request submits pending update', function () {
     $update = \App\Models\PendingAlumnusUpdate::where('alumnus_id', $alumnus->id)->latest()->first();
 
     // Debug output if update is null
-    if (!$update) {
+    if (! $update) {
         dump('Pending update not found in DB.');
     }
 

@@ -17,7 +17,7 @@ class Alumni2008_2009Seeder extends Seeder
             ['year' => '2008-2009'],
             [
                 'name' => 'Humility with the fear of the Lord Generation',
-                'family_name' => 'Gilgal FAMILY'
+                'family_name' => 'Gilgal FAMILY',
             ]
         );
 
@@ -1432,6 +1432,6 @@ class Alumni2008_2009Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

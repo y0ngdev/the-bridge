@@ -19,7 +19,7 @@ describe('Alumni Index', function () {
             ->get(route('alumni.index'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('alumni/Index')
                     ->has('alumni')
             );
@@ -33,7 +33,7 @@ describe('Alumni Index', function () {
             ->get(route('alumni.index', ['search' => 'John']))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->has('alumni.data', 1)
             );
     });
@@ -49,7 +49,7 @@ describe('Alumni Index', function () {
             ->get(route('alumni.index', ['tenure_id' => $tenure1->id]))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->has('alumni.data', 3)
             );
     });
@@ -68,7 +68,7 @@ describe('Alumni Index', function () {
             ->get(route('alumni.index', ['search' => '+2341234567890']))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->has('alumni.data', 1)
             );
     });
@@ -139,7 +139,7 @@ describe('Alumni Show', function () {
             ->get(route('alumni.show', $alumnus))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('alumni/Show')
                     ->has('alumnus')
             );
@@ -152,7 +152,7 @@ describe('Alumni Show', function () {
             ->get(route('alumni.show', $alumnus))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->has('alumnus.department')
             );
     });
@@ -164,7 +164,7 @@ describe('Birthdays', function () {
             ->get(route('alumni.birthdays'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('alumni/Birthdays')
             );
     });

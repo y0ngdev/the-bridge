@@ -18,7 +18,7 @@ class Alumni2010_2011Seeder extends Seeder
 
             [
                 'name' => 'Beauties of Holiness Generation',
-                'family_name' => 'Issachar FAMILY'
+                'family_name' => 'Issachar FAMILY',
             ]
         );
 
@@ -37,6 +37,6 @@ class Alumni2010_2011Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

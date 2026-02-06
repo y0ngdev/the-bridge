@@ -782,8 +782,8 @@ class AlumniFormSeeder extends Seeder
             $departmentName = $data['department'] ?? null;
             unset($data['department']);
             if ($departmentName) {
-                $department = \App\Models\Department::where('name', 'like', '%' . $departmentName . '%')
-                    ->orWhere('name', 'like', $departmentName . '%')
+                $department = \App\Models\Department::where('name', 'like', '%'.$departmentName.'%')
+                    ->orWhere('name', 'like', $departmentName.'%')
                     ->first();
                 if ($department) {
                     $data['department_id'] = $department->id;
@@ -792,10 +792,10 @@ class AlumniFormSeeder extends Seeder
 
             // Find existing alumnus by email or name
             $alumnus = null;
-            if (!empty($data['email'])) {
+            if (! empty($data['email'])) {
                 $alumnus = Alumnus::where('email', $data['email'])->first();
             }
-            if (!$alumnus) {
+            if (! $alumnus) {
                 $alumnus = Alumnus::where('name', $data['name'])->first();
             }
 
@@ -827,7 +827,7 @@ class AlumniFormSeeder extends Seeder
                 if ($data['is_overseas'] ?? false) {
                     $updateData['is_overseas'] = true;
                 }
-                if (!empty($updateData)) {
+                if (! empty($updateData)) {
                     $alumnus->update($updateData);
                     $updated++;
                 }

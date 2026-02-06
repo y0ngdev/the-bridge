@@ -18,7 +18,7 @@ class Alumni2011_2012Seeder extends Seeder
 
             [
                 'name' => 'The Lord reigns generation',
-                'family_name' => 'Peculiar Treasure FAMILY'
+                'family_name' => 'Peculiar Treasure FAMILY',
             ]
         );
 
@@ -2434,6 +2434,6 @@ class Alumni2011_2012Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

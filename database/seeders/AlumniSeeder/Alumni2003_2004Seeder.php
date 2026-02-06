@@ -17,7 +17,7 @@ class Alumni2003_2004Seeder extends Seeder
             ['year' => '2003-2004'],
             [
                 'name' => 'That I may Know Him Generation',
-                'family_name' => 'Peculiar FAMILY'
+                'family_name' => 'Peculiar FAMILY',
             ]
         );
 
@@ -761,6 +761,6 @@ class Alumni2003_2004Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

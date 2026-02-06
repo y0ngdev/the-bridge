@@ -25,13 +25,13 @@ class DatabaseSeeder extends Seeder
         $this->seedIfEmpty(Alumnus::class, AlumniSeeder::class);
         $this->seedIfEmpty(CommunicationLog::class, CommunicationLogSeeder::class);
 
-$this->call([
-    TvmAlumniSeeder::class,
-    AlumniLocationSeeder::class,
-    AlumniFormSeeder::class,
-    FutaStaffSeeder::class,
-    HeirsOfPromiseSeeder::class,
-]);
+        $this->call([
+            TvmAlumniSeeder::class,
+            AlumniLocationSeeder::class,
+            AlumniFormSeeder::class,
+            FutaStaffSeeder::class,
+            HeirsOfPromiseSeeder::class,
+        ]);
     }
 
     protected function seedIfEmpty(string $model, string $seeder): void

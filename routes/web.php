@@ -7,10 +7,8 @@ use App\Http\Controllers\RedemptionWeekSessionController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\TenureController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Fortify\Features;
 
 Route::get('/', function () {
     return redirect('/portal');
@@ -77,7 +75,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('alumni/duplicates/dismiss', [\App\Http\Controllers\AlumnusDuplicateController::class, 'dismiss'])->name('alumni.duplicates.dismiss');
         Route::post('alumni/{alumnus}/merge/{target}', [\App\Http\Controllers\AlumnusDuplicateController::class, 'merge'])->name('alumni.merge');
     });
-
 
     // Redemption Week - Member routes (all authenticated users)
     Route::get('redemption-week', [RedemptionWeekSessionController::class, 'index'])->name('redemption-week.index');

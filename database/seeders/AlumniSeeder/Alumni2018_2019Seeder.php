@@ -2243,7 +2243,7 @@ class Alumni2018_2019Seeder extends Seeder
             ],
             [
                 'name' => 'OJO OLALEKAN',
-                'email' =>null,
+                'email' => null,
                 'phones' => ['08104444512'],
                 'department_id' => 52,
                 'gender' => 'M',
@@ -3277,6 +3277,6 @@ class Alumni2018_2019Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

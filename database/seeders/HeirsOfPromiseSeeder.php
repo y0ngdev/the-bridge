@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Alumnus;
-use App\Models\Tenure;
 use App\Models\Department;
+use App\Models\Tenure;
 use Illuminate\Database\Seeder;
 
 class HeirsOfPromiseSeeder extends Seeder
@@ -1243,8 +1243,8 @@ In front of why lodge',
             $departmentName = $data['department'] ?? null;
             unset($data['department']);
             if ($departmentName) {
-                $department = Department::where('name', 'like', '%' . $departmentName . '%')
-                    ->orWhere('name', 'like', $departmentName . '%')
+                $department = Department::where('name', 'like', '%'.$departmentName.'%')
+                    ->orWhere('name', 'like', $departmentName.'%')
                     ->first();
                 if ($department) {
                     $data['department_id'] = $department->id;
@@ -1253,10 +1253,10 @@ In front of why lodge',
 
             // Find existing alumnus by phone or name
             $alumnus = null;
-            if (!empty($data['phones'][0])) {
+            if (! empty($data['phones'][0])) {
                 $alumnus = Alumnus::whereJsonContains('phones', $data['phones'][0])->first();
             }
-            if (!$alumnus) {
+            if (! $alumnus) {
                 $alumnus = Alumnus::where('name', $data['name'])->first();
             }
 
@@ -1282,7 +1282,7 @@ In front of why lodge',
                 if (($data['department_id'] ?? null) && empty($alumnus->department_id)) {
                     $updateData['department_id'] = $data['department_id'];
                 }
-                if (!empty($updateData)) {
+                if (! empty($updateData)) {
                     $alumnus->update($updateData);
                     $updated++;
                 }

@@ -20,12 +20,12 @@ describe('Alumni Distribution', function () {
             ->get(route('alumni.distribution'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('alumni/Distribution')
                     ->missing('stateDistribution')
                     ->missing('alumni')
                     ->loadDeferredProps(
-                        fn(Assert $reload) => $reload
+                        fn (Assert $reload) => $reload
                             ->has('stateDistribution')
                             ->has('alumni')
                     )
@@ -45,7 +45,7 @@ describe('Alumni Executives', function () {
             ->get(route('alumni.executives'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('alumni/Executives')
             );
     });

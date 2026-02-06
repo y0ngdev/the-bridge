@@ -798,7 +798,6 @@ class FutaStaffSeeder extends Seeder
             ],
         ];
 
-
         $updated = 0;
         $created = 0;
 
@@ -812,10 +811,10 @@ class FutaStaffSeeder extends Seeder
 
             // Find existing alumnus by email or name
             $alumnus = null;
-            if (!empty($data['email'])) {
+            if (! empty($data['email'])) {
                 $alumnus = Alumnus::where('email', $data['email'])->first();
             }
-            if (!$alumnus) {
+            if (! $alumnus) {
                 $alumnus = Alumnus::where('name', $data['name'])->first();
             }
 
@@ -844,7 +843,7 @@ class FutaStaffSeeder extends Seeder
                 if (($data['current_employer'] ?? null) && empty($alumnus->current_employer)) {
                     $updateData['current_employer'] = $data['current_employer'];
                 }
-                if (!empty($updateData)) {
+                if (! empty($updateData)) {
                     $alumnus->update($updateData);
                     $updated++;
                 }

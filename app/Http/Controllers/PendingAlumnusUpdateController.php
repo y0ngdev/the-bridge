@@ -17,7 +17,7 @@ class PendingAlumnusUpdateController extends Controller
         $updates = PendingAlumnusUpdate::query()
             ->with(['alumnus' => function ($query) {
                 // Ensure we select necessary fields to display/compare
-                $query->select('*'); 
+                $query->select('*');
             }])
             ->where('status', 'pending')
             ->latest()

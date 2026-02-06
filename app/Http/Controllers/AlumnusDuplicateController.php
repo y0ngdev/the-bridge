@@ -36,7 +36,7 @@ class AlumnusDuplicateController extends Controller
             })
             ->get()
             ->mapWithKeys(function ($d) {
-                return [$d->alumnus_id_1 . '-' . $d->alumnus_id_2 => true];
+                return [$d->alumnus_id_1.'-'.$d->alumnus_id_2 => true];
             });
 
         // Filter out dismissed pairs
@@ -45,7 +45,7 @@ class AlumnusDuplicateController extends Controller
                 return false;
             }
 
-            $ids = array_map(fn($a) => $a->id, $group);
+            $ids = array_map(fn ($a) => $a->id, $group);
             $id1 = $ids[0];
             $id2 = $ids[1];
             $min = min($id1, $id2);

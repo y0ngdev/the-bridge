@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('alumnus_id_2')->constrained('alumni')->onDelete('cascade');
             $table->foreignId('dismissed_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
-            
+
             $table->unique(['alumnus_id_1', 'alumnus_id_2']);
         });
     }

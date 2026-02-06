@@ -14,7 +14,7 @@ enum PastExcoOffice: string
     case FinancialSecretary = 'Financial Secretary';
     case BrothersCoordinator = "Brother's Coordinator";
     case SistersCoordinator = "Sister's Coordinator";
-    
+
     case AsstBrothersCoordinator = "Asst. Brother's Coordinator";
     case AsstSistersCoordinator = "Asst. Sister's Coordinator";
     case AsstGeneralSecretary = 'Asst. General Secretary';
@@ -55,8 +55,8 @@ enum PastExcoOffice: string
     case AsstHundredLevelCoordinator = 'Asst. 100 Level Coordinator';
     case ICTCoordinator = 'ICT Coordinator';
     case TransportSecretary = 'Transport Secretary';
-    case DirectorOfCommerce = 'Director of Commerce';  
-      case AsstDirectorOfCommerce = 'Asst. Director of Commerce';
+    case DirectorOfCommerce = 'Director of Commerce';
+    case AsstDirectorOfCommerce = 'Asst. Director of Commerce';
     case HallRep = 'Hall Reps Coordinator';
     case AsstHallRep = 'Asst. Hall Reps Coordinator';
 

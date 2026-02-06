@@ -23,12 +23,12 @@ describe('Outreach Analytics', function () {
             ->get(route('analytics.outreach'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('analytics/Outreach')
                     ->missing('stats')
                     ->missing('tenure_breakdown')
                     ->loadDeferredProps(
-                        fn(Assert $reload) => $reload
+                        fn (Assert $reload) => $reload
                             ->has('stats')
                             ->has('tenure_breakdown')
                     )
@@ -42,7 +42,7 @@ describe('Outreach Analytics', function () {
             ->get(route('analytics.outreach'))
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->has('active_session')
             );
     });

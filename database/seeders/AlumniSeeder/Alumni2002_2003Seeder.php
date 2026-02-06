@@ -15,8 +15,8 @@ class Alumni2002_2003Seeder extends Seeder
     {
         $tenure = Tenure::updateOrCreate(
             ['year' => '2002-2003'],
-             ['name' => 'In the Portters Hand Generation',
-           ]
+            ['name' => 'In the Portters Hand Generation',
+            ]
 
         );
 
@@ -35,6 +35,6 @@ class Alumni2002_2003Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

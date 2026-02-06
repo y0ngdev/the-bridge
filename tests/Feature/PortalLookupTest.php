@@ -25,7 +25,7 @@ test('portal lookup returns match prop', function () {
     // Follow redirect to check props
     $this->get('/portal')
         ->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('public/Portal')
                 ->has('flash.match')
                 ->where('flash.match.id', $alumnus->id)
@@ -46,7 +46,7 @@ test('portal lookup returns no_match prop', function () {
     // Follow redirect
     $this->get('/portal')
         ->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('public/Portal')
                 ->has('flash.no_match')
                 ->where('flash.no_match', true)

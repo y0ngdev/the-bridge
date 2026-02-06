@@ -1303,10 +1303,10 @@ class TvmAlumniSeeder extends Seeder
 
             // Try to find existing alumnus by phones or name
             $alumnus = null;
-            if (!empty($data['phones'][0])) {
+            if (! empty($data['phones'][0])) {
                 $alumnus = Alumnus::whereJsonContains('phones', $data['phones'][0])->first();
             }
-            if (!$alumnus) {
+            if (! $alumnus) {
                 $alumnus = Alumnus::where('name', $data['name'])->first();
             }
 
@@ -1319,6 +1319,6 @@ class TvmAlumniSeeder extends Seeder
             }
         }
 
-        $this->command->info('Seeded TVM Alumni: ' . count($alumni) . ' records');
+        $this->command->info('Seeded TVM Alumni: '.count($alumni).' records');
     }
 }

@@ -73,6 +73,6 @@ class CommunicationLogSeeder extends Seeder
             CommunicationLog::create($data);
         }
 
-        $this->command->info('Seeded ' . count($logs) . ' communication logs');
+        $this->command->info('Seeded '.count($logs).' communication logs');
     }
 }

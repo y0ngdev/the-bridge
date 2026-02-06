@@ -1011,10 +1011,10 @@ class AlumniLocationSeeder extends Seeder
 
             // Try to find existing alumnus by email or name
             $alumnus = null;
-            if (!empty($data['email'])) {
+            if (! empty($data['email'])) {
                 $alumnus = Alumnus::where('email', $data['email'])->first();
             }
-            if (!$alumnus) {
+            if (! $alumnus) {
                 $alumnus = Alumnus::where('name', $data['name'])->first();
             }
 

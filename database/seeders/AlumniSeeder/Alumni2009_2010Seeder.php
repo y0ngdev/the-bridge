@@ -17,7 +17,7 @@ class Alumni2009_2010Seeder extends Seeder
             ['year' => '2009-2010'],
             [
                 'name' => 'A New Convenant Generation',
-                'family_name' => 'Chosen race FAMILY'
+                'family_name' => 'Chosen race FAMILY',
             ]
         );
 
@@ -1432,6 +1432,6 @@ class Alumni2009_2010Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

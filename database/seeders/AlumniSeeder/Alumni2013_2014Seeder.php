@@ -17,8 +17,8 @@ class Alumni2013_2014Seeder extends Seeder
             ['year' => '2013-2014'],
 
             [
-                'name' => "A new creature generation",
-                'family_name' => "God's Own people FAMILY"
+                'name' => 'A new creature generation',
+                'family_name' => "God's Own people FAMILY",
             ]
         );
 
@@ -1765,6 +1765,6 @@ class Alumni2013_2014Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

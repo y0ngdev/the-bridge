@@ -50,11 +50,11 @@ class Alumnus extends Model
      */
     public function getPhotoUrlAttribute(): ?string
     {
-        if (!$this->photo) {
+        if (! $this->photo) {
             return null;
         }
 
-        return asset('storage/' . $this->photo);
+        return asset('storage/'.$this->photo);
     }
 
     /**
@@ -62,7 +62,7 @@ class Alumnus extends Model
      */
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
-        if (!$search) {
+        if (! $search) {
             return $query;
         }
 
@@ -78,7 +78,7 @@ class Alumnus extends Model
      */
     public function scopeByTenure(Builder $query, ?int $tenureId): Builder
     {
-        if (!$tenureId) {
+        if (! $tenureId) {
             return $query;
         }
 
@@ -90,7 +90,7 @@ class Alumnus extends Model
      */
     public function scopeByUnit(Builder $query, ?string $unit): Builder
     {
-        if (!$unit) {
+        if (! $unit) {
             return $query;
         }
 
@@ -102,7 +102,7 @@ class Alumnus extends Model
      */
     public function scopeByState(Builder $query, ?string $state): Builder
     {
-        if (!$state) {
+        if (! $state) {
             return $query;
         }
 
@@ -114,7 +114,7 @@ class Alumnus extends Model
      */
     public function scopeByGender(Builder $query, ?string $gender): Builder
     {
-        if (!$gender) {
+        if (! $gender) {
             return $query;
         }
 
@@ -199,9 +199,9 @@ class Alumnus extends Model
                         $rec2 = $group[$j];
                         $id1 = $rec1->id;
                         $id2 = $rec2->id;
-                        $pairKey = min($id1, $id2) . '-' . max($id1, $id2);
+                        $pairKey = min($id1, $id2).'-'.max($id1, $id2);
 
-                        if (!isset($processed[$pairKey])) {
+                        if (! isset($processed[$pairKey])) {
                             $duplicatePairs[] = [$rec1, $rec2];
                             $processed[$pairKey] = true;
                         }
@@ -232,7 +232,7 @@ class Alumnus extends Model
                 $candidate = $alumni[$j];
                 $id1 = $alumnus->id;
                 $id2 = $candidate->id;
-                $pairKey = min($id1, $id2) . '-' . max($id1, $id2);
+                $pairKey = min($id1, $id2).'-'.max($id1, $id2);
 
                 if (isset($processed[$pairKey])) {
                     continue;
@@ -256,12 +256,12 @@ class Alumnus extends Model
                 }
 
                 // Phone overlap
-                if (!$isDuplicate && !empty($normalizedMap[$id1]['phones']) && !empty($normalizedMap[$id2]['phones'])) {
+                if (! $isDuplicate && ! empty($normalizedMap[$id1]['phones']) && ! empty($normalizedMap[$id2]['phones'])) {
                     $overlap = array_intersect(
                         $normalizedMap[$id1]['phones'],
                         $normalizedMap[$id2]['phones']
                     );
-                    if (!empty($overlap)) {
+                    if (! empty($overlap)) {
                         $isDuplicate = true;
                     }
                 }
@@ -286,6 +286,7 @@ class Alumnus extends Model
         $name = preg_replace('/^(mr\.?|mrs\.?|ms\.?|dr\.?|prof\.?|engr\.?)\s*/i', '', $name);
         // Remove extra spaces
         $name = preg_replace('/\s+/', ' ', $name);
+
         return $name;
     }
 

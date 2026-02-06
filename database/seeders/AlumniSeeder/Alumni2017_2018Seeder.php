@@ -16,7 +16,7 @@ class Alumni2017_2018Seeder extends Seeder
         $tenure = Tenure::updateOrCreate(
             ['year' => '2017-2018'],
             ['name' => 'The shining light generation',
-            'family_name'=>'REDEEMER’S ARMY FAMILY']
+                'family_name' => 'REDEEMER’S ARMY FAMILY']
         );
 
         $alumni = [
@@ -1947,6 +1947,6 @@ class Alumni2017_2018Seeder extends Seeder
             );
         }
 
-        $this->command->info("Seeded {$tenure->year} alumni: " . count($alumni) . " records");
+        $this->command->info("Seeded {$tenure->year} alumni: ".count($alumni).' records');
     }
 }

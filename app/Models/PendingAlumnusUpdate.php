@@ -47,7 +47,7 @@ class PendingAlumnusUpdate extends Model
             'reviewed_at' => now(),
         ]);
 
-        // Prioritize getAttribute('changes') because accessing $this->changes 
+        // Prioritize getAttribute('changes') because accessing $this->changes
         // conflicts with Eloquent's internal protected $changes property.
         $this->alumnus->update($this->getAttribute('changes') ?? []);
     }
