@@ -10,6 +10,7 @@
         "format:check": "prettier --check resources/",
         "lint": "eslint . --fix"
     },
+    "engines": { "node": "24.x" },
     "devDependencies": {
         "@eslint/js": "^9.19.0",
         "@laravel/vite-plugin-wayfinder": "^0.1.3",
