@@ -18,10 +18,11 @@ import {
 } from "@/components/ui/sidebar";
 import { Link, usePage } from '@inertiajs/vue3';
 import { urlIsActive } from '@/lib/utils';
+import { ref, watch } from 'vue';
 
 const page = usePage();
 
-defineProps<{
+const props = defineProps<{
     label?: string;
     items: {
         title: string;
@@ -34,6 +35,20 @@ defineProps<{
         }[];
     }[];
 }>();
+
+const openStates = ref<Record<string, boolean>>({});
+
+const isGroupActive = (item: typeof props.items[number]) => {
+    return item.isActive || item.items?.some(subItem => urlIsActive(subItem.url, page.url, false));
+};
+
+watch(() => page.url, () => {
+    props.items.forEach(item => {
+        if (item.items?.length && isGroupActive(item)) {
+            openStates.value[item.title] = true;
+        }
+    });
+}, { immediate: true });
 </script>
 
 <template>
@@ -54,12 +69,12 @@ defineProps<{
                 v-for="item in items.filter(i => i.items && i.items.length > 0)"
                 :key="item.title"
                 as-child
-                :default-open="item.isActive"
+                v-model:open="openStates[item.title]"
                 class="group/collapsible"
             >
                 <SidebarMenuItem>
                     <CollapsibleTrigger as-child>
-                        <SidebarMenuButton size="sm" :tooltip="item.title">
+                        <SidebarMenuButton size="sm" :tooltip="item.title" :is-active="isGroupActive(item)">
                             <component :is="item.icon" v-if="item.icon" />
                             <span>{{ item.title }}</span>
                             <ChevronRight class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />

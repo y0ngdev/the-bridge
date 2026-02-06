@@ -7,10 +7,16 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export function urlIsActive(urlToCheck: NonNullable<InertiaLinkProps['href']>, currentUrl: string) {
+export function urlIsActive(urlToCheck: NonNullable<InertiaLinkProps['href']>, currentUrl: string, exact: boolean = true) {
     const urlPath = toUrl(urlToCheck).split('?')[0];
     const currentPath = currentUrl.split('?')[0];
-    // Exact match or prefix match for parent routes (e.g., /redemption-week matches /redemption-week/1)
+
+    if (exact) {
+        // Exact match only - for direct links
+        return currentPath === urlPath;
+    }
+
+    // Prefix match for parent/group detection (e.g., /alumni matches /alumni/birthdays)
     return currentPath === urlPath || currentPath.startsWith(urlPath + '/');
 }
 

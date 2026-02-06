@@ -12,6 +12,11 @@ import { ArrowLeft, Edit, Mail, Phone, MapPin, Calendar, Building, User, Briefca
 import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
 import { router } from '@inertiajs/vue3';
 import { formatPhoneNumber } from '@/lib/utils';
+import {
+    Dialog,
+    DialogContent,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 
 const props = defineProps<{
     alumnus: Alumnus;
@@ -46,15 +51,30 @@ function formatDate(date: string | null): string {
                             <ArrowLeft class="h-5 w-5" />
                         </Button>
                     </Link>
-                    <!-- Photo Avatar -->
-                    <div class="relative h-16 w-16 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0 ring-2 ring-background shadow-lg">
-                        <img 
-                            v-if="alumnus.photo_url" 
-                            :src="alumnus.photo_url" 
-                            :alt="`${alumnus.name}'s photo`"
-                            class="h-full w-full object-cover"
-                        />
-                        <span v-else class="text-xl font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
+                    <!-- Photo Avatar with Preview -->
+                    <Dialog v-if="alumnus.photo_url">
+                        <DialogTrigger as-child>
+                            <div class="relative h-16 w-16 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0 ring-2 ring-background shadow-lg cursor-pointer hover:ring-primary transition-all">
+                                <img 
+                                    :src="alumnus.photo_url" 
+                                    :alt="`${alumnus.name}'s photo`"
+                                    class="h-full w-full object-cover"
+                                />
+                            </div>
+                        </DialogTrigger>
+                        <DialogContent class="max-w-md p-0 overflow-hidden">
+                            <div class="aspect-square">
+                                <img 
+                                    :src="alumnus.photo_url" 
+                                    :alt="`${alumnus.name}'s photo`"
+                                    class="h-full w-full object-cover"
+                                />
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                    <!-- Fallback for no photo -->
+                    <div v-else class="relative h-16 w-16 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0 ring-2 ring-background shadow-lg">
+                        <span class="text-xl font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold">{{ alumnus.name }}</h1>
