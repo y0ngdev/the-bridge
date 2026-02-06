@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem, type User } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
-import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
-import { UserPlus, Pencil, Trash2, Shield, X } from 'lucide-vue-next';
+import { Pencil, Shield, Trash2, UserPlus } from 'lucide-vue-next';
 import { ref } from 'vue';
 
 const props = defineProps<{
@@ -100,13 +100,10 @@ function handleDelete() {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="px-4 py-6">
-            <div class="flex items-center justify-between mb-6">
-                <HeadingSmall 
-                    title="User Management" 
-                    description="Manage user accounts and permissions" 
-                />
+            <div class="mb-6 flex items-center justify-between">
+                <HeadingSmall title="User Management" description="Manage user accounts and permissions" />
                 <Button @click="openAddDialog">
-                    <UserPlus class="h-4 w-4 mr-2" />
+                    <UserPlus class="mr-2 h-4 w-4" />
                     Add User
                 </Button>
             </div>
@@ -129,7 +126,7 @@ function handleDelete() {
                                 <TableCell>{{ user.email }}</TableCell>
                                 <TableCell>
                                     <Badge v-if="user.is_admin" variant="default">
-                                        <Shield class="h-3 w-3 mr-1" />
+                                        <Shield class="mr-1 h-3 w-3" />
                                         Admin
                                     </Badge>
                                     <Badge v-else variant="secondary">Member</Badge>
@@ -173,7 +170,13 @@ function handleDelete() {
                     </div>
                     <div class="space-y-2">
                         <Label for="add_password">Password</Label>
-                        <Input id="add_password" type="password" v-model="addForm.password" required :class="addForm.errors.password && 'border-destructive'" />
+                        <Input
+                            id="add_password"
+                            type="password"
+                            v-model="addForm.password"
+                            required
+                            :class="addForm.errors.password && 'border-destructive'"
+                        />
                         <p v-if="addForm.errors.password" class="text-sm text-destructive">{{ addForm.errors.password }}</p>
                     </div>
                     <div class="space-y-2">
@@ -182,7 +185,7 @@ function handleDelete() {
                     </div>
                     <div class="flex items-center space-x-2">
                         <Checkbox id="add_is_admin" v-model:checked="addForm.is_admin" />
-                        <Label for="add_is_admin" class="text-sm font-normal cursor-pointer">Administrator</Label>
+                        <Label for="add_is_admin" class="cursor-pointer text-sm font-normal">Administrator</Label>
                     </div>
 
                     <DialogFooter>
@@ -209,12 +212,23 @@ function handleDelete() {
                     </div>
                     <div class="space-y-2">
                         <Label for="edit_email">Email</Label>
-                        <Input id="edit_email" type="email" v-model="editForm.email" required :class="editForm.errors.email && 'border-destructive'" />
+                        <Input
+                            id="edit_email"
+                            type="email"
+                            v-model="editForm.email"
+                            required
+                            :class="editForm.errors.email && 'border-destructive'"
+                        />
                         <p v-if="editForm.errors.email" class="text-sm text-destructive">{{ editForm.errors.email }}</p>
                     </div>
                     <div class="space-y-2">
                         <Label for="edit_password">New Password (leave blank to keep current)</Label>
-                        <Input id="edit_password" type="password" v-model="editForm.password" :class="editForm.errors.password && 'border-destructive'" />
+                        <Input
+                            id="edit_password"
+                            type="password"
+                            v-model="editForm.password"
+                            :class="editForm.errors.password && 'border-destructive'"
+                        />
                         <p v-if="editForm.errors.password" class="text-sm text-destructive">{{ editForm.errors.password }}</p>
                     </div>
                     <div class="space-y-2">
@@ -223,7 +237,7 @@ function handleDelete() {
                     </div>
                     <div class="flex items-center space-x-2">
                         <Checkbox id="edit_is_admin" v-model:checked="editForm.is_admin" />
-                        <Label for="edit_is_admin" class="text-sm font-normal cursor-pointer">Administrator</Label>
+                        <Label for="edit_is_admin" class="cursor-pointer text-sm font-normal">Administrator</Label>
                     </div>
 
                     <DialogFooter>
@@ -240,7 +254,8 @@ function handleDelete() {
                 <DialogHeader>
                     <DialogTitle>Delete User</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete <strong>{{ selectedUser?.name }}</strong>? This action cannot be undone.
+                        Are you sure you want to delete <strong>{{ selectedUser?.name }}</strong
+                        >? This action cannot be undone.
                     </DialogDescription>
                 </DialogHeader>
 

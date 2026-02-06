@@ -1,35 +1,21 @@
 <script setup lang="ts">
-import { index, store, update, destroy } from '@/actions/App/Http/Controllers/DepartmentController';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
+import { destroy, index, store, update } from '@/actions/App/Http/Controllers/DepartmentController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-    Dialog, 
-    DialogContent, 
-    DialogDescription, 
-    DialogFooter, 
-    DialogHeader, 
-    DialogTitle, 
-    DialogTrigger 
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { 
-    Select, 
-    SelectContent, 
-    SelectItem, 
-    SelectTrigger, 
-    SelectValue 
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm } from '@inertiajs/vue3';
-import { Edit, Plus, Trash2, Search, Building2 } from 'lucide-vue-next';
-import { ref, computed } from 'vue';
+import { Building2, Edit, Plus, Search, Trash2 } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
 
 interface Department {
@@ -59,10 +45,14 @@ const searchQuery = ref(props.filters.search || '');
 const selectedSchool = ref(props.filters.school || 'ALL');
 
 function applyFilters() {
-    router.get(index().url, {
-        search: searchQuery.value || undefined,
-        school: (selectedSchool.value === 'ALL' || !selectedSchool.value) ? undefined : selectedSchool.value,
-    }, { preserveState: true });
+    router.get(
+        index().url,
+        {
+            search: searchQuery.value || undefined,
+            school: selectedSchool.value === 'ALL' || !selectedSchool.value ? undefined : selectedSchool.value,
+        },
+        { preserveState: true },
+    );
 }
 
 function clearFilters() {
@@ -148,12 +138,9 @@ const totalSchools = computed(() => props.schools.length);
     <Head title="Departments" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="px-4 py-6 max-w-7xl mx-auto">
+        <div class="mx-auto max-w-7xl px-4 py-6">
             <div class="mb-6 flex items-center justify-between">
-                <HeadingSmall 
-                    title="Departments" 
-                    :description="`${totalDepartments} departments across ${totalSchools} schools`" 
-                />
+                <HeadingSmall title="Departments" :description="`${totalDepartments} departments across ${totalSchools} schools`" />
 
                 <!-- Add Dialog -->
                 <Dialog v-model:open="showAddDialog">
@@ -171,31 +158,17 @@ const totalSchools = computed(() => props.schools.length);
                         <form @submit.prevent="handleAddSubmit" class="space-y-4">
                             <div class="space-y-2">
                                 <Label for="code">Code</Label>
-                                <Input
-                                    id="code"
-                                    v-model="addForm.code"
-                                    placeholder="e.g., CSC"
-                                    required
-                                />
+                                <Input id="code" v-model="addForm.code" placeholder="e.g., CSC" required />
                                 <InputError :message="addForm.errors.code" />
                             </div>
                             <div class="space-y-2">
                                 <Label for="name">Name</Label>
-                                <Input
-                                    id="name"
-                                    v-model="addForm.name"
-                                    placeholder="e.g., Computer Science"
-                                    required
-                                />
+                                <Input id="name" v-model="addForm.name" placeholder="e.g., Computer Science" required />
                                 <InputError :message="addForm.errors.name" />
                             </div>
                             <div class="space-y-2">
                                 <Label for="school">School</Label>
-                                <Input
-                                    id="school"
-                                    v-model="addForm.school"
-                                    placeholder="e.g., SOC"
-                                />
+                                <Input id="school" v-model="addForm.school" placeholder="e.g., SOC" />
                                 <InputError :message="addForm.errors.school" />
                             </div>
                             <DialogFooter>
@@ -211,16 +184,11 @@ const totalSchools = computed(() => props.schools.length);
             <!-- Filters -->
             <Card class="mb-6">
                 <CardContent class="pt-6">
-                    <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex flex-col gap-4 sm:flex-row">
                         <div class="flex-1">
                             <div class="relative">
-                                <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    v-model="searchQuery"
-                                    placeholder="Search departments..."
-                                    class="pl-10"
-                                    @keyup.enter="applyFilters"
-                                />
+                                <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                <Input v-model="searchQuery" placeholder="Search departments..." class="pl-10" @keyup.enter="applyFilters" />
                             </div>
                         </div>
                         <Select v-model="selectedSchool" @update:model-value="applyFilters">
@@ -235,9 +203,7 @@ const totalSchools = computed(() => props.schools.length);
                             </SelectContent>
                         </Select>
                         <Button variant="outline" @click="applyFilters">Search</Button>
-                        <Button variant="ghost" @click="clearFilters" v-if="filters.search || filters.school">
-                            Clear
-                        </Button>
+                        <Button variant="ghost" @click="clearFilters" v-if="filters.search || filters.school"> Clear </Button>
                     </div>
                 </CardContent>
             </Card>
@@ -272,9 +238,9 @@ const totalSchools = computed(() => props.schools.length);
                                             <Button variant="ghost" size="icon" @click="openEditDialog(dept)">
                                                 <Edit class="h-4 w-4" />
                                             </Button>
-                                            <Button 
-                                                variant="ghost" 
-                                                size="icon" 
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
                                                 class="text-destructive hover:text-destructive"
                                                 @click="openDeleteDialog(dept)"
                                             >
@@ -291,10 +257,14 @@ const totalSchools = computed(() => props.schools.length);
                 <!-- Empty State -->
                 <Card v-if="Object.keys(departmentsBySchool).length === 0" class="border-dashed">
                     <CardContent class="py-16 text-center">
-                        <Building2 class="mx-auto h-16 w-16 text-muted-foreground/30 mb-4" />
-                        <h3 class="text-lg font-medium mb-2">No Departments Found</h3>
-                        <p class="text-muted-foreground mb-4">
-                            {{ filters.search || filters.school ? 'No departments match your filters.' : 'Create your first department to get started.' }}
+                        <Building2 class="mx-auto mb-4 h-16 w-16 text-muted-foreground/30" />
+                        <h3 class="mb-2 text-lg font-medium">No Departments Found</h3>
+                        <p class="mb-4 text-muted-foreground">
+                            {{
+                                filters.search || filters.school
+                                    ? 'No departments match your filters.'
+                                    : 'Create your first department to get started.'
+                            }}
                         </p>
                     </CardContent>
                 </Card>
@@ -310,31 +280,17 @@ const totalSchools = computed(() => props.schools.length);
                     <form @submit.prevent="handleEditSubmit" class="space-y-4">
                         <div class="space-y-2">
                             <Label for="edit-code">Code</Label>
-                            <Input
-                                id="edit-code"
-                                v-model="editForm.code"
-                                placeholder="e.g., CSC"
-                                required
-                            />
+                            <Input id="edit-code" v-model="editForm.code" placeholder="e.g., CSC" required />
                             <InputError :message="editForm.errors.code" />
                         </div>
                         <div class="space-y-2">
                             <Label for="edit-name">Name</Label>
-                            <Input
-                                id="edit-name"
-                                v-model="editForm.name"
-                                placeholder="e.g., Computer Science"
-                                required
-                            />
+                            <Input id="edit-name" v-model="editForm.name" placeholder="e.g., Computer Science" required />
                             <InputError :message="editForm.errors.name" />
                         </div>
                         <div class="space-y-2">
                             <Label for="edit-school">School</Label>
-                            <Input
-                                id="edit-school"
-                                v-model="editForm.school"
-                                placeholder="e.g., SOC"
-                            />
+                            <Input id="edit-school" v-model="editForm.school" placeholder="e.g., SOC" />
                             <InputError :message="editForm.errors.school" />
                         </div>
                         <DialogFooter>

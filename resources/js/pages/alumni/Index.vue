@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
+import { destroy, exportMethod, importStore, index, show, store, update } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
+import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import {
     Pagination,
     PaginationContent,
@@ -28,13 +29,14 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
-import { type BreadcrumbItem, type Tenure, type EnumOption, type Alumnus, type SimplePaginatedResponse } from '@/types';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { type Alumnus, type BreadcrumbItem, type EnumOption, type SimplePaginatedResponse, type Tenure } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
-import { index, store, update, destroy, show, importStore, exportMethod } from '@/actions/App/Http/Controllers/AlumnusController';
-import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
-import { Plus, Edit, Trash2, Check, ChevronsUpDown, Eye, Download, Upload, Info, X, MessageSquarePlus } from 'lucide-vue-next';
-import CommunicationLogForm from '@/components/CommunicationLogForm.vue';
-import { ref, computed, onMounted } from 'vue';
+import { Check, ChevronsUpDown, Download, Edit, Eye, Info, MessageSquarePlus, Plus, Trash2, Upload, X } from 'lucide-vue-next';
+import { computed, onMounted, ref } from 'vue';
 import { toast } from 'vue-sonner';
 
 const page = usePage();
@@ -85,9 +87,19 @@ const openDepartmentCombobox = ref(false);
 const openEditDepartmentCombobox = ref(false);
 
 const exportFields = ref<string[]>([
-    'name', 'email', 'phones', 'department', 'gender',
-    'birth_date', 'tenure', 'unit', 'state', 'address',
-    'past_exco_office', 'current_exco_office', 'is_futa_staff'
+    'name',
+    'email',
+    'phones',
+    'department',
+    'gender',
+    'birth_date',
+    'tenure',
+    'unit',
+    'state',
+    'address',
+    'past_exco_office',
+    'current_exco_office',
+    'is_futa_staff',
 ]);
 const availableExportFields = [
     { key: 'name', label: 'Name' },
@@ -112,7 +124,7 @@ const exportGender = ref('');
 function toggleExportField(key: string, value?: boolean) {
     const index = exportFields.value.indexOf(key);
     const shouldBeSelected = value !== undefined ? value : index === -1;
-    
+
     if (shouldBeSelected && index === -1) {
         exportFields.value.push(key);
     } else if (!shouldBeSelected && index > -1) {
@@ -125,10 +137,8 @@ const isExportFieldSelected = (key: string) => exportFields.value.includes(key);
 function getExportUrl() {
     const params = new URLSearchParams();
     // Use availableExportFields order to maintain consistent header order
-    const orderedFields = availableExportFields
-        .filter(f => exportFields.value.includes(f.key))
-        .map(f => f.key);
-    orderedFields.forEach(f => params.append('fields[]', f));
+    const orderedFields = availableExportFields.filter((f) => exportFields.value.includes(f.key)).map((f) => f.key);
+    orderedFields.forEach((f) => params.append('fields[]', f));
     if (exportTenureId.value && exportTenureId.value !== '__all__') params.append('tenure_id', exportTenureId.value);
     if (exportUnit.value && exportUnit.value !== '__all__') params.append('unit', exportUnit.value);
     if (exportState.value && exportState.value !== '__all__') params.append('state', exportState.value);
@@ -238,16 +248,18 @@ const goToPage = (page: number) => {
 };
 
 function handleAddSubmit() {
-    addForm.transform((data) => ({
-        ...data,
-        is_futa_staff: Boolean(data.is_futa_staff),
-    })).post(store().url, {
-        onSuccess: () => {
-            showAddDialog.value = false;
-            addForm.reset();
-            toast.success('Alumnus added successfully');
-        },
-    });
+    addForm
+        .transform((data) => ({
+            ...data,
+            is_futa_staff: Boolean(data.is_futa_staff),
+        }))
+        .post(store().url, {
+            onSuccess: () => {
+                showAddDialog.value = false;
+                addForm.reset();
+                toast.success('Alumnus added successfully');
+            },
+        });
 }
 
 // Format a stored birth date (ISO format) to user-friendly format (e.g., "20 Dec")
@@ -285,16 +297,18 @@ function openEditDialog(alumnus: Alumnus) {
 
 function handleEditSubmit() {
     if (!editingAlumnus.value) return;
-    editForm.transform((data) => ({
-        ...data,
-        is_futa_staff: Boolean(data.is_futa_staff),
-    })).put(update(editingAlumnus.value.id).url, {
-        onSuccess: () => {
-            showEditDialog.value = false;
-            editForm.reset();
-            toast.success('Alumnus updated successfully');
-        },
-    });
+    editForm
+        .transform((data) => ({
+            ...data,
+            is_futa_staff: Boolean(data.is_futa_staff),
+        }))
+        .put(update(editingAlumnus.value.id).url, {
+            onSuccess: () => {
+                showEditDialog.value = false;
+                editForm.reset();
+                toast.success('Alumnus updated successfully');
+            },
+        });
 }
 
 function openDeleteDialog(alumnus: Alumnus) {
@@ -306,14 +320,14 @@ function openDeleteDialog(alumnus: Alumnus) {
 
 function handleDelete() {
     if (!deletingAlumnus.value) return;
-    
+
     if (!deletePassword.value) {
         deletePasswordError.value = 'Please enter your password.';
         return;
     }
-    
+
     deletePasswordError.value = '';
-    
+
     router.delete(destroy(deletingAlumnus.value.id).url, {
         data: { password: deletePassword.value },
         onSuccess: () => {
@@ -342,7 +356,7 @@ onMounted(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const editId = urlParams.get('edit');
     if (editId) {
-        const alumnusToEdit = props.alumni.data.find(a => a.id === parseInt(editId));
+        const alumnusToEdit = props.alumni.data.find((a) => a.id === parseInt(editId));
         if (alumnusToEdit) {
             openEditDialog(alumnusToEdit);
         }
@@ -355,57 +369,99 @@ onMounted(() => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="px-4 py-6">
-            <div class="flex items-center justify-between mb-4">
+            <div class="mb-4 flex items-center justify-between">
                 <HeadingSmall title="Alumni" description="Manage alumni records" />
                 <div class="flex gap-2">
                     <Dialog v-model:open="showImportDialog">
                         <DialogTrigger as-child>
                             <Button variant="outline">
-                                <Upload class="h-4 w-4 mr-2" />
+                                <Upload class="mr-2 h-4 w-4" />
                                 Import Alumni
                             </Button>
                         </DialogTrigger>
-                        <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
+                        <DialogContent class="max-h-[90vh] max-w-2xl overflow-y-auto">
                             <DialogHeader>
                                 <DialogTitle>Import Alumni</DialogTitle>
-                                <DialogDescription>Upload an Excel file (.xlsx or .xls) to import alumni records for the selected tenure.</DialogDescription>
+                                <DialogDescription
+                                    >Upload an Excel file (.xlsx or .xls) to import alumni records for the selected tenure.</DialogDescription
+                                >
                             </DialogHeader>
                             <form @submit.prevent="handleImportSubmit" class="space-y-4">
-                                <Alert class="bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900">
-                                    <Info class="h-4 w-4 text-blue-600 font-bold" />
-                                    <AlertTitle class="text-blue-700 dark:text-blue-400 font-bold">Import Requirements</AlertTitle>
+                                <Alert class="border-blue-200 bg-blue-50/50 dark:border-blue-900 dark:bg-blue-950/20">
+                                    <Info class="h-4 w-4 font-bold text-blue-600" />
+                                    <AlertTitle class="font-bold text-blue-700 dark:text-blue-400">Import Requirements</AlertTitle>
                                     <AlertDescription class="mt-2 space-y-4 text-xs">
                                         <div>
-                                            <p class="font-semibold mb-2 flex items-center gap-1.5"><Check class="size-3 text-green-600" /> 1. Required Headers</p>
-                                            <p class="text-muted-foreground mb-2">The system looks for these specific column names in your first row:</p>
+                                            <p class="mb-2 flex items-center gap-1.5 font-semibold">
+                                                <Check class="size-3 text-green-600" /> 1. Required Headers
+                                            </p>
+                                            <p class="mb-2 text-muted-foreground">
+                                                The system looks for these specific column names in your first row:
+                                            </p>
                                             <div class="grid grid-cols-2 gap-x-6 gap-y-2">
-                                                <div class="flex flex-col gap-0.5"><code class="w-fit bg-muted px-1 rounded text-[10px] font-bold">name</code> <span class="text-[9px] text-muted-foreground italic">Full Name </span></div>
-                                                <div class="flex flex-col gap-0.5"><code class="w-fit bg-muted px-1 rounded text-[10px] font-bold">email</code> <span class="text-[9px] text-muted-foreground italic">Valid email address</span></div>
-                                                <div class="flex flex-col gap-0.5"><code class="w-fit bg-muted px-1 rounded text-[10px] font-bold">phones</code> <span class="text-[9px] text-muted-foreground italic">Comma-separated numbers</span></div>
-                                                <div class="flex flex-col gap-0.5"><code class="w-fit bg-muted px-1 rounded text-[10px] font-bold">gender</code> <span class="text-[9px] text-muted-foreground italic">M or F</span></div>
-                                                <div class="flex flex-col gap-0.5"><code class="w-fit bg-muted px-1 rounded text-[10px] font-bold">birth_date</code> <span class="text-[9px] text-muted-foreground italic">Birthday</span></div>
-                                                <div class="flex flex-col gap-0.5"><code class="w-fit bg-muted px-1 rounded text-[10px] font-bold">state</code> <span class="text-[9px] text-muted-foreground italic">State of residence</span></div>
-                                                <div class="flex flex-col gap-0.5"><code class="w-fit bg-muted px-1 rounded text-[10px] font-bold">unit</code> <span class="text-[9px] text-muted-foreground italic">Assigned Unit</span></div>
-                                                <div class="flex flex-col gap-0.5"><code class="w-fit bg-muted px-1 rounded text-[10px] font-bold">address</code> <span class="text-[9px] text-muted-foreground italic">Residential address</span></div>
+                                                <div class="flex flex-col gap-0.5">
+                                                    <code class="w-fit rounded bg-muted px-1 text-[10px] font-bold">name</code>
+                                                    <span class="text-[9px] text-muted-foreground italic">Full Name </span>
+                                                </div>
+                                                <div class="flex flex-col gap-0.5">
+                                                    <code class="w-fit rounded bg-muted px-1 text-[10px] font-bold">email</code>
+                                                    <span class="text-[9px] text-muted-foreground italic">Valid email address</span>
+                                                </div>
+                                                <div class="flex flex-col gap-0.5">
+                                                    <code class="w-fit rounded bg-muted px-1 text-[10px] font-bold">phones</code>
+                                                    <span class="text-[9px] text-muted-foreground italic">Comma-separated numbers</span>
+                                                </div>
+                                                <div class="flex flex-col gap-0.5">
+                                                    <code class="w-fit rounded bg-muted px-1 text-[10px] font-bold">gender</code>
+                                                    <span class="text-[9px] text-muted-foreground italic">M or F</span>
+                                                </div>
+                                                <div class="flex flex-col gap-0.5">
+                                                    <code class="w-fit rounded bg-muted px-1 text-[10px] font-bold">birth_date</code>
+                                                    <span class="text-[9px] text-muted-foreground italic">Birthday</span>
+                                                </div>
+                                                <div class="flex flex-col gap-0.5">
+                                                    <code class="w-fit rounded bg-muted px-1 text-[10px] font-bold">state</code>
+                                                    <span class="text-[9px] text-muted-foreground italic">State of residence</span>
+                                                </div>
+                                                <div class="flex flex-col gap-0.5">
+                                                    <code class="w-fit rounded bg-muted px-1 text-[10px] font-bold">unit</code>
+                                                    <span class="text-[9px] text-muted-foreground italic">Assigned Unit</span>
+                                                </div>
+                                                <div class="flex flex-col gap-0.5">
+                                                    <code class="w-fit rounded bg-muted px-1 text-[10px] font-bold">address</code>
+                                                    <span class="text-[9px] text-muted-foreground italic">Residential address</span>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div>
-                                            <p class="text-muted-foreground mb-2">The system intelligently parses birthday formats:</p>
-                                            <div class="flex flex-wrap gap-2">:
-                                                <div class="flex flex-col items-center gap-1"><code class="bg-muted px-1.5 py-0.5 rounded font-bold">20-12</code><span class="text-[8px] text-muted-foreground">Day-Month</span></div>
-                                                <div class="flex flex-col items-center gap-1"><code class="bg-muted px-1.5 py-0.5 rounded font-bold">20/12</code><span class="text-[8px] text-muted-foreground">Day/Month</span></div>
-                                                <div class="flex flex-col items-center gap-1"><code class="bg-muted px-1.5 py-0.5 rounded font-bold">20 Dec</code><span class="text-[8px] text-muted-foreground">Day ShortMonth</span></div>
-                                                <div class="flex flex-col items-center gap-1"><code class="bg-muted px-1.5 py-0.5 rounded font-bold">20 December</code><span class="text-[8px] text-muted-foreground">Day FullMonth</span></div>
+                                            <p class="mb-2 text-muted-foreground">The system intelligently parses birthday formats:</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                :
+                                                <div class="flex flex-col items-center gap-1">
+                                                    <code class="rounded bg-muted px-1.5 py-0.5 font-bold">20-12</code
+                                                    ><span class="text-[8px] text-muted-foreground">Day-Month</span>
+                                                </div>
+                                                <div class="flex flex-col items-center gap-1">
+                                                    <code class="rounded bg-muted px-1.5 py-0.5 font-bold">20/12</code
+                                                    ><span class="text-[8px] text-muted-foreground">Day/Month</span>
+                                                </div>
+                                                <div class="flex flex-col items-center gap-1">
+                                                    <code class="rounded bg-muted px-1.5 py-0.5 font-bold">20 Dec</code
+                                                    ><span class="text-[8px] text-muted-foreground">Day ShortMonth</span>
+                                                </div>
+                                                <div class="flex flex-col items-center gap-1">
+                                                    <code class="rounded bg-muted px-1.5 py-0.5 font-bold">20 December</code
+                                                    ><span class="text-[8px] text-muted-foreground">Day FullMonth</span>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div>
-                                            
-                                            <ul class="space-y-1.5 text-muted-foreground ml-1">
-                                             
-                                                <li class="flex gap-2"><span>•</span> <strong>Clean data:</strong> Ensure no empty rows exist between records.</li>
-                                             
+                                            <ul class="ml-1 space-y-1.5 text-muted-foreground">
+                                                <li class="flex gap-2">
+                                                    <span>•</span> <strong>Clean data:</strong> Ensure no empty rows exist between records.
+                                                </li>
                                             </ul>
                                         </div>
                                     </AlertDescription>
@@ -440,7 +496,7 @@ onMounted(() => {
                                         <Button variant="outline" type="button">Cancel</Button>
                                     </DialogClose>
                                     <Button type="submit" :disabled="!importForm.file || !importForm.tenure_id || importForm.processing">
-                                        <Upload class="h-4 w-4 mr-2" />
+                                        <Upload class="mr-2 h-4 w-4" />
                                         {{ importForm.processing ? 'Importing...' : 'Import' }}
                                     </Button>
                                 </DialogFooter>
@@ -450,11 +506,11 @@ onMounted(() => {
                     <Dialog v-model:open="showExportDialog">
                         <DialogTrigger as-child>
                             <Button variant="outline">
-                                <Download class="h-4 w-4 mr-2" />
+                                <Download class="mr-2 h-4 w-4" />
                                 Export
                             </Button>
                         </DialogTrigger>
-                        <DialogContent class="max-w-lg max-h-[85vh] overflow-y-auto">
+                        <DialogContent class="max-h-[85vh] max-w-lg overflow-y-auto">
                             <DialogHeader>
                                 <DialogTitle>Export Alumni</DialogTitle>
                                 <DialogDescription>Choose which fields to export and optionally filter the data.</DialogDescription>
@@ -462,20 +518,20 @@ onMounted(() => {
                             <div class="space-y-4">
                                 <div>
                                     <Label class="text-base font-semibold">Fields to Export</Label>
-                                    <div class="grid grid-cols-2 gap-2 mt-2">
+                                    <div class="mt-2 grid grid-cols-2 gap-2">
                                         <div v-for="field in availableExportFields" :key="field.key" class="flex items-center gap-2">
-                                            <Checkbox 
-                                                :id="`export_${field.key}`" 
-                                                :model-value="isExportFieldSelected(field.key)" 
-                                                @update:model-value="(val: boolean | 'indeterminate') => toggleExportField(field.key, val === true)" 
+                                            <Checkbox
+                                                :id="`export_${field.key}`"
+                                                :model-value="isExportFieldSelected(field.key)"
+                                                @update:model-value="(val: boolean | 'indeterminate') => toggleExportField(field.key, val === true)"
                                             />
-                                            <Label :for="`export_${field.key}`" class="text-sm cursor-pointer">{{ field.label }}</Label>
+                                            <Label :for="`export_${field.key}`" class="cursor-pointer text-sm">{{ field.label }}</Label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="border-t pt-4">
                                     <Label class="text-base font-semibold">Filter Data (Optional)</Label>
-                                    <div class="grid grid-cols-2 gap-4 mt-2">
+                                    <div class="mt-2 grid grid-cols-2 gap-4">
                                         <div class="space-y-1">
                                             <Label class="text-sm">Tenure</Label>
                                             <Select v-model="exportTenureId">
@@ -526,7 +582,7 @@ onMounted(() => {
                                 </DialogClose>
                                 <a :href="getExportUrl()" @click="showExportDialog = false">
                                     <Button :disabled="exportFields.length === 0">
-                                        <Download class="h-4 w-4 mr-2" />
+                                        <Download class="mr-2 h-4 w-4" />
                                         Download Excel
                                     </Button>
                                 </a>
@@ -536,11 +592,11 @@ onMounted(() => {
                     <Dialog v-model:open="showAddDialog">
                         <DialogTrigger as-child>
                             <Button>
-                                <Plus class="h-4 w-4 mr-2" />
+                                <Plus class="mr-2 h-4 w-4" />
                                 Add Alumnus
                             </Button>
                         </DialogTrigger>
-                        <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
+                        <DialogContent class="max-h-[90vh] max-w-2xl overflow-y-auto">
                             <DialogHeader>
                                 <DialogTitle>Add New Alumnus</DialogTitle>
                                 <DialogDescription>Enter the alumni details below.</DialogDescription>
@@ -554,22 +610,27 @@ onMounted(() => {
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="space-y-2">
                                         <Label for="email">Email</Label>
-                                        <Input id="email" type="email" v-model="addForm.email" :class="addForm.errors.email && 'border-destructive'" />
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            v-model="addForm.email"
+                                            :class="addForm.errors.email && 'border-destructive'"
+                                        />
                                         <p v-if="addForm.errors.email" class="text-sm text-destructive">{{ addForm.errors.email }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Phone Numbers</Label>
                                         <div class="space-y-2">
                                             <div v-for="(phone, index) in addForm.phones" :key="index" class="flex gap-2">
-                                                <Input 
-                                                    v-model="addForm.phones[index]" 
-                                                    type="tel" 
+                                                <Input
+                                                    v-model="addForm.phones[index]"
+                                                    type="tel"
                                                     placeholder="e.g., +234 123 456 7890"
                                                     class="flex-1"
                                                 />
-                                                <Button 
-                                                    type="button" 
-                                                    variant="ghost" 
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
                                                     size="icon"
                                                     @click="addForm.phones.splice(index, 1)"
                                                     class="shrink-0"
@@ -577,14 +638,8 @@ onMounted(() => {
                                                     <X class="h-4 w-4" />
                                                 </Button>
                                             </div>
-                                            <Button 
-                                                type="button" 
-                                                variant="outline" 
-                                                size="sm" 
-                                                @click="addForm.phones.push('')"
-                                                class="w-full"
-                                            >
-                                                <Plus class="h-4 w-4 mr-2" />
+                                            <Button type="button" variant="outline" size="sm" @click="addForm.phones.push('')" class="w-full">
+                                                <Plus class="mr-2 h-4 w-4" />
                                                 Add Phone Number
                                             </Button>
                                         </div>
@@ -595,20 +650,44 @@ onMounted(() => {
                                     <Label>Department</Label>
                                     <Popover v-model:open="openDepartmentCombobox">
                                         <PopoverTrigger as-child>
-                                            <Button variant="outline" role="combobox" class="justify-between w-full" :class="!addForm.department_id && 'text-muted-foreground'" :aria-invalid="!!addForm.errors.department_id">
-                                                {{ addForm.department_id ? departments.find(d => d.value === addForm.department_id)?.label : 'Select department...' }}
+                                            <Button
+                                                variant="outline"
+                                                role="combobox"
+                                                class="w-full justify-between"
+                                                :class="!addForm.department_id && 'text-muted-foreground'"
+                                                :aria-invalid="!!addForm.errors.department_id"
+                                            >
+                                                {{
+                                                    addForm.department_id
+                                                        ? departments.find((d) => d.value === addForm.department_id)?.label
+                                                        : 'Select department...'
+                                                }}
                                                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent class="!w-full p-0 max-h-[400px]">
+                                        <PopoverContent class="max-h-[400px] !w-full p-0">
                                             <Command>
                                                 <CommandInput placeholder="Search department..." />
                                                 <CommandEmpty>No department found.</CommandEmpty>
                                                 <CommandList>
                                                     <CommandGroup>
-                                                        <CommandItem v-for="d in departments" :key="d.value" :value="d.value" :keywords="[d.label]" @select="() => { addForm.department_id = d.value; openDepartmentCombobox = false; }">
+                                                        <CommandItem
+                                                            v-for="d in departments"
+                                                            :key="d.value"
+                                                            :value="d.value"
+                                                            :keywords="[d.label]"
+                                                            @select="
+                                                                () => {
+                                                                    addForm.department_id = d.value;
+                                                                    openDepartmentCombobox = false;
+                                                                }
+                                                            "
+                                                        >
                                                             {{ d.label }}
-                                                            <Check class="ml-auto h-4 w-4" :class="addForm.department_id === d.value ? 'opacity-100' : 'opacity-0'" />
+                                                            <Check
+                                                                class="ml-auto h-4 w-4"
+                                                                :class="addForm.department_id === d.value ? 'opacity-100' : 'opacity-0'"
+                                                            />
                                                         </CommandItem>
                                                     </CommandGroup>
                                                 </CommandList>
@@ -621,7 +700,9 @@ onMounted(() => {
                                     <div class="space-y-2">
                                         <Label>Gender</Label>
                                         <Select v-model="addForm.gender">
-                                            <SelectTrigger :class="addForm.errors.gender && 'border-destructive'"><SelectValue placeholder="Select gender" /></SelectTrigger>
+                                            <SelectTrigger :class="addForm.errors.gender && 'border-destructive'"
+                                                ><SelectValue placeholder="Select gender"
+                                            /></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="M">Male</SelectItem>
                                                 <SelectItem value="F">Female</SelectItem>
@@ -631,17 +712,31 @@ onMounted(() => {
                                     </div>
                                     <div class="space-y-2">
                                         <Label for="birth_date">Birthday</Label>
-                                        <Input id="birth_date" v-model="addForm.birth_date" placeholder="e.g., 20-12, 20/12, 20 Dec" :class="addForm.errors.birth_date && 'border-destructive'" />
+                                        <Input
+                                            id="birth_date"
+                                            v-model="addForm.birth_date"
+                                            placeholder="e.g., 20-12, 20/12, 20 Dec"
+                                            :class="addForm.errors.birth_date && 'border-destructive'"
+                                        />
                                         <p v-if="addForm.errors.birth_date" class="text-sm text-destructive">{{ addForm.errors.birth_date }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div class="space-y-2 flex flex-col">
+                                    <div class="flex flex-col space-y-2">
                                         <Label>Tenure</Label>
                                         <Popover v-model:open="openTenureCombobox">
                                             <PopoverTrigger as-child>
-                                                <Button variant="outline" role="combobox" class="justify-between" :class="!addForm.tenure_id && 'text-muted-foreground'">
-                                                    {{ addForm.tenure_id ? tenures.find(t => t.id === Number(addForm.tenure_id))?.year : 'Select tenure...' }}
+                                                <Button
+                                                    variant="outline"
+                                                    role="combobox"
+                                                    class="justify-between"
+                                                    :class="!addForm.tenure_id && 'text-muted-foreground'"
+                                                >
+                                                    {{
+                                                        addForm.tenure_id
+                                                            ? tenures.find((t) => t.id === Number(addForm.tenure_id))?.year
+                                                            : 'Select tenure...'
+                                                    }}
                                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
                                             </PopoverTrigger>
@@ -651,9 +746,23 @@ onMounted(() => {
                                                     <CommandEmpty>No tenure found.</CommandEmpty>
                                                     <CommandList>
                                                         <CommandGroup>
-                                                            <CommandItem v-for="t in tenures" :key="t.id" :value="String(t.id)" :keywords="[t.year]" @select="() => { addForm.tenure_id = t.id; openTenureCombobox = false; }">
+                                                            <CommandItem
+                                                                v-for="t in tenures"
+                                                                :key="t.id"
+                                                                :value="String(t.id)"
+                                                                :keywords="[t.year]"
+                                                                @select="
+                                                                    () => {
+                                                                        addForm.tenure_id = t.id;
+                                                                        openTenureCombobox = false;
+                                                                    }
+                                                                "
+                                                            >
                                                                 {{ t.year }}
-                                                                <Check class="ml-auto h-4 w-4" :class="addForm.tenure_id === t.id ? 'opacity-100' : 'opacity-0'" />
+                                                                <Check
+                                                                    class="ml-auto h-4 w-4"
+                                                                    :class="addForm.tenure_id === t.id ? 'opacity-100' : 'opacity-0'"
+                                                                />
                                                             </CommandItem>
                                                         </CommandGroup>
                                                     </CommandList>
@@ -662,11 +771,16 @@ onMounted(() => {
                                         </Popover>
                                         <p v-if="addForm.errors.tenure_id" class="text-sm text-destructive">{{ addForm.errors.tenure_id }}</p>
                                     </div>
-                                    <div class="space-y-2 flex flex-col">
+                                    <div class="flex flex-col space-y-2">
                                         <Label>Unit</Label>
                                         <Popover v-model:open="openUnitCombobox">
                                             <PopoverTrigger as-child>
-                                                <Button variant="outline" role="combobox" class="justify-between" :class="!addForm.unit && 'text-muted-foreground'">
+                                                <Button
+                                                    variant="outline"
+                                                    role="combobox"
+                                                    class="justify-between"
+                                                    :class="!addForm.unit && 'text-muted-foreground'"
+                                                >
                                                     {{ addForm.unit || 'Select unit...' }}
                                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
@@ -677,9 +791,23 @@ onMounted(() => {
                                                     <CommandEmpty>No unit found.</CommandEmpty>
                                                     <CommandList>
                                                         <CommandGroup>
-                                                            <CommandItem v-for="u in units" :key="u.value" :value="u.value" :keywords="[u.label]" @select="() => { addForm.unit = u.value; openUnitCombobox = false; }">
+                                                            <CommandItem
+                                                                v-for="u in units"
+                                                                :key="u.value"
+                                                                :value="u.value"
+                                                                :keywords="[u.label]"
+                                                                @select="
+                                                                    () => {
+                                                                        addForm.unit = u.value;
+                                                                        openUnitCombobox = false;
+                                                                    }
+                                                                "
+                                                            >
                                                                 {{ u.label }}
-                                                                <Check class="ml-auto h-4 w-4" :class="addForm.unit === u.value ? 'opacity-100' : 'opacity-0'" />
+                                                                <Check
+                                                                    class="ml-auto h-4 w-4"
+                                                                    :class="addForm.unit === u.value ? 'opacity-100' : 'opacity-0'"
+                                                                />
                                                             </CommandItem>
                                                         </CommandGroup>
                                                     </CommandList>
@@ -690,11 +818,16 @@ onMounted(() => {
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div class="space-y-2 flex flex-col">
+                                    <div class="flex flex-col space-y-2">
                                         <Label>State</Label>
                                         <Popover v-model:open="openStateCombobox">
                                             <PopoverTrigger as-child>
-                                                <Button variant="outline" role="combobox" class="justify-between" :class="!addForm.state && 'text-muted-foreground'">
+                                                <Button
+                                                    variant="outline"
+                                                    role="combobox"
+                                                    class="justify-between"
+                                                    :class="!addForm.state && 'text-muted-foreground'"
+                                                >
                                                     {{ addForm.state || 'Select state...' }}
                                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
@@ -705,9 +838,23 @@ onMounted(() => {
                                                     <CommandEmpty>No state found.</CommandEmpty>
                                                     <CommandList>
                                                         <CommandGroup>
-                                                            <CommandItem v-for="s in states" :key="s.value" :value="s.value" :keywords="[s.label]" @select="() => { addForm.state = s.value; openStateCombobox = false; }">
+                                                            <CommandItem
+                                                                v-for="s in states"
+                                                                :key="s.value"
+                                                                :value="s.value"
+                                                                :keywords="[s.label]"
+                                                                @select="
+                                                                    () => {
+                                                                        addForm.state = s.value;
+                                                                        openStateCombobox = false;
+                                                                    }
+                                                                "
+                                                            >
                                                                 {{ s.label }}
-                                                                <Check class="ml-auto h-4 w-4" :class="addForm.state === s.value ? 'opacity-100' : 'opacity-0'" />
+                                                                <Check
+                                                                    class="ml-auto h-4 w-4"
+                                                                    :class="addForm.state === s.value ? 'opacity-100' : 'opacity-0'"
+                                                                />
                                                             </CommandItem>
                                                         </CommandGroup>
                                                     </CommandList>
@@ -726,17 +873,28 @@ onMounted(() => {
                                     <div class="space-y-2">
                                         <Label>Past Exco Office (School)</Label>
                                         <Select v-model="addForm.past_exco_office">
-                                            <SelectTrigger :class="addForm.errors.past_exco_office && 'border-destructive'"><SelectValue placeholder="Select position" /></SelectTrigger>
+                                            <SelectTrigger :class="addForm.errors.past_exco_office && 'border-destructive'"
+                                                ><SelectValue placeholder="Select position"
+                                            /></SelectTrigger>
                                             <SelectContent class="max-h-60">
                                                 <SelectItem v-for="p in pastExcoOffices" :key="p.value" :value="p.value">{{ p.label }}</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <p v-if="addForm.errors.past_exco_office" class="text-sm text-destructive">{{ addForm.errors.past_exco_office }}</p>
+                                        <p v-if="addForm.errors.past_exco_office" class="text-sm text-destructive">
+                                            {{ addForm.errors.past_exco_office }}
+                                        </p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label for="current_exco_office">Current Exco Office (Alumni)</Label>
-                                        <Input id="current_exco_office" v-model="addForm.current_exco_office" placeholder="e.g., President, Secretary" :class="addForm.errors.current_exco_office && 'border-destructive'" />
-                                        <p v-if="addForm.errors.current_exco_office" class="text-sm text-destructive">{{ addForm.errors.current_exco_office }}</p>
+                                        <Input
+                                            id="current_exco_office"
+                                            v-model="addForm.current_exco_office"
+                                            placeholder="e.g., President, Secretary"
+                                            :class="addForm.errors.current_exco_office && 'border-destructive'"
+                                        />
+                                        <p v-if="addForm.errors.current_exco_office" class="text-sm text-destructive">
+                                            {{ addForm.errors.current_exco_office }}
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-3 gap-4">
@@ -751,24 +909,36 @@ onMounted(() => {
                                                 <SelectItem value="Married">Married</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <p v-if="addForm.errors.marital_status" class="text-sm text-destructive">{{ addForm.errors.marital_status }}</p>
+                                        <p v-if="addForm.errors.marital_status" class="text-sm text-destructive">
+                                            {{ addForm.errors.marital_status }}
+                                        </p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label for="occupation">Occupation</Label>
-                                        <Input id="occupation" v-model="addForm.occupation" placeholder="e.g., Engineer, Teacher" :class="addForm.errors.occupation && 'border-destructive'" />
+                                        <Input
+                                            id="occupation"
+                                            v-model="addForm.occupation"
+                                            placeholder="e.g., Engineer, Teacher"
+                                            :class="addForm.errors.occupation && 'border-destructive'"
+                                        />
                                         <p v-if="addForm.errors.occupation" class="text-sm text-destructive">{{ addForm.errors.occupation }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label for="current_employer">Current Employer</Label>
-                                        <Input id="current_employer" v-model="addForm.current_employer" placeholder="e.g., Company Name" :class="addForm.errors.current_employer && 'border-destructive'" />
-                                        <p v-if="addForm.errors.current_employer" class="text-sm text-destructive">{{ addForm.errors.current_employer }}</p>
+                                        <Input
+                                            id="current_employer"
+                                            v-model="addForm.current_employer"
+                                            placeholder="e.g., Company Name"
+                                            :class="addForm.errors.current_employer && 'border-destructive'"
+                                        />
+                                        <p v-if="addForm.errors.current_employer" class="text-sm text-destructive">
+                                            {{ addForm.errors.current_employer }}
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <Checkbox id="is_futa_staff" v-model="addForm.is_futa_staff" />
-                                    <Label for="is_futa_staff" class="text-sm font-normal cursor-pointer">
-                                        Is FUTA Staff
-                                    </Label>
+                                    <Label for="is_futa_staff" class="cursor-pointer text-sm font-normal"> Is FUTA Staff </Label>
                                 </div>
                                 <DialogFooter>
                                     <DialogClose as-child>
@@ -781,19 +951,14 @@ onMounted(() => {
                             </form>
                         </DialogContent>
                     </Dialog>
-
                 </div>
             </div>
 
             <!-- Filters -->
-            <div class="mb-4 p-4 border rounded-md bg-muted/30 space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3">
-                    <Input 
-                        v-model="filterSearch" 
-                        placeholder="Search name/email/phone..." 
-                        @keyup.enter="applyFilters"
-                    />
-                    
+            <div class="mb-4 space-y-4 rounded-md border bg-muted/30 p-4">
+                <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-6">
+                    <Input v-model="filterSearch" placeholder="Search name/email/phone..." @keyup.enter="applyFilters" />
+
                     <Select v-model="filterTenureId">
                         <SelectTrigger>
                             <SelectValue placeholder="All Tenures" />
@@ -804,7 +969,7 @@ onMounted(() => {
                             </SelectItem>
                         </SelectContent>
                     </Select>
-                    
+
                     <Select v-model="filterUnit">
                         <SelectTrigger>
                             <SelectValue placeholder="All Units" />
@@ -815,7 +980,7 @@ onMounted(() => {
                             </SelectItem>
                         </SelectContent>
                     </Select>
-                    
+
                     <Select v-model="filterState">
                         <SelectTrigger>
                             <SelectValue placeholder="All States" />
@@ -826,7 +991,7 @@ onMounted(() => {
                             </SelectItem>
                         </SelectContent>
                     </Select>
-                    
+
                     <Select v-model="filterGender">
                         <SelectTrigger>
                             <SelectValue placeholder="All Genders" />
@@ -836,7 +1001,7 @@ onMounted(() => {
                             <SelectItem value="Female">Female</SelectItem>
                         </SelectContent>
                     </Select>
-                    
+
                     <div class="flex gap-2">
                         <Button @click="applyFilters" class="flex-1">Filter</Button>
                         <Button variant="outline" @click="clearFilters">Clear</Button>
@@ -860,10 +1025,10 @@ onMounted(() => {
                         <TableRow v-for="alumnus in alumni.data" :key="alumnus.id">
                             <TableCell class="font-medium">
                                 <div class="flex items-center gap-3">
-                                    <div class="h-8 w-8 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0">
-                                        <img 
-                                            v-if="alumnus.photo_url" 
-                                            :src="alumnus.photo_url" 
+                                    <div class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
+                                        <img
+                                            v-if="alumnus.photo_url"
+                                            :src="alumnus.photo_url"
                                             :alt="`${alumnus.name}'s photo`"
                                             class="h-full w-full object-cover"
                                         />
@@ -896,7 +1061,7 @@ onMounted(() => {
                             </TableCell>
                         </TableRow>
                         <TableRow v-if="alumni.data.length === 0">
-                            <TableCell colspan="6" class="text-center text-muted-foreground py-8">
+                            <TableCell colspan="6" class="py-8 text-center text-muted-foreground">
                                 No alumni found. Add or import some records!
                             </TableCell>
                         </TableRow>
@@ -918,7 +1083,7 @@ onMounted(() => {
             >
                 <PaginationContent v-slot="{ items }" class="gap-4">
                     <PaginationFirst class="cursor-pointer" />
-                    <PaginationPrevious class="cursor-pointer"/>
+                    <PaginationPrevious class="cursor-pointer" />
                     <template v-for="(item, idx) in items" :key="idx">
                         <PaginationItem v-if="item.type === 'page'" :value="item.value" as-child>
                             <Button :variant="item.value === alumni.current_page ? 'default' : 'outline'" size="icon" class="cursor-pointer">
@@ -927,7 +1092,7 @@ onMounted(() => {
                         </PaginationItem>
                         <PaginationEllipsis v-else :index="idx" />
                     </template>
-                    <PaginationNext class="cursor-pointer"/>
+                    <PaginationNext class="cursor-pointer" />
                     <PaginationLast class="cursor-pointer" />
                 </PaginationContent>
             </Pagination>
@@ -940,16 +1105,12 @@ onMounted(() => {
                     <DialogTitle>Log Interaction</DialogTitle>
                     <DialogDescription>Log a communication with {{ selectedAlumnusForLog?.name }}</DialogDescription>
                 </DialogHeader>
-                <CommunicationLogForm 
-                    v-if="selectedAlumnusForLog" 
-                    :alumnus-id="selectedAlumnusForLog.id" 
-                    @success="showLogDialog = false" 
-                />
+                <CommunicationLogForm v-if="selectedAlumnusForLog" :alumnus-id="selectedAlumnusForLog.id" @success="showLogDialog = false" />
             </DialogContent>
         </Dialog>
 
         <Dialog v-model:open="showEditDialog">
-            <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent class="max-h-[90vh] max-w-2xl overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Edit Alumnus</DialogTitle>
                     <DialogDescription>Update the alumni details below.</DialogDescription>
@@ -970,30 +1131,13 @@ onMounted(() => {
                             <Label>Phone Numbers</Label>
                             <div class="space-y-2">
                                 <div v-for="(phone, index) in editForm.phones" :key="index" class="flex gap-2">
-                                    <Input 
-                                        v-model="editForm.phones[index]" 
-                                        type="tel" 
-                                        placeholder="e.g., +234 123 456 7890"
-                                        class="flex-1"
-                                    />
-                                    <Button 
-                                        type="button" 
-                                        variant="ghost" 
-                                        size="icon"
-                                        @click="editForm.phones.splice(index, 1)"
-                                        class="shrink-0"
-                                    >
+                                    <Input v-model="editForm.phones[index]" type="tel" placeholder="e.g., +234 123 456 7890" class="flex-1" />
+                                    <Button type="button" variant="ghost" size="icon" @click="editForm.phones.splice(index, 1)" class="shrink-0">
                                         <X class="h-4 w-4" />
                                     </Button>
                                 </div>
-                                <Button 
-                                    type="button" 
-                                    variant="outline" 
-                                    size="sm" 
-                                    @click="editForm.phones.push('')"
-                                    class="w-full"
-                                >
-                                    <Plus class="h-4 w-4 mr-2" />
+                                <Button type="button" variant="outline" size="sm" @click="editForm.phones.push('')" class="w-full">
+                                    <Plus class="mr-2 h-4 w-4" />
                                     Add Phone Number
                                 </Button>
                             </div>
@@ -1004,20 +1148,44 @@ onMounted(() => {
                         <Label>Department</Label>
                         <Popover v-model:open="openEditDepartmentCombobox">
                             <PopoverTrigger as-child>
-                                <Button variant="outline" role="combobox" class="justify-between w-full" :class="!editForm.department_id && 'text-muted-foreground'" :aria-invalid="!!editForm.errors.department_id">
-                                    {{ editForm.department_id ? departments.find(d => d.value === editForm.department_id)?.label : 'Select department...' }}
+                                <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    class="w-full justify-between"
+                                    :class="!editForm.department_id && 'text-muted-foreground'"
+                                    :aria-invalid="!!editForm.errors.department_id"
+                                >
+                                    {{
+                                        editForm.department_id
+                                            ? departments.find((d) => d.value === editForm.department_id)?.label
+                                            : 'Select department...'
+                                    }}
                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent class="!w-full p-0 max-h-[400px]">
+                            <PopoverContent class="max-h-[400px] !w-full p-0">
                                 <Command>
                                     <CommandInput placeholder="Search department..." />
                                     <CommandEmpty>No department found.</CommandEmpty>
                                     <CommandList>
                                         <CommandGroup>
-                                            <CommandItem v-for="d in departments" :key="d.value" :value="d.value" :keywords="[d.label]" @select="() => { editForm.department_id = d.value; openEditDepartmentCombobox = false; }">
+                                            <CommandItem
+                                                v-for="d in departments"
+                                                :key="d.value"
+                                                :value="d.value"
+                                                :keywords="[d.label]"
+                                                @select="
+                                                    () => {
+                                                        editForm.department_id = d.value;
+                                                        openEditDepartmentCombobox = false;
+                                                    }
+                                                "
+                                            >
                                                 {{ d.label }}
-                                                <Check class="ml-auto h-4 w-4" :class="editForm.department_id === d.value ? 'opacity-100' : 'opacity-0'" />
+                                                <Check
+                                                    class="ml-auto h-4 w-4"
+                                                    :class="editForm.department_id === d.value ? 'opacity-100' : 'opacity-0'"
+                                                />
                                             </CommandItem>
                                         </CommandGroup>
                                     </CommandList>
@@ -1030,7 +1198,9 @@ onMounted(() => {
                         <div class="space-y-2">
                             <Label>Gender</Label>
                             <Select v-model="editForm.gender">
-                                <SelectTrigger :class="editForm.errors.gender && 'border-destructive'"><SelectValue placeholder="Select gender" /></SelectTrigger>
+                                <SelectTrigger :class="editForm.errors.gender && 'border-destructive'"
+                                    ><SelectValue placeholder="Select gender"
+                                /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="M">Male</SelectItem>
                                     <SelectItem value="F">Female</SelectItem>
@@ -1040,17 +1210,27 @@ onMounted(() => {
                         </div>
                         <div class="space-y-2">
                             <Label for="edit_birth_date">Birthday</Label>
-                            <Input id="edit_birth_date" v-model="editForm.birth_date" placeholder="e.g., 20-12, 20/12, 20 Dec" :class="editForm.errors.birth_date && 'border-destructive'" />
+                            <Input
+                                id="edit_birth_date"
+                                v-model="editForm.birth_date"
+                                placeholder="e.g., 20-12, 20/12, 20 Dec"
+                                :class="editForm.errors.birth_date && 'border-destructive'"
+                            />
                             <p v-if="editForm.errors.birth_date" class="text-sm text-destructive">{{ editForm.errors.birth_date }}</p>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2 flex flex-col">
+                        <div class="flex flex-col space-y-2">
                             <Label>Tenure</Label>
                             <Popover v-model:open="openEditTenureCombobox">
                                 <PopoverTrigger as-child>
-                                    <Button variant="outline" role="combobox" class="justify-between" :class="!editForm.tenure_id && 'text-muted-foreground'">
-                                        {{ editForm.tenure_id ? tenures.find(t => t.id === Number(editForm.tenure_id))?.year : 'Select tenure...' }}
+                                    <Button
+                                        variant="outline"
+                                        role="combobox"
+                                        class="justify-between"
+                                        :class="!editForm.tenure_id && 'text-muted-foreground'"
+                                    >
+                                        {{ editForm.tenure_id ? tenures.find((t) => t.id === Number(editForm.tenure_id))?.year : 'Select tenure...' }}
                                         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
@@ -1060,9 +1240,23 @@ onMounted(() => {
                                         <CommandEmpty>No tenure found.</CommandEmpty>
                                         <CommandList>
                                             <CommandGroup>
-                                                <CommandItem v-for="t in tenures" :key="t.id" :value="String(t.id)" :keywords="[t.year]" @select="() => { editForm.tenure_id = t.id; openEditTenureCombobox = false; }">
+                                                <CommandItem
+                                                    v-for="t in tenures"
+                                                    :key="t.id"
+                                                    :value="String(t.id)"
+                                                    :keywords="[t.year]"
+                                                    @select="
+                                                        () => {
+                                                            editForm.tenure_id = t.id;
+                                                            openEditTenureCombobox = false;
+                                                        }
+                                                    "
+                                                >
                                                     {{ t.year }}
-                                                    <Check class="ml-auto h-4 w-4" :class="editForm.tenure_id === t.id ? 'opacity-100' : 'opacity-0'" />
+                                                    <Check
+                                                        class="ml-auto h-4 w-4"
+                                                        :class="editForm.tenure_id === t.id ? 'opacity-100' : 'opacity-0'"
+                                                    />
                                                 </CommandItem>
                                             </CommandGroup>
                                         </CommandList>
@@ -1071,11 +1265,16 @@ onMounted(() => {
                             </Popover>
                             <p v-if="editForm.errors.tenure_id" class="text-sm text-destructive">{{ editForm.errors.tenure_id }}</p>
                         </div>
-                        <div class="space-y-2 flex flex-col">
+                        <div class="flex flex-col space-y-2">
                             <Label>Unit</Label>
                             <Popover v-model:open="openEditUnitCombobox">
                                 <PopoverTrigger as-child>
-                                    <Button variant="outline" role="combobox" class="justify-between" :class="!editForm.unit && 'text-muted-foreground'">
+                                    <Button
+                                        variant="outline"
+                                        role="combobox"
+                                        class="justify-between"
+                                        :class="!editForm.unit && 'text-muted-foreground'"
+                                    >
                                         {{ editForm.unit || 'Select unit...' }}
                                         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
@@ -1086,7 +1285,18 @@ onMounted(() => {
                                         <CommandEmpty>No unit found.</CommandEmpty>
                                         <CommandList>
                                             <CommandGroup>
-                                                <CommandItem v-for="u in units" :key="u.value" :value="u.value" :keywords="[u.label]" @select="() => { editForm.unit = u.value; openEditUnitCombobox = false; }">
+                                                <CommandItem
+                                                    v-for="u in units"
+                                                    :key="u.value"
+                                                    :value="u.value"
+                                                    :keywords="[u.label]"
+                                                    @select="
+                                                        () => {
+                                                            editForm.unit = u.value;
+                                                            openEditUnitCombobox = false;
+                                                        }
+                                                    "
+                                                >
                                                     {{ u.label }}
                                                     <Check class="ml-auto h-4 w-4" :class="editForm.unit === u.value ? 'opacity-100' : 'opacity-0'" />
                                                 </CommandItem>
@@ -1099,11 +1309,16 @@ onMounted(() => {
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2 flex flex-col">
+                        <div class="flex flex-col space-y-2">
                             <Label>State</Label>
                             <Popover v-model:open="openEditStateCombobox">
                                 <PopoverTrigger as-child>
-                                    <Button variant="outline" role="combobox" class="justify-between" :class="!editForm.state && 'text-muted-foreground'">
+                                    <Button
+                                        variant="outline"
+                                        role="combobox"
+                                        class="justify-between"
+                                        :class="!editForm.state && 'text-muted-foreground'"
+                                    >
                                         {{ editForm.state || 'Select state...' }}
                                         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
@@ -1114,9 +1329,23 @@ onMounted(() => {
                                         <CommandEmpty>No state found.</CommandEmpty>
                                         <CommandList>
                                             <CommandGroup>
-                                                <CommandItem v-for="s in states" :key="s.value" :value="s.value" :keywords="[s.label]" @select="() => { editForm.state = s.value; openEditStateCombobox = false; }">
+                                                <CommandItem
+                                                    v-for="s in states"
+                                                    :key="s.value"
+                                                    :value="s.value"
+                                                    :keywords="[s.label]"
+                                                    @select="
+                                                        () => {
+                                                            editForm.state = s.value;
+                                                            openEditStateCombobox = false;
+                                                        }
+                                                    "
+                                                >
                                                     {{ s.label }}
-                                                    <Check class="ml-auto h-4 w-4" :class="editForm.state === s.value ? 'opacity-100' : 'opacity-0'" />
+                                                    <Check
+                                                        class="ml-auto h-4 w-4"
+                                                        :class="editForm.state === s.value ? 'opacity-100' : 'opacity-0'"
+                                                    />
                                                 </CommandItem>
                                             </CommandGroup>
                                         </CommandList>
@@ -1135,7 +1364,9 @@ onMounted(() => {
                         <div class="space-y-2">
                             <Label>Past Exco Office (School)</Label>
                             <Select v-model="editForm.past_exco_office">
-                                <SelectTrigger :class="editForm.errors.past_exco_office && 'border-destructive'"><SelectValue placeholder="Select position" /></SelectTrigger>
+                                <SelectTrigger :class="editForm.errors.past_exco_office && 'border-destructive'"
+                                    ><SelectValue placeholder="Select position"
+                                /></SelectTrigger>
                                 <SelectContent class="max-h-60">
                                     <SelectItem v-for="p in pastExcoOffices" :key="p.value" :value="p.value">{{ p.label }}</SelectItem>
                                 </SelectContent>
@@ -1144,8 +1375,15 @@ onMounted(() => {
                         </div>
                         <div class="space-y-2">
                             <Label for="edit_current_exco_office">Current Exco Office (Alumni)</Label>
-                            <Input id="edit_current_exco_office" v-model="editForm.current_exco_office" placeholder="e.g., President, Secretary" :class="editForm.errors.current_exco_office && 'border-destructive'" />
-                            <p v-if="editForm.errors.current_exco_office" class="text-sm text-destructive">{{ editForm.errors.current_exco_office }}</p>
+                            <Input
+                                id="edit_current_exco_office"
+                                v-model="editForm.current_exco_office"
+                                placeholder="e.g., President, Secretary"
+                                :class="editForm.errors.current_exco_office && 'border-destructive'"
+                            />
+                            <p v-if="editForm.errors.current_exco_office" class="text-sm text-destructive">
+                                {{ editForm.errors.current_exco_office }}
+                            </p>
                         </div>
                     </div>
                     <div class="grid grid-cols-3 gap-4">
@@ -1164,20 +1402,28 @@ onMounted(() => {
                         </div>
                         <div class="space-y-2">
                             <Label for="edit_occupation">Occupation</Label>
-                            <Input id="edit_occupation" v-model="editForm.occupation" placeholder="e.g., Engineer, Teacher" :class="editForm.errors.occupation && 'border-destructive'" />
+                            <Input
+                                id="edit_occupation"
+                                v-model="editForm.occupation"
+                                placeholder="e.g., Engineer, Teacher"
+                                :class="editForm.errors.occupation && 'border-destructive'"
+                            />
                             <p v-if="editForm.errors.occupation" class="text-sm text-destructive">{{ editForm.errors.occupation }}</p>
                         </div>
                         <div class="space-y-2">
                             <Label for="edit_current_employer">Current Employer</Label>
-                            <Input id="edit_current_employer" v-model="editForm.current_employer" placeholder="e.g., Company Name" :class="editForm.errors.current_employer && 'border-destructive'" />
+                            <Input
+                                id="edit_current_employer"
+                                v-model="editForm.current_employer"
+                                placeholder="e.g., Company Name"
+                                :class="editForm.errors.current_employer && 'border-destructive'"
+                            />
                             <p v-if="editForm.errors.current_employer" class="text-sm text-destructive">{{ editForm.errors.current_employer }}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-2">
                         <Checkbox id="edit_is_futa_staff" v-model="editForm.is_futa_staff" />
-                        <Label for="edit_is_futa_staff" class="text-sm font-normal cursor-pointer">
-                            Is FUTA Staff
-                        </Label>
+                        <Label for="edit_is_futa_staff" class="cursor-pointer text-sm font-normal"> Is FUTA Staff </Label>
                     </div>
                     <DialogFooter>
                         <DialogClose as-child>
@@ -1197,27 +1443,23 @@ onMounted(() => {
                 <DialogHeader>
                     <DialogTitle class="text-destructive">Delete Alumnus</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete <strong>{{ deletingAlumnus?.name }}</strong>? 
-                        This action cannot be undone.
+                        Are you sure you want to delete <strong>{{ deletingAlumnus?.name }}</strong
+                        >? This action cannot be undone.
                     </DialogDescription>
                 </DialogHeader>
                 <form @submit.prevent="handleDelete" class="space-y-4">
                     <div class="space-y-2">
                         <Label for="confirmation_auth_field">to confirm</Label>
-                       
+
                         <Input
                             id="confirmation_auth_field"
-                            
                             v-model="deletePassword"
                             type="password"
                             placeholder="Confirm"
                             :class="deletePasswordError && 'border-destructive'"
-                          autocomplete="do-not-autofill-this-field"
-                           
+                            autocomplete="do-not-autofill-this-field"
                         />
 
-
-                        
                         <p v-if="deletePasswordError" class="text-sm text-destructive">{{ deletePasswordError }}</p>
                     </div>
                     <DialogFooter>

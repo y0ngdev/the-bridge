@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
 import { Toaster } from 'vue-sonner';
-import AppLogo from '@/components/AppLogo.vue';
 
 defineProps<{
     title?: string;
@@ -9,9 +7,9 @@ defineProps<{
 </script>
 
 <template>
-    <div class="min-h-screen bg-background flex flex-col font-sans antialiased">
+    <div class="flex min-h-screen flex-col bg-background font-sans antialiased">
         <Toaster richColors position="top-right" />
-        
+
         <!-- Main Content -->
         <main class="flex-1">
             <div class="container mx-auto px-4 py-8 md:py-12">

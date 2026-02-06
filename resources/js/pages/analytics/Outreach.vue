@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { ChartConfig } from '@/components/ui/chart';
+import { index } from '@/actions/App/Http/Controllers/OutreachController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import type { ChartConfig } from '@/components/ui/chart';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, componentToString } from '@/components/ui/chart';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem, type Tenure } from '@/types';
-import { Head, Link, Deferred } from '@inertiajs/vue3';
-import { ArrowLeft, Phone, CheckCircle, Users, TrendingUp } from 'lucide-vue-next';
-import { index } from '@/actions/App/Http/Controllers/OutreachController';
 import { home } from '@/routes';
-import { VisAxis, VisStackedBar, VisXYContainer, VisDonut, VisSingleContainer } from '@unovis/vue';
+import { type BreadcrumbItem, type Tenure } from '@/types';
+import { Deferred, Head, Link } from '@inertiajs/vue3';
 import { Donut } from '@unovis/ts';
+import { VisAxis, VisDonut, VisSingleContainer, VisStackedBar, VisXYContainer } from '@unovis/vue';
+import { ArrowLeft, CheckCircle, Phone, TrendingUp, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 interface Stats {
@@ -71,7 +71,7 @@ const genderDataWithFill = computed(() =>
     (props.gender_breakdown ?? []).map((item, i) => ({
         ...item,
         fill: `var(--color-${item.gender.toLowerCase()})`,
-    }))
+    })),
 );
 
 const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((sum, g) => sum + g.count, 0));
@@ -81,11 +81,11 @@ const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((s
     <Head title="Outreach Analytics" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="px-4 py-6 space-y-6">
+        <div class="space-y-6 px-4 py-6">
             <div class="flex items-center justify-between">
-                <HeadingSmall 
-                    title="Outreach Analytics" 
-                    :description="active_session ? `Statistics for ${active_session.name} (${active_session.year})` : 'No active session'" 
+                <HeadingSmall
+                    title="Outreach Analytics"
+                    :description="active_session ? `Statistics for ${active_session.name} (${active_session.year})` : 'No active session'"
                 />
                 <Link :href="home().url">
                     <Button variant="outline">
@@ -105,13 +105,13 @@ const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((s
                                 <Skeleton class="h-4 w-4 rounded-full" />
                             </CardHeader>
                             <CardContent>
-                                <Skeleton class="h-8 w-16 mb-1" />
+                                <Skeleton class="mb-1 h-8 w-16" />
                                 <Skeleton class="h-3 w-20" />
                             </CardContent>
                         </Card>
                     </div>
                 </template>
-                
+
                 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
@@ -189,16 +189,14 @@ const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((s
                                         <TableCell class="text-center font-semibold">{{ item.reached }}</TableCell>
                                         <TableCell class="text-center text-muted-foreground">{{ item.total_logs }}</TableCell>
                                         <TableCell>
-                                            <div class="h-2 w-full bg-muted rounded-full overflow-hidden">
+                                            <div class="h-2 w-full overflow-hidden rounded-full bg-muted">
                                                 <div class="h-full bg-primary" :style="{ width: `${Math.min(item.reached * 2, 100)}%` }" />
                                             </div>
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
-                            <div v-else class="text-center py-8 text-muted-foreground">
-                                No outreach data available for this session.
-                            </div>
+                            <div v-else class="py-8 text-center text-muted-foreground">No outreach data available for this session.</div>
                         </Deferred>
                     </CardContent>
                 </Card>
@@ -227,7 +225,7 @@ const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((s
                                     <VisAxis type="y" :tick-format="(v: number) => Math.round(v)" :grid-line="false" :tick-line="false" />
                                 </VisXYContainer>
                             </ChartContainer>
-                            <div v-else class="text-center py-8 text-muted-foreground text-sm">No data</div>
+                            <div v-else class="py-8 text-center text-sm text-muted-foreground">No data</div>
                         </Deferred>
                     </CardContent>
                 </Card>
@@ -245,7 +243,7 @@ const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((s
                             </template>
                             <ChartContainer v-if="(outcome_breakdown ?? []).length > 0" :config="chartConfig" class="h-[200px] w-full">
                                 <VisXYContainer :data="outcome_breakdown!" :height="180">
-                                    <VisStackedBar :x="xIndex" :y="yCount" :rounded-corners="10"/>
+                                    <VisStackedBar :x="xIndex" :y="yCount" :rounded-corners="10" />
                                     <VisAxis
                                         type="x"
                                         :tick-values="(outcome_breakdown ?? []).map((_: any, i: number) => i)"
@@ -256,7 +254,7 @@ const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((s
                                     <VisAxis type="y" :tick-format="(v: number) => Math.round(v)" :grid-line="false" :tick-line="false" />
                                 </VisXYContainer>
                             </ChartContainer>
-                            <div v-else class="text-center py-8 text-muted-foreground text-sm">No data</div>
+                            <div v-else class="py-8 text-center text-sm text-muted-foreground">No data</div>
                         </Deferred>
                     </CardContent>
                 </Card>
@@ -272,9 +270,9 @@ const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((s
                             <template #fallback>
                                 <Skeleton class="mx-auto h-[200px] w-[200px] rounded-full" />
                             </template>
-                            <ChartContainer 
-                                v-if="(gender_breakdown ?? []).length > 0" 
-                                :config="genderChartConfig" 
+                            <ChartContainer
+                                v-if="(gender_breakdown ?? []).length > 0"
+                                :config="genderChartConfig"
                                 class="mx-auto aspect-square max-h-[200px]"
                                 :style="{
                                     '--vis-donut-central-label-font-size': 'var(--text-2xl)',
@@ -284,8 +282,8 @@ const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((s
                                 }"
                             >
                                 <VisSingleContainer :data="genderDataWithFill" :margin="{ top: 20, bottom: 20 }">
-                                    <VisDonut 
-                                        :value="(d: any) => d.count" 
+                                    <VisDonut
+                                        :value="(d: any) => d.count"
                                         :color="(d: any) => d.fill"
                                         :arc-width="30"
                                         :pad-angle="0.02"
@@ -294,18 +292,20 @@ const totalGenderCount = computed(() => (props.gender_breakdown ?? []).reduce((s
                                     />
                                     <ChartTooltip
                                         :triggers="{
-                                            [Donut.selectors.segment]: componentToString(genderChartConfig, ChartTooltipContent, { hideLabel: true })!,
+                                            [Donut.selectors.segment]: componentToString(genderChartConfig, ChartTooltipContent, {
+                                                hideLabel: true,
+                                            })!,
                                         }"
                                     />
                                 </VisSingleContainer>
                             </ChartContainer>
-                            <div v-if="(gender_breakdown ?? []).length > 0" class="flex justify-center gap-4 mt-4 text-sm">
-                                <div v-for="(item, i) in (gender_breakdown ?? [])" :key="item.gender" class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full" :style="{ backgroundColor: `var(--chart-${i + 1})` }"></div>
+                            <div v-if="(gender_breakdown ?? []).length > 0" class="mt-4 flex justify-center gap-4 text-sm">
+                                <div v-for="(item, i) in gender_breakdown ?? []" :key="item.gender" class="flex items-center gap-2">
+                                    <div class="h-3 w-3 rounded-full" :style="{ backgroundColor: `var(--chart-${i + 1})` }"></div>
                                     <span>{{ item.gender }}: {{ item.count }}</span>
                                 </div>
                             </div>
-                            <div v-else class="text-center py-8 text-muted-foreground text-sm">No data</div>
+                            <div v-else class="py-8 text-center text-sm text-muted-foreground">No data</div>
                         </Deferred>
                     </CardContent>
                 </Card>

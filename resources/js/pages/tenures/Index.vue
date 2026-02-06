@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { index, store, update } from '@/actions/App/Http/Controllers/TenureController';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
+import { index, store, update } from '@/actions/App/Http/Controllers/TenureController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     Dialog,
     DialogClose,
@@ -15,7 +16,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/pagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem, type Tenure, type SimplePaginatedResponse } from '@/types';
+import { type BreadcrumbItem, type SimplePaginatedResponse, type Tenure } from '@/types';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { Edit, Plus } from 'lucide-vue-next';
 import { ref } from 'vue';
@@ -73,18 +73,20 @@ const showEditDialog = ref(false);
 const editingTenure = ref<Tenure | null>(null);
 
 function handleAddSubmit() {
-    addForm.transform((data) => ({
-        ...data,
-        is_active: Boolean(data.is_active),
-        start_date: data.start_date || null,
-        end_date: data.end_date || null,
-    })).post(store().url, {
-        onSuccess: () => {
-            showAddDialog.value = false;
-            addForm.reset();
-            toast.success('Tenure created');
-        },
-    });
+    addForm
+        .transform((data) => ({
+            ...data,
+            is_active: Boolean(data.is_active),
+            start_date: data.start_date || null,
+            end_date: data.end_date || null,
+        }))
+        .post(store().url, {
+            onSuccess: () => {
+                showAddDialog.value = false;
+                addForm.reset();
+                toast.success('Tenure created');
+            },
+        });
 }
 
 const openEditDialog = (tenure: Tenure) => {
@@ -101,18 +103,20 @@ const openEditDialog = (tenure: Tenure) => {
 
 function handleEditSubmit() {
     if (!editingTenure.value) return;
-    editForm.transform((data) => ({
-        ...data,
-        is_active: Boolean(data.is_active),
-        start_date: data.start_date || null,
-        end_date: data.end_date || null,
-    })).put(update(editingTenure.value.id).url, {
-        onSuccess: () => {
-            showEditDialog.value = false;
-            editForm.reset();
-            toast.success('Tenure record updated');
-        },
-    });
+    editForm
+        .transform((data) => ({
+            ...data,
+            is_active: Boolean(data.is_active),
+            start_date: data.start_date || null,
+            end_date: data.end_date || null,
+        }))
+        .put(update(editingTenure.value.id).url, {
+            onSuccess: () => {
+                showEditDialog.value = false;
+                editForm.reset();
+                toast.success('Tenure record updated');
+            },
+        });
 }
 </script>
 
@@ -183,20 +187,12 @@ function handleEditSubmit() {
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="space-y-2">
                                     <Label for="add_start_date">Start Date</Label>
-                                    <Input
-                                        id="add_start_date"
-                                        v-model="addForm.start_date"
-                                        type="date"
-                                    />
+                                    <Input id="add_start_date" v-model="addForm.start_date" type="date" />
                                     <InputError :message="addForm.errors.start_date" />
                                 </div>
                                 <div class="space-y-2">
                                     <Label for="add_end_date">End Date</Label>
-                                    <Input
-                                        id="add_end_date"
-                                        v-model="addForm.end_date"
-                                        type="date"
-                                    />
+                                    <Input id="add_end_date" v-model="addForm.end_date" type="date" />
                                     <InputError :message="addForm.errors.end_date" />
                                 </div>
                             </div>
@@ -239,7 +235,7 @@ function handleEditSubmit() {
                             <TableCell>{{ tenure.family_name || '—' }}</TableCell>
                             <TableCell>
                                 <Badge v-if="tenure.is_active" variant="default">Active</Badge>
-                                <span v-else class="text-muted-foreground text-xs">—</span>
+                                <span v-else class="text-xs text-muted-foreground">—</span>
                             </TableCell>
                             <TableCell class="text-right">
                                 <Button variant="outline" size="sm" @click="openEditDialog(tenure)">
@@ -339,20 +335,12 @@ function handleEditSubmit() {
                         <div class="grid grid-cols-2 gap-4">
                             <div class="space-y-2">
                                 <Label for="edit_start_date">Start Date</Label>
-                                <Input
-                                    id="edit_start_date"
-                                    v-model="editForm.start_date"
-                                    type="date"
-                                />
+                                <Input id="edit_start_date" v-model="editForm.start_date" type="date" />
                                 <InputError :message="editForm.errors.start_date" />
                             </div>
                             <div class="space-y-2">
                                 <Label for="edit_end_date">End Date</Label>
-                                <Input
-                                    id="edit_end_date"
-                                    v-model="editForm.end_date"
-                                    type="date"
-                                />
+                                <Input id="edit_end_date" v-model="editForm.end_date" type="date" />
                                 <InputError :message="editForm.errors.end_date" />
                             </div>
                         </div>

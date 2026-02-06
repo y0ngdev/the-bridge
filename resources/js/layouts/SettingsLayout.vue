@@ -38,9 +38,7 @@ const allNavItems: (NavItem & { adminOnly?: boolean })[] = [
     },
 ];
 
-const sidebarNavItems = computed(() => 
-    allNavItems.filter(item => !item.adminOnly || isAdmin.value)
-);
+const sidebarNavItems = computed(() => allNavItems.filter((item) => !item.adminOnly || isAdmin.value));
 
 const currentPath = typeof window !== undefined ? window.location.pathname : '';
 </script>

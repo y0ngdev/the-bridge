@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { update, updateAvatar, destroyAvatar } from '@/actions/App/Http/Controllers/Settings/ProfileController';
+import { destroyAvatar, update, updateAvatar } from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import { edit } from '@/routes/profile';
-import { Form, Head, Link, router, usePage } from '@inertiajs/vue3';
+import { Form, Head, router, usePage } from '@inertiajs/vue3';
 
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
@@ -13,7 +13,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/SettingsLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Camera, Trash2 } from 'lucide-vue-next';
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
 
 interface Props {
@@ -41,7 +41,7 @@ const avatarError = ref<string | null>(null);
 function getInitials(name: string): string {
     return name
         .split(' ')
-        .map(n => n[0])
+        .map((n) => n[0])
         .join('')
         .toUpperCase()
         .slice(0, 2);
@@ -54,27 +54,27 @@ function selectAvatar() {
 function handleAvatarChange(event: Event) {
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
-    
+
     if (!file) return;
-    
+
     // Validate file type
     if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
         avatarError.value = 'Please select an image file (JPEG, PNG, GIF, or WebP)';
         return;
     }
-    
+
     // Validate file size (2MB)
     if (file.size > 2 * 1024 * 1024) {
         avatarError.value = 'Image must be less than 2MB';
         return;
     }
-    
+
     avatarError.value = null;
     uploading.value = true;
-    
+
     const formData = new FormData();
     formData.append('avatar', file);
-    
+
     router.post(updateAvatar().url, formData, {
         forceFormData: true,
         onSuccess: () => {
@@ -106,38 +106,33 @@ function removeAvatar() {
 
         <SettingsLayout>
             <!-- Avatar Section -->
-            <div class="flex flex-col space-y-6 mb-8">
+            <div class="mb-8 flex flex-col space-y-6">
                 <HeadingSmall title="Profile photo" description="Upload a photo for your profile" />
-                
+
                 <div class="flex items-center gap-6">
-                    <div class="relative group">
+                    <div class="group relative">
                         <Avatar class="h-24 w-24 text-lg">
                             <AvatarImage :src="user.avatar_url ?? ''" :alt="user.name" />
                             <AvatarFallback>{{ getInitials(user.name) }}</AvatarFallback>
                         </Avatar>
-                        <button 
+                        <button
                             @click="selectAvatar"
-                            class="absolute inset-0 flex items-center justify-center bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            class="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100"
                             :disabled="uploading"
                         >
                             <Camera class="h-6 w-6" />
                         </button>
                     </div>
-                    
+
                     <div class="flex flex-col gap-2">
                         <div class="flex gap-2">
-                            <Button 
-                                variant="outline" 
-                                size="sm"
-                                @click="selectAvatar"
-                                :disabled="uploading"
-                            >
+                            <Button variant="outline" size="sm" @click="selectAvatar" :disabled="uploading">
                                 <Camera class="mr-2 h-4 w-4" />
                                 {{ uploading ? 'Uploading...' : 'Upload photo' }}
                             </Button>
-                            <Button 
+                            <Button
                                 v-if="user.avatar_url"
-                                variant="outline" 
+                                variant="outline"
                                 size="sm"
                                 class="text-destructive hover:text-destructive"
                                 @click="removeAvatar"
@@ -146,12 +141,10 @@ function removeAvatar() {
                                 Remove
                             </Button>
                         </div>
-                        <p class="text-xs text-muted-foreground">
-                            JPG, PNG, GIF or WebP. Max 2MB.
-                        </p>
+                        <p class="text-xs text-muted-foreground">JPG, PNG, GIF or WebP. Max 2MB.</p>
                         <InputError v-if="avatarError" :message="avatarError" />
                     </div>
-                    
+
                     <input
                         ref="avatarInput"
                         type="file"
@@ -161,9 +154,9 @@ function removeAvatar() {
                     />
                 </div>
             </div>
-            
+
             <hr class="my-6" />
-            
+
             <!-- Profile Info Section -->
             <div class="flex flex-col space-y-6">
                 <HeadingSmall title="Profile information" description="Update your name and email address" />
@@ -196,9 +189,7 @@ function removeAvatar() {
                             placeholder="Email address"
                             :disabled="!user.is_admin"
                         />
-                        <p v-if="!user.is_admin" class="text-sm text-muted-foreground">
-                            Contact an administrator to change your email address.
-                        </p>
+                        <p v-if="!user.is_admin" class="text-sm text-muted-foreground">Contact an administrator to change your email address.</p>
                         <InputError class="mt-2" :message="errors.email" />
                     </div>
 

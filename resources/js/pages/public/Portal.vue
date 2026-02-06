@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import PublicLayout from '@/layouts/PublicLayout.vue';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import Combobox from '@/components/Combobox.vue';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Head, useForm, usePage, router } from '@inertiajs/vue3';
-import { ref, computed, watch, useTemplateRef } from 'vue';
-import { Search, UserPlus, Save, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-vue-next';
-import { type Tenure, type Department } from '@/types';
-import { Checkbox } from '@/components/ui/checkbox';
-import Combobox from '@/components/Combobox.vue';
+import PublicLayout from '@/layouts/PublicLayout.vue';
+import { type Department, type Tenure } from '@/types';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
+import { AlertCircle, CheckCircle2, Search } from 'lucide-vue-next';
+import { computed, ref, useTemplateRef, watch } from 'vue';
 
 interface Props {
     tenures: Tenure[];
@@ -24,15 +24,19 @@ interface Props {
 const props = defineProps<Props>();
 const page = usePage<any>();
 
-const tenureOptions = computed(() => props.tenures.map(t => ({
-    value: String(t.id),
-    label: `${t.name} (${t.year})`
-})));
+const tenureOptions = computed(() =>
+    props.tenures.map((t) => ({
+        value: String(t.id),
+        label: `${t.name} (${t.year})`,
+    })),
+);
 
-const departmentOptions = computed(() => props.departments.map(d => ({
-    value: String(d.id),
-    label: d.name
-})));
+const departmentOptions = computed(() =>
+    props.departments.map((d) => ({
+        value: String(d.id),
+        label: d.name,
+    })),
+);
 
 const pastExcoOfficeOptions = computed(() => props.pastExcoOffices);
 
@@ -165,38 +169,42 @@ const noMatch = computed(() => page.props.flash?.no_match);
 // console.log('Session Flash:', page.props.flash);
 
 // Watch for flash messages to handle lookup results
-watch(() => page.props.flash, (flash: any) => {
-    if (flash?.possible_matches) {
-        mode.value = 'disambiguation';
-        possibleMatches.value = flash.possible_matches;
-    }
+watch(
+    () => page.props.flash,
+    (flash: any) => {
+        if (flash?.possible_matches) {
+            mode.value = 'disambiguation';
+            possibleMatches.value = flash.possible_matches;
+        }
 
-    if (flash?.match) {
-        selectMatch(flash.match);
-    } 
-    
-    if (flash?.no_match) {
-        proceedToCreate();
-    }
-}, { deep: true, immediate: true });
+        if (flash?.match) {
+            selectMatch(flash.match);
+        }
+
+        if (flash?.no_match) {
+            proceedToCreate();
+        }
+    },
+    { deep: true, immediate: true },
+);
 
 function selectMatch(alumnus: any) {
     matchedAlumnus.value = alumnus;
     mode.value = 'update';
-    
+
     // Populate update form
     const m = matchedAlumnus.value;
     updateForm.name = m.name;
     updateForm.email = m.email; // Keep DB email by default
     updateForm.phones = m.phones && m.phones.length > 0 ? [...m.phones] : [''];
-    
+
     // PRESERVE INPUT: If user searched with a phone number that isn't in the list, add it
     if (lookupForm.phone) {
         // Normalize for comparison (basic strip)
         const normalize = (p: string) => p.replace(/\D/g, '');
         const searchedPhone = normalize(lookupForm.phone);
         const exists = updateForm.phones.some((p: string) => normalize(p) === searchedPhone);
-        
+
         if (!exists && searchedPhone.length > 0) {
             // Append the new phone number from search
             updateForm.phones.push(lookupForm.phone);
@@ -224,7 +232,7 @@ function selectMatch(alumnus: any) {
 
 function proceedToCreate() {
     mode.value = 'create';
-    
+
     // Prefill create form with lookup data
     createForm.name = lookupForm.name;
     createForm.email = lookupForm.email;
@@ -275,9 +283,9 @@ function scrollToFirstError() {
         if (firstError) {
             firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else {
-             // Fallback to top of form if alert is valid
-             const alert = document.querySelector('[role="alert"]');
-             if (alert) alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Fallback to top of form if alert is valid
+            const alert = document.querySelector('[role="alert"]');
+            if (alert) alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }, 100);
 }
@@ -328,13 +336,15 @@ function resetToLookup() {
     <PublicLayout>
         <Head title="Alumni Portal" />
 
-        <div class="min-h-[80vh] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="flex min-h-[80vh] flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
             <!-- Hero Section -->
-            <div class="text-center space-y-4 mb-8 max-w-2xl">
-                <h1 class="text-4xl font-extrabold tracking-tight lg:text-5xl bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+            <div class="mb-8 max-w-2xl space-y-4 text-center">
+                <h1
+                    class="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent lg:text-5xl"
+                >
                     The Bridge
                 </h1>
-                <p class="text-xl text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <p class="animate-in text-xl text-muted-foreground duration-700 fade-in slide-in-from-bottom-4">
                     Reconnect with RCFFUTA. Update your records and stay in the loop.
                 </p>
             </div>
@@ -351,20 +361,20 @@ function resetToLookup() {
             >
                 <!-- Success State -->
                 <div v-if="successMessage" class="w-full max-w-md">
-                    <Card class="border-green-200 bg-green-50 dark:bg-green-900/10 dark:border-green-800">
-                        <CardContent class="pt-6 text-center space-y-4">
-                            <div class="mx-auto rounded-full bg-green-100 dark:bg-green-900/20 p-3 w-12 h-12 flex items-center justify-center">
+                    <Card class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/10">
+                        <CardContent class="space-y-4 pt-6 text-center">
+                            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 p-3 dark:bg-green-900/20">
                                 <CheckCircle2 class="h-6 w-6 text-green-600 dark:text-green-400" />
                             </div>
                             <h2 class="text-2xl font-bold text-green-800 dark:text-green-400">Success!</h2>
                             <p class="text-green-700 dark:text-green-300">{{ successMessage }}</p>
-                            <Button class="w-full mt-4" @click="resetToLookup">Return to Home</Button>
+                            <Button class="mt-4 w-full" @click="resetToLookup">Return to Home</Button>
                         </CardContent>
                     </Card>
                 </div>
 
                 <!-- Lookup Form -->
-                <Card v-else-if="mode === 'lookup'" class="w-full max-w-md shadow-lg border-t-4 border-t-primary">
+                <Card v-else-if="mode === 'lookup'" class="w-full max-w-md border-t-4 border-t-primary shadow-lg">
                     <CardHeader>
                         <CardTitle>Find Your Record</CardTitle>
                         <CardDescription>Search by name and email or phone.</CardDescription>
@@ -377,46 +387,46 @@ function resetToLookup() {
                                 <AlertDescription>Please fix the errors below.</AlertDescription>
                             </Alert>
 
-                             <Alert v-if="noMatch" variant="destructive">
+                            <Alert v-if="noMatch" variant="destructive">
                                 <AlertCircle class="h-4 w-4" />
                                 <AlertTitle>No Record Found</AlertTitle>
                                 <AlertDescription>
-                                    We couldn't find you. 
-                                    <button type="button" @click="proceedToCreate" class="underline font-bold">Create new?</button>
+                                    We couldn't find you.
+                                    <button type="button" @click="proceedToCreate" class="font-bold underline">Create new?</button>
                                 </AlertDescription>
                             </Alert>
 
                             <div class="space-y-2">
                                 <Label>Full Name</Label>
                                 <div class="relative">
-                                    <Search class="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                    <Search class="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
                                     <Input v-model="lookupForm.name" class="pl-9" placeholder="e.g. John Doe" required />
                                 </div>
-                                <p v-if="lookupForm.errors.name" class="text-destructive text-xs">{{ lookupForm.errors.name }}</p>
+                                <p v-if="lookupForm.errors.name" class="text-xs text-destructive">{{ lookupForm.errors.name }}</p>
                             </div>
 
                             <div class="space-y-4 pt-2">
                                 <div class="relative flex items-center">
                                     <span class="w-full border-t" />
-                                    <span class="px-2 text-xs text-muted-foreground uppercase bg-background">And</span>
+                                    <span class="bg-background px-2 text-xs text-muted-foreground uppercase">And</span>
                                     <span class="w-full border-t" />
                                 </div>
-                                
+
                                 <div class="grid grid-cols-1 gap-4">
                                     <div class="space-y-2">
                                         <Label>Email</Label>
                                         <Input type="email" v-model="lookupForm.email" placeholder="john@example.com" />
-                                        <p v-if="lookupForm.errors.email" class="text-destructive text-xs">{{ lookupForm.errors.email }}</p>
+                                        <p v-if="lookupForm.errors.email" class="text-xs text-destructive">{{ lookupForm.errors.email }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Phone</Label>
                                         <Input v-model="lookupForm.phone" placeholder="080..." />
-                                        <p v-if="lookupForm.errors.phone" class="text-destructive text-xs">{{ lookupForm.errors.phone }}</p>
+                                        <p v-if="lookupForm.errors.phone" class="text-xs text-destructive">{{ lookupForm.errors.phone }}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <Button type="submit" class="w-full mt-2" :disabled="lookupForm.processing" size="lg">
+                            <Button type="submit" class="mt-2 w-full" :disabled="lookupForm.processing" size="lg">
                                 {{ lookupForm.processing ? 'Searching...' : 'Search Record' }}
                             </Button>
                         </form>
@@ -430,35 +440,39 @@ function resetToLookup() {
                         <CardDescription>Select your profile from the list below.</CardDescription>
                     </CardHeader>
                     <CardContent class="grid gap-3">
-                         <div v-for="match in possibleMatches" :key="match.id" 
-                            class="group flex items-center justify-between p-4 border rounded-xl hover:bg-accent/50 cursor-pointer transition-all hover:scale-[1.01] hover:shadow-sm"
+                        <div
+                            v-for="match in possibleMatches"
+                            :key="match.id"
+                            class="group flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-all hover:scale-[1.01] hover:bg-accent/50 hover:shadow-sm"
                             @click="selectMatch(match)"
                         >
-                            <div class="flex-1 min-w-0 pr-4">
-                                <p class="font-bold text-lg truncate">{{ match.name }}</p>
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-sm text-muted-foreground mt-1">
-                                    <span class="flex items-center gap-1.5 truncat">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-primary/40 shrink-0"></span>
+                            <div class="min-w-0 flex-1 pr-4">
+                                <p class="truncate text-lg font-bold">{{ match.name }}</p>
+                                <div class="mt-1 flex flex-col gap-1 text-sm text-muted-foreground sm:flex-row sm:items-center sm:gap-4">
+                                    <span class="truncat flex items-center gap-1.5">
+                                        <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-primary/40"></span>
                                         <span class="truncate">{{ match.department?.name || 'No Dept' }}</span>
                                     </span>
-                                    <span class="hidden sm:inline text-muted-foreground/30">•</span>
+                                    <span class="hidden text-muted-foreground/30 sm:inline">•</span>
                                     <span class="flex items-center gap-1.5 truncate">
                                         <span class="truncate">{{ match.tenure?.name || 'Unknown Tenure' }}</span>
                                     </span>
                                 </div>
                             </div>
-                            <div class="shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-muted group-hover:bg-primary/10 text-muted-foreground group-hover:text-primary transition-colors">
+                            <div
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary"
+                            >
                                 <CheckCircle2 class="h-6 w-6" />
                             </div>
                         </div>
-                        
-                        <div class="text-center pt-4">
+
+                        <div class="pt-4 text-center">
                             <Button variant="link" @click="proceedToCreate">None of these are me</Button>
                         </div>
                     </CardContent>
                 </Card>
 
-                 <!-- Update Form -->
+                <!-- Update Form -->
                 <Card v-else-if="mode === 'update'" class="w-full max-w-3xl shadow-xl">
                     <CardHeader class="border-b bg-muted/30">
                         <div class="flex items-center justify-between">
@@ -479,12 +493,12 @@ function resetToLookup() {
 
                             <!-- Group 1: Personal Details -->
                             <div class="space-y-4">
-                                <h3 class="text-lg font-semibold border-b pb-2">Personal Details</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <h3 class="border-b pb-2 text-lg font-semibold">Personal Details</h3>
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
                                         <Label>Full Name *</Label>
                                         <Input v-model="updateForm.name" required />
-                                        <p v-if="updateForm.errors.name" class="text-destructive text-xs">{{ updateForm.errors.name }}</p>
+                                        <p v-if="updateForm.errors.name" class="text-xs text-destructive">{{ updateForm.errors.name }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Gender *</Label>
@@ -495,16 +509,16 @@ function resetToLookup() {
                                                 <SelectItem value="F">Female</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <p v-if="updateForm.errors.gender" class="text-destructive text-xs">{{ updateForm.errors.gender }}</p>
+                                        <p v-if="updateForm.errors.gender" class="text-xs text-destructive">{{ updateForm.errors.gender }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Birth Date *</Label>
                                         <Input type="date" v-model="updateForm.birth_date" required />
-                                        <p v-if="updateForm.errors.birth_date" class="text-destructive text-xs">{{ updateForm.errors.birth_date }}</p>
+                                        <p v-if="updateForm.errors.birth_date" class="text-xs text-destructive">{{ updateForm.errors.birth_date }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Marital Status</Label>
-                                         <Select v-model="updateForm.marital_status">
+                                        <Select v-model="updateForm.marital_status">
                                             <SelectTrigger><SelectValue placeholder="Select Status" /></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="Single">Single</SelectItem>
@@ -513,157 +527,197 @@ function resetToLookup() {
                                                 <SelectItem value="Widowed">Widowed</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <p v-if="updateForm.errors.marital_status" class="text-destructive text-xs">{{ updateForm.errors.marital_status }}</p>
+                                        <p v-if="updateForm.errors.marital_status" class="text-xs text-destructive">
+                                            {{ updateForm.errors.marital_status }}
+                                        </p>
                                     </div>
                                     <div class="space-y-2 md:col-span-2">
                                         <Label>Recent Photo</Label>
-                                        <div 
-                                            class="relative border-2 border-dashed rounded-lg p-6 transition-colors cursor-pointer"
+                                        <div
+                                            class="relative cursor-pointer rounded-lg border-2 border-dashed p-6 transition-colors"
                                             :class="[
-                                                updateDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 hover:border-primary/50',
-                                                updatePhotoPreview ? 'bg-muted/30' : ''
+                                                updateDragActive
+                                                    ? 'border-primary bg-primary/5'
+                                                    : 'border-muted-foreground/25 hover:border-primary/50',
+                                                updatePhotoPreview ? 'bg-muted/30' : '',
                                             ]"
                                             @dragover.prevent="updateDragActive = true"
                                             @dragleave.prevent="updateDragActive = false"
                                             @drop="handleUpdateDrop"
                                             @click="updatePhotoInput?.click()"
                                         >
-                                            <input 
+                                            <input
                                                 ref="updatePhotoInput"
-                                                type="file" 
+                                                type="file"
                                                 accept="image/jpeg,image/png,image/jpg,image/gif"
                                                 class="hidden"
                                                 @change="handleUpdatePhotoChange"
                                             />
                                             <div v-if="updatePhotoPreview" class="flex items-center gap-4">
-                                                <img :src="updatePhotoPreview" alt="Photo preview" class="w-20 h-20 rounded-full object-cover border-2 border-background shadow-md" />
+                                                <img
+                                                    :src="updatePhotoPreview"
+                                                    alt="Photo preview"
+                                                    class="h-20 w-20 rounded-full border-2 border-background object-cover shadow-md"
+                                                />
                                                 <div class="flex-1">
                                                     <p class="text-sm font-medium">Photo selected</p>
                                                     <p class="text-xs text-muted-foreground">Click to change or drag a new photo</p>
                                                 </div>
-                                                <Button type="button" variant="outline" size="sm" @click.stop="clearUpdatePhoto">
-                                                    Remove
-                                                </Button>
+                                                <Button type="button" variant="outline" size="sm" @click.stop="clearUpdatePhoto"> Remove </Button>
                                             </div>
                                             <div v-else class="text-center">
-                                                <div class="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-3">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        class="h-6 w-6 text-muted-foreground"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                        />
                                                     </svg>
                                                 </div>
                                                 <p class="text-sm font-medium text-muted-foreground">
                                                     <span class="text-primary">Click to upload</span> or drag and drop
                                                 </p>
-                                                <p class="text-xs text-muted-foreground mt-1">JPEG, PNG, GIF (max 2MB)</p>
+                                                <p class="mt-1 text-xs text-muted-foreground">JPEG, PNG, GIF (max 2MB)</p>
                                             </div>
                                         </div>
-                                        <p v-if="updateForm.errors.photo" class="text-destructive text-xs">{{ updateForm.errors.photo }}</p>
+                                        <p v-if="updateForm.errors.photo" class="text-xs text-destructive">{{ updateForm.errors.photo }}</p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Group 2: Contact Information -->
                             <div class="space-y-4">
-                                <h3 class="text-lg font-semibold border-b pb-2">Contact Information</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <h3 class="border-b pb-2 text-lg font-semibold">Contact Information</h3>
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
                                         <Label>Email</Label>
                                         <Input v-model="updateForm.email" type="email" />
-                                        <p v-if="updateForm.errors.email" class="text-destructive text-xs">{{ updateForm.errors.email }}</p>
+                                        <p v-if="updateForm.errors.email" class="text-xs text-destructive">{{ updateForm.errors.email }}</p>
                                     </div>
                                     <div class="space-y-2 md:col-span-2">
                                         <Label>Phone Numbers *</Label>
                                         <div v-for="(phone, index) in updateForm.phones" :key="index" class="space-y-1">
                                             <div class="flex gap-2">
                                                 <Input v-model="updateForm.phones[index]" placeholder="e.g. 08012345678" />
-                                                <Button type="button" variant="ghost" size="icon" @click="removePhone(updateForm, index)" v-if="updateForm.phones.length > 1">
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    @click="removePhone(updateForm, index)"
+                                                    v-if="updateForm.phones.length > 1"
+                                                >
                                                     <span class="sr-only">Delete</span>
                                                     <span aria-hidden="true">&times;</span>
                                                 </Button>
                                             </div>
-                                            <p v-if="updateForm.errors[`phones.${index}`]" class="text-destructive text-xs">{{ updateForm.errors[`phones.${index}`] }}</p>
+                                            <p v-if="updateForm.errors[`phones.${index}`]" class="text-xs text-destructive">
+                                                {{ updateForm.errors[`phones.${index}`] }}
+                                            </p>
                                         </div>
-                                        <Button type="button" variant="outline" size="sm" class="mt-2" @click="addPhone(updateForm)">+ Add Phone</Button>
-                                        <p v-if="updateForm.errors.phones" class="text-destructive text-xs">{{ updateForm.errors.phones }}</p>
+                                        <Button type="button" variant="outline" size="sm" class="mt-2" @click="addPhone(updateForm)"
+                                            >+ Add Phone</Button
+                                        >
+                                        <p v-if="updateForm.errors.phones" class="text-xs text-destructive">{{ updateForm.errors.phones }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Residential State</Label>
                                         <Combobox v-model="updateForm.state" :options="states" placeholder="Select State" />
-                                        <p v-if="updateForm.errors.state" class="text-destructive text-xs">{{ updateForm.errors.state }}</p>
+                                        <p v-if="updateForm.errors.state" class="text-xs text-destructive">{{ updateForm.errors.state }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Address</Label>
                                         <Input v-model="updateForm.address" />
-                                        <p v-if="updateForm.errors.address" class="text-destructive text-xs">{{ updateForm.errors.address }}</p>
+                                        <p v-if="updateForm.errors.address" class="text-xs text-destructive">{{ updateForm.errors.address }}</p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Group 3: Academic & Professional -->
                             <div class="space-y-4">
-                                <h3 class="text-lg font-semibold border-b pb-2">Academic & Professional</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <h3 class="border-b pb-2 text-lg font-semibold">Academic & Professional</h3>
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
                                         <Label>Tenure Year *</Label>
                                         <Combobox v-model="updateForm.tenure_id" :options="tenureOptions" placeholder="Select Tenure" />
-                                        <p v-if="updateForm.errors.tenure_id" class="text-destructive text-xs">{{ updateForm.errors.tenure_id }}</p>
+                                        <p v-if="updateForm.errors.tenure_id" class="text-xs text-destructive">{{ updateForm.errors.tenure_id }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Department</Label>
                                         <Combobox v-model="updateForm.department_id" :options="departmentOptions" placeholder="Select Department" />
-                                        <p v-if="updateForm.errors.department_id" class="text-destructive text-xs">{{ updateForm.errors.department_id }}</p>
+                                        <p v-if="updateForm.errors.department_id" class="text-xs text-destructive">
+                                            {{ updateForm.errors.department_id }}
+                                        </p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Current Employer</Label>
                                         <Input v-model="updateForm.current_employer" />
-                                        <p v-if="updateForm.errors.current_employer" class="text-destructive text-xs">{{ updateForm.errors.current_employer }}</p>
+                                        <p v-if="updateForm.errors.current_employer" class="text-xs text-destructive">
+                                            {{ updateForm.errors.current_employer }}
+                                        </p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Occupation</Label>
                                         <Input v-model="updateForm.occupation" />
-                                        <p v-if="updateForm.errors.occupation" class="text-destructive text-xs">{{ updateForm.errors.occupation }}</p>
+                                        <p v-if="updateForm.errors.occupation" class="text-xs text-destructive">{{ updateForm.errors.occupation }}</p>
                                     </div>
                                     <div class="flex items-end pb-2 md:col-span-2">
                                         <div class="flex items-center space-x-2">
-                                            <Checkbox id="update_is_futa_staff" :checked="updateForm.is_futa_staff" @update:checked="(v: boolean) => updateForm.is_futa_staff = v" />
+                                            <Checkbox
+                                                id="update_is_futa_staff"
+                                                :checked="updateForm.is_futa_staff"
+                                                @update:checked="(v: boolean) => (updateForm.is_futa_staff = v)"
+                                            />
                                             <Label for="update_is_futa_staff">I'm currently a FUTA Staff</Label>
                                         </div>
-                                        <p v-if="updateForm.errors.is_futa_staff" class="text-destructive text-xs ml-2">{{ updateForm.errors.is_futa_staff }}</p>
+                                        <p v-if="updateForm.errors.is_futa_staff" class="ml-2 text-xs text-destructive">
+                                            {{ updateForm.errors.is_futa_staff }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Group 4: Association Details -->
                             <div class="space-y-4">
-                                <h3 class="text-lg font-semibold border-b pb-2">Unit Details</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <h3 class="border-b pb-2 text-lg font-semibold">Unit Details</h3>
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
                                         <Label>Unit</Label>
                                         <Combobox v-model="updateForm.unit" :options="units" placeholder="Select Unit" />
-                                        <p v-if="updateForm.errors.unit" class="text-destructive text-xs">{{ updateForm.errors.unit }}</p>
+                                        <p v-if="updateForm.errors.unit" class="text-xs text-destructive">{{ updateForm.errors.unit }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Past Exco Office</Label>
-                                        <Combobox v-model="updateForm.past_exco_office" :options="pastExcoOfficeOptions" placeholder="Select Office" />
-                                        <p v-if="updateForm.errors.past_exco_office" class="text-destructive text-xs">{{ updateForm.errors.past_exco_office }}</p>
+                                        <Combobox
+                                            v-model="updateForm.past_exco_office"
+                                            :options="pastExcoOfficeOptions"
+                                            placeholder="Select Office"
+                                        />
+                                        <p v-if="updateForm.errors.past_exco_office" class="text-xs text-destructive">
+                                            {{ updateForm.errors.past_exco_office }}
+                                        </p>
                                     </div>
-                                   
                                 </div>
                             </div>
 
                             <div class="flex justify-end pt-6">
-                                <Button type="submit" size="lg" :disabled="updateForm.processing" class="w-full md:w-auto">
-                                    Submit Updates
-                                </Button>
+                                <Button type="submit" size="lg" :disabled="updateForm.processing" class="w-full md:w-auto"> Submit Updates </Button>
                             </div>
                         </form>
                     </CardContent>
                 </Card>
 
-                 <!-- Create Form -->
+                <!-- Create Form -->
                 <Card v-else-if="mode === 'create'" class="w-full max-w-3xl shadow-xl">
                     <CardHeader class="border-b bg-muted/30">
-                         <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between">
                             <div>
                                 <CardTitle>Join The Bridge</CardTitle>
                                 <CardDescription>Create your alumni profile.</CardDescription>
@@ -672,25 +726,25 @@ function resetToLookup() {
                         </div>
                     </CardHeader>
                     <CardContent class="p-6 md:p-8">
-                         <form @submit.prevent="handleCreate" class="space-y-6" novalidate>
+                        <form @submit.prevent="handleCreate" class="space-y-6" novalidate>
                             <Alert v-if="createForm.hasErrors" variant="destructive">
                                 <AlertCircle class="h-4 w-4" />
                                 <AlertTitle>Validation Error</AlertTitle>
                                 <AlertDescription>Please fix the highlighted errors below.</AlertDescription>
                             </Alert>
 
-                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-sm text-blue-800 dark:text-blue-300 mb-6">
+                            <div class="mb-6 rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
                                 Please fill in as much information as possible to help us keep in touch with you.
                             </div>
-                             
+
                             <!-- Group 1: Personal Details -->
                             <div class="space-y-4">
-                                <h3 class="text-lg font-semibold border-b pb-2">Personal Details</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <h3 class="border-b pb-2 text-lg font-semibold">Personal Details</h3>
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
                                         <Label>Full Name *</Label>
                                         <Input v-model="createForm.name" required />
-                                        <p v-if="createForm.errors.name" class="text-destructive text-xs">{{ createForm.errors.name }}</p>
+                                        <p v-if="createForm.errors.name" class="text-xs text-destructive">{{ createForm.errors.name }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Gender *</Label>
@@ -701,16 +755,16 @@ function resetToLookup() {
                                                 <SelectItem value="F">Female</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <p v-if="createForm.errors.gender" class="text-destructive text-xs">{{ createForm.errors.gender }}</p>
+                                        <p v-if="createForm.errors.gender" class="text-xs text-destructive">{{ createForm.errors.gender }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Birth Date *</Label>
                                         <Input type="date" v-model="createForm.birth_date" required />
-                                        <p v-if="createForm.errors.birth_date" class="text-destructive text-xs">{{ createForm.errors.birth_date }}</p>
+                                        <p v-if="createForm.errors.birth_date" class="text-xs text-destructive">{{ createForm.errors.birth_date }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Marital Status</Label>
-                                         <Select v-model="createForm.marital_status">
+                                        <Select v-model="createForm.marital_status">
                                             <SelectTrigger><SelectValue placeholder="Select Status" /></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="Single">Single</SelectItem>
@@ -719,147 +773,188 @@ function resetToLookup() {
                                                 <SelectItem value="Widowed">Widowed</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <p v-if="createForm.errors.marital_status" class="text-destructive text-xs">{{ createForm.errors.marital_status }}</p>
+                                        <p v-if="createForm.errors.marital_status" class="text-xs text-destructive">
+                                            {{ createForm.errors.marital_status }}
+                                        </p>
                                     </div>
                                     <div class="space-y-2 md:col-span-2">
                                         <Label>Recent Photo</Label>
-                                        <div 
-                                            class="relative border-2 border-dashed rounded-lg p-6 transition-colors cursor-pointer"
+                                        <div
+                                            class="relative cursor-pointer rounded-lg border-2 border-dashed p-6 transition-colors"
                                             :class="[
-                                                createDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 hover:border-primary/50',
-                                                createPhotoPreview ? 'bg-muted/30' : ''
+                                                createDragActive
+                                                    ? 'border-primary bg-primary/5'
+                                                    : 'border-muted-foreground/25 hover:border-primary/50',
+                                                createPhotoPreview ? 'bg-muted/30' : '',
                                             ]"
                                             @dragover.prevent="createDragActive = true"
                                             @dragleave.prevent="createDragActive = false"
                                             @drop="handleCreateDrop"
                                             @click="createPhotoInput?.click()"
                                         >
-                                            <input 
+                                            <input
                                                 ref="createPhotoInput"
-                                                type="file" 
+                                                type="file"
                                                 accept="image/jpeg,image/png,image/jpg,image/gif"
                                                 class="hidden"
                                                 @change="handleCreatePhotoChange"
                                             />
                                             <div v-if="createPhotoPreview" class="flex items-center gap-4">
-                                                <img :src="createPhotoPreview" alt="Photo preview" class="w-20 h-20 rounded-full object-cover border-2 border-background shadow-md" />
+                                                <img
+                                                    :src="createPhotoPreview"
+                                                    alt="Photo preview"
+                                                    class="h-20 w-20 rounded-full border-2 border-background object-cover shadow-md"
+                                                />
                                                 <div class="flex-1">
                                                     <p class="text-sm font-medium">Photo selected</p>
                                                     <p class="text-xs text-muted-foreground">Click to change or drag a new photo</p>
                                                 </div>
-                                                <Button type="button" variant="outline" size="sm" @click.stop="clearCreatePhoto">
-                                                    Remove
-                                                </Button>
+                                                <Button type="button" variant="outline" size="sm" @click.stop="clearCreatePhoto"> Remove </Button>
                                             </div>
                                             <div v-else class="text-center">
-                                                <div class="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-3">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        class="h-6 w-6 text-muted-foreground"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                        />
                                                     </svg>
                                                 </div>
                                                 <p class="text-sm font-medium text-muted-foreground">
                                                     <span class="text-primary">Click to upload</span> or drag and drop
                                                 </p>
-                                                <p class="text-xs text-muted-foreground mt-1">JPEG, PNG, GIF (max 2MB)</p>
+                                                <p class="mt-1 text-xs text-muted-foreground">JPEG, PNG, GIF (max 2MB)</p>
                                             </div>
                                         </div>
-                                        <p v-if="createForm.errors.photo" class="text-destructive text-xs">{{ createForm.errors.photo }}</p>
+                                        <p v-if="createForm.errors.photo" class="text-xs text-destructive">{{ createForm.errors.photo }}</p>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Group 2: Contact Information -->
                             <div class="space-y-4">
-                                <h3 class="text-lg font-semibold border-b pb-2">Contact Information</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <h3 class="border-b pb-2 text-lg font-semibold">Contact Information</h3>
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
                                         <Label>Email</Label>
                                         <Input v-model="createForm.email" type="email" />
-                                        <p v-if="createForm.errors.email" class="text-destructive text-xs">{{ createForm.errors.email }}</p>
+                                        <p v-if="createForm.errors.email" class="text-xs text-destructive">{{ createForm.errors.email }}</p>
                                     </div>
                                     <div class="space-y-2 md:col-span-2">
                                         <Label>Phone Numbers *</Label>
                                         <div v-for="(phone, index) in createForm.phones" :key="index" class="space-y-1">
                                             <div class="flex gap-2">
                                                 <Input v-model="createForm.phones[index]" placeholder="e.g. 08012345678" />
-                                                <Button type="button" variant="ghost" size="icon" @click="removePhone(createForm, index)" v-if="createForm.phones.length > 1">
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    @click="removePhone(createForm, index)"
+                                                    v-if="createForm.phones.length > 1"
+                                                >
                                                     <span class="sr-only">Delete</span>
                                                     <span aria-hidden="true">&times;</span>
                                                 </Button>
                                             </div>
-                                            <p v-if="createForm.errors[`phones.${index}`]" class="text-destructive text-xs">{{ createForm.errors[`phones.${index}`] }}</p>
+                                            <p v-if="createForm.errors[`phones.${index}`]" class="text-xs text-destructive">
+                                                {{ createForm.errors[`phones.${index}`] }}
+                                            </p>
                                         </div>
-                                        <Button type="button" variant="outline" size="sm" class="mt-2" @click="addPhone(createForm)">+ Add Phone</Button>
-                                        <p v-if="createForm.errors.phones" class="text-destructive text-xs">{{ createForm.errors.phones }}</p>
+                                        <Button type="button" variant="outline" size="sm" class="mt-2" @click="addPhone(createForm)"
+                                            >+ Add Phone</Button
+                                        >
+                                        <p v-if="createForm.errors.phones" class="text-xs text-destructive">{{ createForm.errors.phones }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Residential State</Label>
                                         <Combobox v-model="createForm.state" :options="states" placeholder="Select State" />
-                                        <p v-if="createForm.errors.state" class="text-destructive text-xs">{{ createForm.errors.state }}</p>
+                                        <p v-if="createForm.errors.state" class="text-xs text-destructive">{{ createForm.errors.state }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Address</Label>
                                         <Input v-model="createForm.address" />
-                                        <p v-if="createForm.errors.address" class="text-destructive text-xs">{{ createForm.errors.address }}</p>
+                                        <p v-if="createForm.errors.address" class="text-xs text-destructive">{{ createForm.errors.address }}</p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Group 3: Academic & Professional -->
                             <div class="space-y-4">
-                                <h3 class="text-lg font-semibold border-b pb-2">Academic & Professional</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <h3 class="border-b pb-2 text-lg font-semibold">Academic & Professional</h3>
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
                                         <Label>Tenure Year *</Label>
                                         <Combobox v-model="createForm.tenure_id" :options="tenureOptions" required placeholder="Select Tenure" />
-                                        <p v-if="createForm.errors.tenure_id" class="text-destructive text-xs">{{ createForm.errors.tenure_id }}</p>
+                                        <p v-if="createForm.errors.tenure_id" class="text-xs text-destructive">{{ createForm.errors.tenure_id }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Department</Label>
                                         <Combobox v-model="createForm.department_id" :options="departmentOptions" placeholder="Select Department" />
-                                        <p v-if="createForm.errors.department_id" class="text-destructive text-xs">{{ createForm.errors.department_id }}</p>
+                                        <p v-if="createForm.errors.department_id" class="text-xs text-destructive">
+                                            {{ createForm.errors.department_id }}
+                                        </p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Current Employer</Label>
                                         <Input v-model="createForm.current_employer" />
-                                        <p v-if="createForm.errors.current_employer" class="text-destructive text-xs">{{ createForm.errors.current_employer }}</p>
+                                        <p v-if="createForm.errors.current_employer" class="text-xs text-destructive">
+                                            {{ createForm.errors.current_employer }}
+                                        </p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Occupation</Label>
                                         <Input v-model="createForm.occupation" />
-                                        <p v-if="createForm.errors.occupation" class="text-destructive text-xs">{{ createForm.errors.occupation }}</p>
+                                        <p v-if="createForm.errors.occupation" class="text-xs text-destructive">{{ createForm.errors.occupation }}</p>
                                     </div>
                                     <div class="flex items-end pb-2 md:col-span-2">
-                                         <div class="flex items-center space-x-2">
-                                            <Checkbox id="create_is_futa_staff" :checked="createForm.is_futa_staff" @update:checked="(v: boolean) => createForm.is_futa_staff = v" />
+                                        <div class="flex items-center space-x-2">
+                                            <Checkbox
+                                                id="create_is_futa_staff"
+                                                :checked="createForm.is_futa_staff"
+                                                @update:checked="(v: boolean) => (createForm.is_futa_staff = v)"
+                                            />
                                             <Label for="create_is_futa_staff">I'm currently a FUTA Staff</Label>
                                         </div>
-                                        <p v-if="createForm.errors.is_futa_staff" class="text-destructive text-xs ml-2">{{ createForm.errors.is_futa_staff }}</p>
+                                        <p v-if="createForm.errors.is_futa_staff" class="ml-2 text-xs text-destructive">
+                                            {{ createForm.errors.is_futa_staff }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Group 4: Association Details -->
                             <div class="space-y-4">
-                                <h3 class="text-lg font-semibold border-b pb-2">Unit Details</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <h3 class="border-b pb-2 text-lg font-semibold">Unit Details</h3>
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
                                         <Label>Unit</Label>
                                         <Combobox v-model="createForm.unit" :options="units" placeholder="Select Unit" />
-                                        <p v-if="createForm.errors.unit" class="text-destructive text-xs">{{ createForm.errors.unit }}</p>
+                                        <p v-if="createForm.errors.unit" class="text-xs text-destructive">{{ createForm.errors.unit }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <Label>Past Exco Office</Label>
-                                        <Combobox v-model="createForm.past_exco_office" :options="pastExcoOfficeOptions" placeholder="Select Office" />
-                                        <p v-if="createForm.errors.past_exco_office" class="text-destructive text-xs">{{ createForm.errors.past_exco_office }}</p>
+                                        <Combobox
+                                            v-model="createForm.past_exco_office"
+                                            :options="pastExcoOfficeOptions"
+                                            placeholder="Select Office"
+                                        />
+                                        <p v-if="createForm.errors.past_exco_office" class="text-xs text-destructive">
+                                            {{ createForm.errors.past_exco_office }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="flex justify-end pt-6">
-                                <Button type="submit" size="lg" :disabled="createForm.processing" class="w-full md:w-auto">
-                                    Join The Bridge
-                                </Button>
+                                <Button type="submit" size="lg" :disabled="createForm.processing" class="w-full md:w-auto"> Join The Bridge </Button>
                             </div>
                         </form>
                     </CardContent>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { index, store, update, destroy } from '@/actions/App/Http/Controllers/RedemptionWeekSessionController';
-import { show as showSession } from '@/actions/App/Http/Controllers/RedemptionWeekSessionController';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
+import { destroy, index, show as showSession, store, update } from '@/actions/App/Http/Controllers/RedemptionWeekSessionController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
 import { Badge } from '@/components/ui/badge';
@@ -27,11 +26,11 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
 import type { BreadcrumbItem, EventDay, RedemptionWeekSession, SimplePaginatedResponse } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
-import { Calendar, CalendarIcon, Edit, Eye, Plus, Trash2, Users } from 'lucide-vue-next';
+import { CalendarDate } from '@internationalized/date';
+import { Calendar, CalendarIcon, Edit, Eye, Plus, Users } from 'lucide-vue-next';
+import type { DateValue } from 'reka-ui';
 import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
-import type { DateValue } from 'reka-ui';
-import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date';
 
 type PaginatedSessions = SimplePaginatedResponse<RedemptionWeekSession>;
 
@@ -107,7 +106,7 @@ const editForm = useForm({
     description: '',
     is_active: true,
 });
- 
+
 // Date picker refs for edit form
 const editStartDate = ref<DateValue>();
 const editEndDate = ref<DateValue>();
@@ -128,20 +127,22 @@ function openEditDialog(session: RedemptionWeekSession) {
 function handleEditSubmit() {
     if (!editingSession.value) return;
 
-    editForm.transform((data) => ({
-        ...data,
-        start_date: formatDateForApi(editStartDate.value),
-        end_date: formatDateForApi(editEndDate.value),
-        is_active: Boolean(data.is_active),
-    })).put(update(editingSession.value.id).url, {
-        onSuccess: () => {
-            showEditDialog.value = false;
-            editForm.reset();
-            editStartDate.value = undefined;
-            editEndDate.value = undefined;
-            toast.success('Session updated');
-        },
-    });
+    editForm
+        .transform((data) => ({
+            ...data,
+            start_date: formatDateForApi(editStartDate.value),
+            end_date: formatDateForApi(editEndDate.value),
+            is_active: Boolean(data.is_active),
+        }))
+        .put(update(editingSession.value.id).url, {
+            onSuccess: () => {
+                showEditDialog.value = false;
+                editForm.reset();
+                editStartDate.value = undefined;
+                editEndDate.value = undefined;
+                toast.success('Session updated');
+            },
+        });
 }
 
 // Delete Session
@@ -205,14 +206,7 @@ function getTotalAttendance(session: RedemptionWeekSession): number {
                                 </div>
                                 <div class="space-y-2">
                                     <Label for="year">Year</Label>
-                                    <Input
-                                        id="year"
-                                        v-model.number="addForm.year"
-                                        type="number"
-                                        min="2000"
-                                        max="2100"
-                                        required
-                                    />
+                                    <Input id="year" v-model.number="addForm.year" type="number" min="2000" max="2100" required />
                                     <InputError :message="addForm.errors.year" />
                                 </div>
                             </div>
@@ -275,9 +269,7 @@ function getTotalAttendance(session: RedemptionWeekSession): number {
             <!-- Sessions Grid -->
             <div v-if="sessions.data.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <Card v-for="session in sessions.data" :key="session.id" class="relative overflow-hidden">
-                    <Badge v-if="session.is_active" class="absolute right-4 top-4" variant="default">
-                        Active
-                    </Badge>
+                    <Badge v-if="session.is_active" class="absolute top-4 right-4" variant="default"> Active </Badge>
                     <CardHeader>
                         <CardTitle class="flex items-center gap-2">
                             <Calendar class="h-5 w-5 text-muted-foreground" />

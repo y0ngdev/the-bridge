@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Check, ChevronsUpDown } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 
@@ -34,9 +29,12 @@ const emit = defineEmits(['update:modelValue']);
 const open = ref(false);
 const value = ref(props.modelValue ? String(props.modelValue) : '');
 
-watch(() => props.modelValue, (newVal) => {
-    value.value = newVal ? String(newVal) : '';
-});
+watch(
+    () => props.modelValue,
+    (newVal) => {
+        value.value = newVal ? String(newVal) : '';
+    },
+);
 
 function handleSelect(selectedValue: string) {
     value.value = selectedValue;
@@ -74,10 +72,7 @@ function handleSelect(selectedValue: string) {
                             :keywords="[option.label]"
                             @select="handleSelect(option.value)"
                         >
-                            <Check
-                                class="mr-2 h-4 w-4"
-                                :class="value === option.value ? 'opacity-100' : 'opacity-0'"
-                            />
+                            <Check class="mr-2 h-4 w-4" :class="value === option.value ? 'opacity-100' : 'opacity-0'" />
                             {{ option.label }}
                         </CommandItem>
                     </CommandGroup>

@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { download, index, store } from '@/actions/App/Http/Controllers/Settings/BackupController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
-import { type BreadcrumbItem } from '@/types';
-import AppLayout from '@/layouts/AppLayout.vue';
-import SettingsLayout from '@/layouts/SettingsLayout.vue';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Mail, Database, RefreshCcw, Download } from 'lucide-vue-next';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/AppLayout.vue';
+import SettingsLayout from '@/layouts/SettingsLayout.vue';
+import { type BreadcrumbItem } from '@/types';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Database, Download, Mail, RefreshCcw } from 'lucide-vue-next';
 import { watch } from 'vue';
 import { toast } from 'vue-sonner';
-import { index, store, download } from '@/actions/App/Http/Controllers/Settings/BackupController';
 
 interface Backup {
     name: string;
@@ -28,9 +28,7 @@ const props = defineProps<{
 
 const page = usePage();
 
-const breadcrumbItems: BreadcrumbItem[] = [
-    { title: 'Backup settings', href: index().url },
-];
+const breadcrumbItems: BreadcrumbItem[] = [{ title: 'Backup settings', href: index().url }];
 
 const form = useForm({
     email: props.backupEmail || '',
@@ -53,7 +51,7 @@ watch(
             toast.error(flash.error);
         }
     },
-    { immediate: true }
+    { immediate: true },
 );
 </script>
 
@@ -63,10 +61,7 @@ watch(
 
         <SettingsLayout>
             <div class="space-y-6">
-                <HeadingSmall 
-                    title="Backup settings" 
-                    description="Manage database backups (sent via email every 4 months)" 
-                />
+                <HeadingSmall title="Backup settings" description="Manage database backups (sent via email every 4 months)" />
 
                 <!-- Manual Backup -->
                 <Card>
@@ -75,17 +70,15 @@ watch(
                             <Mail class="h-5 w-5" />
                             Email Backup
                         </CardTitle>
-                        <CardDescription>
-                            Create a backup and send it as an email attachment
-                        </CardDescription>
+                        <CardDescription> Create a backup and send it as an email attachment </CardDescription>
                     </CardHeader>
                     <CardContent class="space-y-4">
                         <div class="space-y-2">
                             <Label for="email">Send backup to email</Label>
-                            <Input 
-                                id="email" 
-                                v-model="form.email" 
-                                type="email" 
+                            <Input
+                                id="email"
+                                v-model="form.email"
+                                type="email"
                                 placeholder="backup@example.com"
                                 :class="{ 'border-destructive': form.errors.email }"
                             />
@@ -108,9 +101,7 @@ watch(
                             <Database class="h-5 w-5" />
                             Backup History
                         </CardTitle>
-                        <CardDescription>
-                            Recent backups stored locally (also available for download)
-                        </CardDescription>
+                        <CardDescription> Recent backups stored locally (also available for download) </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Table v-if="backups.length > 0">
@@ -140,13 +131,10 @@ watch(
                                 </TableRow>
                             </TableBody>
                         </Table>
-                        <div v-else class="text-center py-8 text-muted-foreground">
-                            No backups found. Create a backup to get started.
-                        </div>
+                        <div v-else class="py-8 text-center text-muted-foreground">No backups found. Create a backup to get started.</div>
                     </CardContent>
                 </Card>
             </div>
         </SettingsLayout>
     </AppLayout>
 </template>
-

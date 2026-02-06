@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
-import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
-import { Check, X, ArrowRight, UserCheck, Clock } from 'lucide-vue-next';
+import { ArrowRight, Check, Clock, UserCheck, X } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 
@@ -43,14 +43,18 @@ function openApproveDialog(update: PendingUpdate) {
 
 function handleApprove() {
     if (!selectedUpdate.value) return;
-    
-    router.post(`/admin/pending-updates/${selectedUpdate.value.id}/approve`, {}, {
-        onSuccess: () => {
-            showApproveDialog.value = false;
-            toast.success('Update approved successfully');
-            selectedUpdate.value = null;
+
+    router.post(
+        `/admin/pending-updates/${selectedUpdate.value.id}/approve`,
+        {},
+        {
+            onSuccess: () => {
+                showApproveDialog.value = false;
+                toast.success('Update approved successfully');
+                selectedUpdate.value = null;
+            },
         },
-    });
+    );
 }
 
 function openRejectDialog(update: PendingUpdate) {
@@ -60,14 +64,18 @@ function openRejectDialog(update: PendingUpdate) {
 
 function handleReject() {
     if (!selectedUpdate.value) return;
-    
-    router.post(`/admin/pending-updates/${selectedUpdate.value.id}/reject`, {}, {
-        onSuccess: () => {
-            showRejectDialog.value = false;
-            toast.success('Update rejected');
-            selectedUpdate.value = null;
+
+    router.post(
+        `/admin/pending-updates/${selectedUpdate.value.id}/reject`,
+        {},
+        {
+            onSuccess: () => {
+                showRejectDialog.value = false;
+                toast.success('Update rejected');
+                selectedUpdate.value = null;
+            },
         },
-    });
+    );
 }
 
 function formatValue(value: any): string {
@@ -98,16 +106,11 @@ function getLabel(key: string): string {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="px-4 py-6">
-            <HeadingSmall 
-                title="Pending Updates" 
-                description="Review profile update requests submitted by alumni" 
-            />
+            <HeadingSmall title="Pending Updates" description="Review profile update requests submitted by alumni" />
 
             <Alert v-if="updates.length === 0" class="mt-6">
                 <Check class="h-4 w-4" />
-                <AlertDescription>
-                    No pending updates! All caught up.
-                </AlertDescription>
+                <AlertDescription> No pending updates! All caught up. </AlertDescription>
             </Alert>
 
             <div v-else class="mt-6 space-y-6">
@@ -132,21 +135,19 @@ function getLabel(key: string): string {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div class="border rounded-md divide-y">
-                            <div 
-                                v-for="(newValue, key) in update.changes" 
-                                :key="key"
-                                class="grid grid-cols-1 md:grid-cols-3 p-3 gap-2 text-sm"
-                            >
+                        <div class="divide-y rounded-md border">
+                            <div v-for="(newValue, key) in update.changes" :key="key" class="grid grid-cols-1 gap-2 p-3 text-sm md:grid-cols-3">
                                 <div class="font-medium text-muted-foreground">
                                     {{ getLabel(String(key)) }}
                                 </div>
-                                <div class="md:col-span-2 flex items-center gap-3">
-                                    <div class="flex-1 bg-red-50 dark:bg-red-950/30 p-2 rounded text-red-600 dark:text-red-400 line-through decoration-red-400/50">
+                                <div class="flex items-center gap-3 md:col-span-2">
+                                    <div
+                                        class="flex-1 rounded bg-red-50 p-2 text-red-600 line-through decoration-red-400/50 dark:bg-red-950/30 dark:text-red-400"
+                                    >
                                         {{ formatValue(update.alumnus[key]) }}
                                     </div>
-                                    <ArrowRight class="h-4 w-4 text-muted-foreground shrink-0" />
-                                    <div class="flex-1 bg-green-50 dark:bg-green-950/30 p-2 rounded text-green-700 dark:text-green-300 font-medium">
+                                    <ArrowRight class="h-4 w-4 shrink-0 text-muted-foreground" />
+                                    <div class="flex-1 rounded bg-green-50 p-2 font-medium text-green-700 dark:bg-green-950/30 dark:text-green-300">
                                         {{ formatValue(newValue) }}
                                     </div>
                                 </div>
@@ -155,11 +156,11 @@ function getLabel(key: string): string {
 
                         <div class="mt-4 flex justify-end gap-3">
                             <Button variant="outline" class="text-destructive hover:bg-destructive/10" @click="openRejectDialog(update)">
-                                <X class="h-4 w-4 mr-2" />
+                                <X class="mr-2 h-4 w-4" />
                                 Reject
                             </Button>
-                            <Button class="bg-green-600 hover:bg-green-700 text-white" @click="openApproveDialog(update)">
-                                <Check class="h-4 w-4 mr-2" />
+                            <Button class="bg-green-600 text-white hover:bg-green-700" @click="openApproveDialog(update)">
+                                <Check class="mr-2 h-4 w-4" />
                                 Approve
                             </Button>
                         </div>
@@ -173,9 +174,7 @@ function getLabel(key: string): string {
             <DialogContent class="max-w-md">
                 <DialogHeader>
                     <DialogTitle>Reject Update</DialogTitle>
-                    <DialogDescription>
-                        Are you sure you want to reject this update request? The changes will be discarded.
-                    </DialogDescription>
+                    <DialogDescription> Are you sure you want to reject this update request? The changes will be discarded. </DialogDescription>
                 </DialogHeader>
 
                 <DialogFooter>
@@ -190,14 +189,12 @@ function getLabel(key: string): string {
             <DialogContent class="max-w-md">
                 <DialogHeader>
                     <DialogTitle>Approve Update</DialogTitle>
-                    <DialogDescription>
-                        Are you sure you want to approve and apply these changes?
-                    </DialogDescription>
+                    <DialogDescription> Are you sure you want to approve and apply these changes? </DialogDescription>
                 </DialogHeader>
 
                 <DialogFooter>
                     <Button variant="outline" @click="showApproveDialog = false">Cancel</Button>
-                    <Button class="bg-green-600 hover:bg-green-700 text-white" @click="handleApprove">Confirm Approve</Button>
+                    <Button class="bg-green-600 text-white hover:bg-green-700" @click="handleApprove">Confirm Approve</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

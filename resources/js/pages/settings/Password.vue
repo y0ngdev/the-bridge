@@ -8,10 +8,10 @@ import { Form, Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 import HeadingSmall from '@/components/HeadingSmall.vue';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { type BreadcrumbItem } from '@/types';
 import { ShieldAlert } from 'lucide-vue-next';
 
@@ -38,7 +38,8 @@ const user = computed(() => page.props.auth.user);
                 <Alert v-if="!user.is_admin" class="mb-6">
                     <ShieldAlert class="h-4 w-4" />
                     <AlertDescription>
-                        For security reasons, only administrators can change passwords. Please contact an administrator if you need to update your password.
+                        For security reasons, only administrators can change passwords. Please contact an administrator if you need to update your
+                        password.
                     </AlertDescription>
                 </Alert>
 
@@ -109,4 +110,3 @@ const user = computed(() => page.props.auth.user);
         </SettingsLayout>
     </AppLayout>
 </template>
-

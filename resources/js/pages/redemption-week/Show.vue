@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { index, show } from '@/actions/App/Http/Controllers/RedemptionWeekSessionController';
-import { store as storeAttendance, destroy as destroyAttendance } from '@/actions/App/Http/Controllers/RedemptionWeekAttendanceController';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
+import { destroy as destroyAttendance, store as storeAttendance } from '@/actions/App/Http/Controllers/RedemptionWeekAttendanceController';
+import { index, show } from '@/actions/App/Http/Controllers/RedemptionWeekSessionController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -55,9 +55,7 @@ const searchQuery = ref('');
 const filteredAlumni = computed(() => {
     if (!searchQuery.value) return props.alumni;
     const q = searchQuery.value.toLowerCase();
-    return props.alumni.filter(
-        (a) => a.name.toLowerCase().includes(q) || a.email?.toLowerCase().includes(q)
-    );
+    return props.alumni.filter((a) => a.name.toLowerCase().includes(q) || a.email?.toLowerCase().includes(q));
 });
 
 // Get alumni who are marked present for active day
@@ -199,9 +197,7 @@ const attendancePercentage = computed(() => {
                     </CardHeader>
                     <CardContent>
                         <div class="text-lg font-bold">{{ attendanceByDay[activeTab]?.label }}</div>
-                        <p class="text-xs text-muted-foreground">
-                            {{ attendanceByDay[activeTab]?.count ?? 0 }} present
-                        </p>
+                        <p class="text-xs text-muted-foreground">{{ attendanceByDay[activeTab]?.count ?? 0 }} present</p>
                     </CardContent>
                 </Card>
             </div>
@@ -230,27 +226,15 @@ const attendancePercentage = computed(() => {
                             <CardContent class="space-y-4">
                                 <!-- Search -->
                                 <div class="relative">
-                                    <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                    <Input
-                                        v-model="searchQuery"
-                                        placeholder="Search alumni..."
-                                        class="pl-10"
-                                    />
+                                    <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                    <Input v-model="searchQuery" placeholder="Search alumni..." class="pl-10" />
                                 </div>
 
                                 <!-- Select all / Clear -->
                                 <div class="flex gap-2">
-                                    <Button variant="outline" size="sm" @click="selectAllFiltered">
-                                        Select All Unmarked
-                                    </Button>
-                                    <Button variant="outline" size="sm" @click="clearSelection">
-                                        Clear
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        :disabled="selectedAlumniIds.length === 0 || attendanceForm.processing"
-                                        @click="markAttendance"
-                                    >
+                                    <Button variant="outline" size="sm" @click="selectAllFiltered"> Select All Unmarked </Button>
+                                    <Button variant="outline" size="sm" @click="clearSelection"> Clear </Button>
+                                    <Button size="sm" :disabled="selectedAlumniIds.length === 0 || attendanceForm.processing" @click="markAttendance">
                                         Mark Present
                                     </Button>
                                 </div>
@@ -273,10 +257,7 @@ const attendancePercentage = computed(() => {
                                                 :disabled="presentAlumniIds.has(alumnus.id)"
                                                 @update:model-value="toggleAlumnus(alumnus.id)"
                                             />
-                                            <Label
-                                                :for="`alumni-${alumnus.id}`"
-                                                class="flex flex-1 cursor-pointer items-center justify-between"
-                                            >
+                                            <Label :for="`alumni-${alumnus.id}`" class="flex flex-1 cursor-pointer items-center justify-between">
                                                 <div>
                                                     <div class="font-medium">{{ alumnus.name }}</div>
                                                     <div class="text-xs text-muted-foreground">{{ alumnus.email }}</div>
@@ -310,10 +291,7 @@ const attendancePercentage = computed(() => {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            <TableRow
-                                                v-for="attendance in attendanceByDay[day.value]?.attendances ?? []"
-                                                :key="attendance.id"
-                                            >
+                                            <TableRow v-for="attendance in attendanceByDay[day.value]?.attendances ?? []" :key="attendance.id">
                                                 <TableCell class="font-medium">
                                                     {{ attendance.alumnus?.name ?? 'Unknown' }}
                                                 </TableCell>
@@ -321,11 +299,7 @@ const attendancePercentage = computed(() => {
                                                     {{ new Date(attendance.created_at).toLocaleString() }}
                                                 </TableCell>
                                                 <TableCell v-if="isAdmin">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        @click="openRemoveDialog(attendance.id)"
-                                                    >
+                                                    <Button variant="ghost" size="icon" @click="openRemoveDialog(attendance.id)">
                                                         <Trash2 class="h-4 w-4 text-destructive" />
                                                     </Button>
                                                 </TableCell>
@@ -350,9 +324,7 @@ const attendancePercentage = computed(() => {
             <DialogContent class="max-w-md">
                 <DialogHeader>
                     <DialogTitle>Remove Attendance</DialogTitle>
-                    <DialogDescription>
-                        Are you sure you want to remove this attendance record?
-                    </DialogDescription>
+                    <DialogDescription> Are you sure you want to remove this attendance record? </DialogDescription>
                 </DialogHeader>
 
                 <DialogFooter>

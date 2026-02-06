@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
+import { index as alumniIndex, destroy } from '@/actions/App/Http/Controllers/AlumnusController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { type BreadcrumbItem, type Alumnus } from '@/types';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { type Alumnus, type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
-import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
-import { index as alumniIndex, destroy } from '@/actions/App/Http/Controllers/AlumnusController';
-import { AlertTriangle, Users, X, Check, Trash2 } from 'lucide-vue-next';
+import { AlertTriangle, Check, Trash2, Users, X } from 'lucide-vue-next';
 import { ref } from 'vue';
 
 const props = defineProps<{
@@ -34,7 +34,7 @@ function openMergeDialog(group: Alumnus[]) {
 }
 
 function dismissGroup(group: Alumnus[]) {
-    const ids = group.map(a => a.id);
+    const ids = group.map((a) => a.id);
     router.post('/alumni/duplicates/dismiss', { ids });
 }
 
@@ -43,20 +43,24 @@ function handleMerge() {
 
     const group = selectedGroup.value;
     const primaryId = selectedPrimary.value;
-    const primary = group.find(a => a.id === primaryId);
-    const secondary = group.find(a => a.id !== primaryId);
+    const primary = group.find((a) => a.id === primaryId);
+    const secondary = group.find((a) => a.id !== primaryId);
 
     if (!primary || !secondary) return;
 
-    router.post(`/alumni/${primary.id}/merge/${secondary.id}`, {
-        primary_id: primaryId,
-    }, {
-        onSuccess: () => {
-            showMergeDialog.value = false;
-            selectedGroup.value = null;
-            selectedPrimary.value = null;
+    router.post(
+        `/alumni/${primary.id}/merge/${secondary.id}`,
+        {
+            primary_id: primaryId,
         },
-    });
+        {
+            onSuccess: () => {
+                showMergeDialog.value = false;
+                selectedGroup.value = null;
+                selectedPrimary.value = null;
+            },
+        },
+    );
 }
 
 // Delete dialog state
@@ -74,14 +78,14 @@ function openDeleteDialog(alumnus: Alumnus) {
 
 function handleDelete() {
     if (!deletingAlumnus.value) return;
-    
+
     if (!deletePassword.value) {
         deletePasswordError.value = 'Please enter your password.';
         return;
     }
-    
+
     deletePasswordError.value = '';
-    
+
     router.delete(destroy(deletingAlumnus.value.id).url, {
         data: { password: deletePassword.value },
         onSuccess: () => {
@@ -105,16 +109,11 @@ function handleDelete() {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="px-4 py-6">
-            <HeadingSmall 
-                title="Duplicate Detection" 
-                description="Review and merge potential duplicate alumni records" 
-            />
+            <HeadingSmall title="Duplicate Detection" description="Review and merge potential duplicate alumni records" />
 
             <Alert v-if="duplicateGroups.length === 0" class="mt-6">
                 <Check class="h-4 w-4" />
-                <AlertDescription>
-                    No duplicate records found! All alumni records appear to be unique.
-                </AlertDescription>
+                <AlertDescription> No duplicate records found! All alumni records appear to be unique. </AlertDescription>
             </Alert>
 
             <div v-else class="mt-6 space-y-6">
@@ -135,19 +134,19 @@ function handleDelete() {
                     </CardHeader>
                     <CardContent>
                         <div class="grid gap-4 md:grid-cols-2">
-                            <div v-for="alumnus in group" :key="alumnus.id" class="p-4 border rounded-lg">
+                            <div v-for="alumnus in group" :key="alumnus.id" class="rounded-lg border p-4">
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="flex items-center gap-3">
-                                        <div class="h-12 w-12 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0">
-                                            <img 
-                                                v-if="alumnus.photo_url" 
-                                                :src="alumnus.photo_url" 
+                                        <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
+                                            <img
+                                                v-if="alumnus.photo_url"
+                                                :src="alumnus.photo_url"
                                                 :alt="`${alumnus.name}'s photo`"
                                                 class="h-full w-full object-cover"
                                             />
                                             <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
                                         </div>
-                                        <h3 class="font-semibold text-lg">{{ alumnus.name }}</h3>
+                                        <h3 class="text-lg font-semibold">{{ alumnus.name }}</h3>
                                     </div>
                                     <Button variant="ghost" size="icon" class="h-8 w-8 text-destructive" @click="openDeleteDialog(alumnus)">
                                         <Trash2 class="h-4 w-4" />
@@ -166,12 +165,10 @@ function handleDelete() {
                         </div>
                         <div class="mt-4 flex justify-end gap-2">
                             <Button variant="outline" @click="dismissGroup(group)">
-                                <X class="h-4 w-4 mr-2" />
+                                <X class="mr-2 h-4 w-4" />
                                 Not Duplicates
                             </Button>
-                            <Button @click="openMergeDialog(group)">
-                                Merge Records
-                            </Button>
+                            <Button @click="openMergeDialog(group)"> Merge Records </Button>
                         </div>
                     </CardContent>
                 </Card>
@@ -183,32 +180,31 @@ function handleDelete() {
             <DialogContent class="max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>Merge Duplicate Records</DialogTitle>
-                    <DialogDescription>
-                        Select which record to keep as the primary. Data will be combined.
-                    </DialogDescription>
+                    <DialogDescription> Select which record to keep as the primary. Data will be combined. </DialogDescription>
                 </DialogHeader>
 
                 <div v-if="selectedGroup" class="space-y-4">
                     <Alert>
                         <AlertTriangle class="h-4 w-4" />
                         <AlertDescription>
-                            The merge will: combine phone numbers, transfer communication logs to the primary record, and mark the secondary as merged. This cannot be easily undone.
+                            The merge will: combine phone numbers, transfer communication logs to the primary record, and mark the secondary as
+                            merged. This cannot be easily undone.
                         </AlertDescription>
                     </Alert>
 
                     <div class="space-y-2">
                         <label class="text-sm font-medium">Select Primary Record (to keep):</label>
                         <div class="grid gap-2">
-                            <div 
-                                v-for="alumnus in selectedGroup" 
+                            <div
+                                v-for="alumnus in selectedGroup"
                                 :key="alumnus.id"
                                 @click="selectedPrimary = alumnus.id"
-                                class="p-3 border rounded cursor-pointer hover:bg-accent transition-colors"
+                                class="cursor-pointer rounded border p-3 transition-colors hover:bg-accent"
                                 :class="selectedPrimary === alumnus.id && 'border-primary bg-accent'"
                             >
                                 <div class="flex items-center gap-2">
-                                    <div 
-                                        class="h-4 w-4 rounded-full border-2" 
+                                    <div
+                                        class="h-4 w-4 rounded-full border-2"
                                         :class="selectedPrimary === alumnus.id ? 'border-primary bg-primary' : 'border-muted-foreground'"
                                     />
                                     <div class="flex-1">
@@ -223,11 +219,11 @@ function handleDelete() {
 
                 <DialogFooter>
                     <Button variant="outline" @click="showMergeDialog = false">
-                        <X class="h-4 w-4 mr-2" />
+                        <X class="mr-2 h-4 w-4" />
                         Cancel
                     </Button>
                     <Button @click="handleMerge" :disabled="!selectedPrimary">
-                        <Check class="h-4 w-4 mr-2" />
+                        <Check class="mr-2 h-4 w-4" />
                         Merge Records
                     </Button>
                 </DialogFooter>
@@ -240,24 +236,23 @@ function handleDelete() {
                 <DialogHeader>
                     <DialogTitle>Delete Alumni Record</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete <strong>{{ deletingAlumnus?.name }}</strong>? This action cannot be undone.
+                        Are you sure you want to delete <strong>{{ deletingAlumnus?.name }}</strong
+                        >? This action cannot be undone.
                     </DialogDescription>
                 </DialogHeader>
-                
+
                 <div class="space-y-4">
                     <Alert variant="destructive">
                         <AlertTriangle class="h-4 w-4" />
-                        <AlertDescription>
-                            This will permanently delete this record and all associated communication logs.
-                        </AlertDescription>
+                        <AlertDescription> This will permanently delete this record and all associated communication logs. </AlertDescription>
                     </Alert>
-                    
+
                     <div class="space-y-2">
                         <label class="text-sm font-medium">Confirm with your password:</label>
-                        <input 
-                            type="password" 
-                            v-model="deletePassword" 
-                            class="w-full px-3 py-2 border rounded-md text-sm"
+                        <input
+                            type="password"
+                            v-model="deletePassword"
+                            class="w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter your password"
                         />
                         <p v-if="deletePasswordError" class="text-sm text-destructive">{{ deletePasswordError }}</p>
@@ -266,11 +261,11 @@ function handleDelete() {
 
                 <DialogFooter>
                     <Button variant="outline" @click="showDeleteDialog = false">
-                        <X class="h-4 w-4 mr-2" />
+                        <X class="mr-2 h-4 w-4" />
                         Cancel
                     </Button>
                     <Button variant="destructive" @click="handleDelete">
-                        <Trash2 class="h-4 w-4 mr-2" />
+                        <Trash2 class="mr-2 h-4 w-4" />
                         Delete
                     </Button>
                 </DialogFooter>

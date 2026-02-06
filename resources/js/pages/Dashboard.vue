@@ -1,25 +1,33 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Deferred } from '@inertiajs/vue3';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { 
-    Users, Calendar, Cake, TrendingUp, GraduationCap, Phone, 
-    UserPlus, Eye, Download, Award, Building, Activity, 
-    ArrowRight, Clock
+import { Deferred, Head, Link } from '@inertiajs/vue3';
+import {
+    Activity,
+    ArrowRight,
+    Award,
+    Building,
+    Cake,
+    Calendar,
+    Clock,
+    Eye,
+    GraduationCap,
+    Phone,
+    TrendingUp,
+    UserPlus,
+    Users,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 
-import { index } from '@/actions/App/Http/Controllers/AlumnusController';
-import { birthdays, distribution, index as alumniIndex } from '@/actions/App/Http/Controllers/AlumnusController';
-import { index as analyticsOutreach } from '@/actions/App/Http/Controllers/OutreachController';
+import { index as alumniIndex, birthdays, distribution, index } from '@/actions/App/Http/Controllers/AlumnusController';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
+import { index as analyticsOutreach } from '@/actions/App/Http/Controllers/OutreachController';
 
 interface Stat {
     title: string;
@@ -51,9 +59,7 @@ const props = defineProps<{
     activity_summary?: { session: string | null; total_logs: number; alumni_reached: number };
 }>();
 
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: dashboardIndex().url },
-];
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Dashboard', href: dashboardIndex().url }];
 
 const statConfigs = computed((): Stat[] => [
     {
@@ -102,10 +108,8 @@ const extraStats = computed(() => [
     },
 ]);
 
-const totalGender = computed(() => 
-    (props.gender_distribution?.male ?? 0) + 
-    (props.gender_distribution?.female ?? 0) + 
-    (props.gender_distribution?.unspecified ?? 0)
+const totalGender = computed(
+    () => (props.gender_distribution?.male ?? 0) + (props.gender_distribution?.female ?? 0) + (props.gender_distribution?.unspecified ?? 0),
 );
 
 const quickActions = [
@@ -131,7 +135,7 @@ const quickActions = [
                                 <Skeleton class="h-4 w-4 rounded-full" />
                             </CardHeader>
                             <CardContent>
-                                <Skeleton class="h-8 w-16 mb-1" />
+                                <Skeleton class="mb-1 h-8 w-16" />
                                 <Skeleton class="h-3 w-32" />
                             </CardContent>
                         </Card>
@@ -161,8 +165,8 @@ const quickActions = [
                     <CardContent>
                         <div class="grid grid-cols-2 gap-2">
                             <Link v-for="action in quickActions" :key="action.title" :href="action.href">
-                                <Button variant="outline" class="w-full justify-start gap-2 h-auto py-3">
-                                    <div :class="[action.color, 'p-1.5 rounded-md']">
+                                <Button variant="outline" class="h-auto w-full justify-start gap-2 py-3">
+                                    <div :class="[action.color, 'rounded-md p-1.5']">
                                         <component :is="action.icon" class="h-3.5 w-3.5 text-white" />
                                     </div>
                                     <span class="text-xs">{{ action.title }}</span>
@@ -193,9 +197,7 @@ const quickActions = [
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span class="font-semibold">{{ stat.value ?? 0 }}</span>
-                                    <Badge v-if="stat.percentage" variant="secondary" class="text-xs">
-                                        {{ stat.percentage }}%
-                                    </Badge>
+                                    <Badge v-if="stat.percentage" variant="secondary" class="text-xs"> {{ stat.percentage }}% </Badge>
                                 </div>
                             </div>
                         </CardContent>
@@ -213,7 +215,7 @@ const quickActions = [
                     </template>
                     <Card v-if="activity_summary">
                         <CardHeader class="pb-2">
-                            <CardTitle class="text-sm flex items-center gap-2">
+                            <CardTitle class="flex items-center gap-2 text-sm">
                                 <Activity class="h-4 w-4 text-green-600" />
                                 Session Activity
                             </CardTitle>
@@ -232,9 +234,7 @@ const quickActions = [
                                     <p class="text-xs text-muted-foreground">Total Logs</p>
                                 </div>
                             </div>
-                            <p v-else class="text-sm text-muted-foreground text-center py-4">
-                                No active session set
-                            </p>
+                            <p v-else class="py-4 text-center text-sm text-muted-foreground">No active session set</p>
                         </CardContent>
                     </Card>
                 </Deferred>
@@ -248,7 +248,7 @@ const quickActions = [
                         <Card>
                             <CardHeader><Skeleton class="h-5 w-40" /></CardHeader>
                             <CardContent class="space-y-3">
-                                <div v-for="i in 4" :key="i" class="flex gap-3 items-center">
+                                <div v-for="i in 4" :key="i" class="flex items-center gap-3">
                                     <Skeleton class="h-8 w-8 rounded-full" />
                                     <div class="space-y-1.5">
                                         <Skeleton class="h-3 w-24" />
@@ -261,37 +261,32 @@ const quickActions = [
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between">
                             <div>
-                                <CardTitle class="text-sm flex items-center gap-2">
+                                <CardTitle class="flex items-center gap-2 text-sm">
                                     <Cake class="h-4 w-4 text-pink-500" />
                                     Upcoming Birthdays
                                 </CardTitle>
                             </div>
                             <Link :href="birthdays().url">
-                                <Button variant="ghost" size="sm" class="h-7 text-xs">
-                                    View All <ArrowRight class="ml-1 h-3 w-3" />
-                                </Button>
+                                <Button variant="ghost" size="sm" class="h-7 text-xs"> View All <ArrowRight class="ml-1 h-3 w-3" /> </Button>
                             </Link>
                         </CardHeader>
                         <CardContent>
                             <div v-if="upcoming_birthdays && upcoming_birthdays.length" class="space-y-3">
-                                <div v-for="person in upcoming_birthdays" :key="person.id" 
-                                     class="flex items-center gap-3">
+                                <div v-for="person in upcoming_birthdays" :key="person.id" class="flex items-center gap-3">
                                     <Avatar class="h-8 w-8">
                                         <AvatarFallback class="text-xs">{{ person.initials }}</AvatarFallback>
                                     </Avatar>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium truncate">{{ person.name }}</p>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="truncate text-sm font-medium">{{ person.name }}</p>
                                         <p class="text-xs text-muted-foreground">{{ person.birth_date }}</p>
                                     </div>
                                     <Badge :variant="person.days_until === 0 ? 'default' : 'secondary'" class="shrink-0">
-                                        <Clock v-if="person.days_until > 0" class="h-3 w-3 mr-1" />
+                                        <Clock v-if="person.days_until > 0" class="mr-1 h-3 w-3" />
                                         {{ person.days_until === 0 ? 'Today!' : `${person.days_until}d` }}
                                     </Badge>
                                 </div>
                             </div>
-                            <p v-else class="text-sm text-muted-foreground text-center py-6">
-                                No upcoming birthdays in the next 2 weeks
-                            </p>
+                            <p v-else class="py-6 text-center text-sm text-muted-foreground">No upcoming birthdays in the next 2 weeks</p>
                         </CardContent>
                     </Card>
                 </Deferred>
@@ -310,24 +305,30 @@ const quickActions = [
                         </CardHeader>
                         <CardContent class="space-y-3">
                             <div class="flex items-center gap-3">
-                                <div class="w-3 h-3 rounded-full bg-blue-500"></div>
-                                <span class="text-sm flex-1">Male</span>
+                                <div class="h-3 w-3 rounded-full bg-blue-500"></div>
+                                <span class="flex-1 text-sm">Male</span>
                                 <span class="font-semibold">{{ gender_distribution.male }}</span>
-                                <span class="text-xs text-muted-foreground w-10 text-right">
+                                <span class="w-10 text-right text-xs text-muted-foreground">
                                     {{ totalGender ? Math.round((gender_distribution.male / totalGender) * 100) : 0 }}%
                                 </span>
                             </div>
-                            <Progress :model-value="totalGender ? (gender_distribution.male / totalGender) * 100 : 0" class="h-2 bg-muted [&>div]:bg-blue-500" />
-                            
+                            <Progress
+                                :model-value="totalGender ? (gender_distribution.male / totalGender) * 100 : 0"
+                                class="h-2 bg-muted [&>div]:bg-blue-500"
+                            />
+
                             <div class="flex items-center gap-3">
-                                <div class="w-3 h-3 rounded-full bg-pink-500"></div>
-                                <span class="text-sm flex-1">Female</span>
+                                <div class="h-3 w-3 rounded-full bg-pink-500"></div>
+                                <span class="flex-1 text-sm">Female</span>
                                 <span class="font-semibold">{{ gender_distribution.female }}</span>
-                                <span class="text-xs text-muted-foreground w-10 text-right">
+                                <span class="w-10 text-right text-xs text-muted-foreground">
                                     {{ totalGender ? Math.round((gender_distribution.female / totalGender) * 100) : 0 }}%
                                 </span>
                             </div>
-                            <Progress :model-value="totalGender ? (gender_distribution.female / totalGender) * 100 : 0" class="h-2 bg-muted [&>div]:bg-pink-500" />
+                            <Progress
+                                :model-value="totalGender ? (gender_distribution.female / totalGender) * 100 : 0"
+                                class="h-2 bg-muted [&>div]:bg-pink-500"
+                            />
                         </CardContent>
                     </Card>
                 </Deferred>
@@ -338,7 +339,7 @@ const quickActions = [
                         <Card>
                             <CardHeader><Skeleton class="h-5 w-40" /></CardHeader>
                             <CardContent class="space-y-3">
-                                <div v-for="i in 4" :key="i" class="flex gap-3 items-center">
+                                <div v-for="i in 4" :key="i" class="flex items-center gap-3">
                                     <Skeleton class="h-8 w-8 rounded-full" />
                                     <div class="space-y-1.5">
                                         <Skeleton class="h-3 w-24" />
@@ -350,27 +351,24 @@ const quickActions = [
                     </template>
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between">
-                            <CardTitle class="text-sm flex items-center gap-2">
+                            <CardTitle class="flex items-center gap-2 text-sm">
                                 <Award class="h-4 w-4 text-amber-500" />
                                 Current Executives
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div v-if="current_executives && current_executives.length" class="space-y-3">
-                                <div v-for="exec in current_executives" :key="exec.id" 
-                                     class="flex items-center gap-3">
+                                <div v-for="exec in current_executives" :key="exec.id" class="flex items-center gap-3">
                                     <Avatar class="h-8 w-8">
-                                        <AvatarFallback class="text-xs bg-amber-100 dark:bg-amber-900">{{ exec.initials }}</AvatarFallback>
+                                        <AvatarFallback class="bg-amber-100 text-xs dark:bg-amber-900">{{ exec.initials }}</AvatarFallback>
                                     </Avatar>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium truncate">{{ exec.name }}</p>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="truncate text-sm font-medium">{{ exec.name }}</p>
                                         <p class="text-xs text-muted-foreground">{{ exec.office }}</p>
                                     </div>
                                 </div>
                             </div>
-                            <p v-else class="text-sm text-muted-foreground text-center py-6">
-                                No current executives set
-                            </p>
+                            <p v-else class="py-6 text-center text-sm text-muted-foreground">No current executives set</p>
                         </CardContent>
                     </Card>
                 </Deferred>
@@ -388,26 +386,23 @@ const quickActions = [
                     </template>
                     <Card v-if="department_distribution && stats">
                         <CardHeader>
-                            <CardTitle class="text-sm flex items-center gap-2">
+                            <CardTitle class="flex items-center gap-2 text-sm">
                                 <GraduationCap class="h-4 w-4 text-purple-500" />
                                 Top Departments
                             </CardTitle>
                         </CardHeader>
                         <CardContent class="space-y-3">
-                            <div v-for="dept in department_distribution" :key="dept.department" 
-                                 class="flex items-center gap-3">
+                            <div v-for="dept in department_distribution" :key="dept.department" class="flex items-center gap-3">
                                 <Badge variant="outline" class="w-14 justify-center text-[10px]">
                                     {{ dept.code }}
                                 </Badge>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-xs truncate mb-1">{{ dept.department }}</p>
-                                    <div class="h-2 bg-muted rounded-full overflow-hidden">
-                                        <div class="h-full bg-purple-500" 
-                                             :style="{ width: `${(dept.total / stats.total_alumni) * 100}%` }">
-                                        </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="mb-1 truncate text-xs">{{ dept.department }}</p>
+                                    <div class="h-2 overflow-hidden rounded-full bg-muted">
+                                        <div class="h-full bg-purple-500" :style="{ width: `${(dept.total / stats.total_alumni) * 100}%` }"></div>
                                     </div>
                                 </div>
-                                <span class="text-sm font-medium w-8 text-right">{{ dept.total }}</span>
+                                <span class="w-8 text-right text-sm font-medium">{{ dept.total }}</span>
                             </div>
                         </CardContent>
                     </Card>
@@ -426,17 +421,20 @@ const quickActions = [
                             <CardTitle class="text-sm">Top Units</CardTitle>
                         </CardHeader>
                         <CardContent class="space-y-3">
-                            <div v-for="item in unit_distribution" :key="item.unit" 
-                                 class="flex items-center gap-3">
-                                <div class="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-[8px] font-bold shrink-0">
-                                    {{ item.unit.split(' ').map(w => w[0]).join('').substring(0, 2) }}
+                            <div v-for="item in unit_distribution" :key="item.unit" class="flex items-center gap-3">
+                                <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-[8px] font-bold">
+                                    {{
+                                        item.unit
+                                            .split(' ')
+                                            .map((w) => w[0])
+                                            .join('')
+                                            .substring(0, 2)
+                                    }}
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-xs truncate">{{ item.unit }}</p>
-                                    <div class="h-1.5 bg-muted rounded-full overflow-hidden mt-1">
-                                        <div class="h-full bg-primary" 
-                                             :style="{ width: `${(item.total / stats.total_alumni) * 100}%` }">
-                                        </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="truncate text-xs">{{ item.unit }}</p>
+                                    <div class="mt-1 h-1.5 overflow-hidden rounded-full bg-muted">
+                                        <div class="h-full bg-primary" :style="{ width: `${(item.total / stats.total_alumni) * 100}%` }"></div>
                                     </div>
                                 </div>
                                 <span class="text-xs font-medium">{{ item.total }}</span>
@@ -451,7 +449,7 @@ const quickActions = [
                         <Card>
                             <CardHeader><Skeleton class="h-5 w-32" /></CardHeader>
                             <CardContent class="space-y-3">
-                                <div v-for="i in 5" :key="i" class="flex gap-3 items-center">
+                                <div v-for="i in 5" :key="i" class="flex items-center gap-3">
                                     <Skeleton class="h-8 w-8 rounded-full" />
                                     <div class="space-y-1.5">
                                         <Skeleton class="h-3 w-24" />
@@ -465,23 +463,20 @@ const quickActions = [
                         <CardHeader class="flex flex-row items-center justify-between">
                             <CardTitle class="text-sm">Recent Alumni</CardTitle>
                             <Link :href="alumniIndex().url">
-                                <Button variant="ghost" size="sm" class="h-7 text-xs">
-                                    View All <ArrowRight class="ml-1 h-3 w-3" />
-                                </Button>
+                                <Button variant="ghost" size="sm" class="h-7 text-xs"> View All <ArrowRight class="ml-1 h-3 w-3" /> </Button>
                             </Link>
                         </CardHeader>
                         <CardContent>
                             <div class="space-y-3">
-                                <div v-for="alumnus in recent_alumni" :key="alumnus.id" 
-                                     class="flex items-center gap-3">
+                                <div v-for="alumnus in recent_alumni" :key="alumnus.id" class="flex items-center gap-3">
                                     <Avatar class="h-8 w-8">
                                         <AvatarFallback class="text-xs">{{ alumnus.initials }}</AvatarFallback>
                                     </Avatar>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium truncate">{{ alumnus.name }}</p>
-                                        <p class="text-xs text-muted-foreground truncate">{{ alumnus.email || 'No email' }}</p>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="truncate text-sm font-medium">{{ alumnus.name }}</p>
+                                        <p class="truncate text-xs text-muted-foreground">{{ alumnus.email || 'No email' }}</p>
                                     </div>
-                                    <Badge variant="outline" class="text-xs shrink-0">{{ alumnus.tenure }}</Badge>
+                                    <Badge variant="outline" class="shrink-0 text-xs">{{ alumnus.tenure }}</Badge>
                                 </div>
                             </div>
                         </CardContent>

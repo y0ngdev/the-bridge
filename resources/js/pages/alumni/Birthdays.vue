@@ -1,27 +1,19 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
-import HeadingSmall from '@/components/HeadingSmall.vue';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogFooter,
-} from '@/components/ui/dialog';
-import { type BreadcrumbItem, type BirthdayAlumnus } from '@/types';
-import { Head, Deferred, Link } from '@inertiajs/vue3';
 import { birthdays, index, show } from '@/actions/App/Http/Controllers/AlumnusController';
 import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
-import { Cake, Mail, Phone, PartyPopper, ChevronDown, ChevronUp, ExternalLink } from 'lucide-vue-next';
-import { ref, computed } from 'vue';
+import HeadingSmall from '@/components/HeadingSmall.vue';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { formatPhoneNumber } from '@/lib/utils';
+import { type BirthdayAlumnus, type BreadcrumbItem } from '@/types';
+import { Deferred, Head, Link } from '@inertiajs/vue3';
+import { Cake, ChevronDown, ChevronUp, ExternalLink, Mail, PartyPopper, Phone } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 
 const props = defineProps<{
     today?: BirthdayAlumnus[];
@@ -47,17 +39,14 @@ const isBirthdayToday = (dateString: string): boolean => {
     return date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
 };
 
-const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-];
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-const sortedMonths = computed(() => months.filter(month => props.allByMonth?.[month]));
+const sortedMonths = computed(() => months.filter((month) => props.allByMonth?.[month]));
 const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long' });
 
 // Filter out today's birthdays from thisWeek/thisMonth to avoid duplication
-const thisWeekFiltered = computed(() => (props.thisWeek ?? []).filter(a => !isBirthdayToday(a.birth_date)));
-const thisMonthFiltered = computed(() => (props.thisMonth ?? []).filter(a => !isBirthdayToday(a.birth_date)));
+const thisWeekFiltered = computed(() => (props.thisWeek ?? []).filter((a) => !isBirthdayToday(a.birth_date)));
+const thisMonthFiltered = computed(() => (props.thisMonth ?? []).filter((a) => !isBirthdayToday(a.birth_date)));
 
 // Show more/less functionality
 const showAllToday = ref(false);
@@ -69,19 +58,15 @@ const displayedToday = computed(() => {
     const todayList = props.today ?? [];
     return showAllToday.value ? todayList : todayList.slice(0, INITIAL_DISPLAY_COUNT);
 });
-const displayedWeek = computed(() => 
-    showAllWeek.value ? thisWeekFiltered.value : thisWeekFiltered.value.slice(0, INITIAL_DISPLAY_COUNT)
-);
-const displayedMonth = computed(() => 
-    showAllMonth.value ? thisMonthFiltered.value : thisMonthFiltered.value.slice(0, INITIAL_DISPLAY_COUNT)
-);
+const displayedWeek = computed(() => (showAllWeek.value ? thisWeekFiltered.value : thisWeekFiltered.value.slice(0, INITIAL_DISPLAY_COUNT)));
+const displayedMonth = computed(() => (showAllMonth.value ? thisMonthFiltered.value : thisMonthFiltered.value.slice(0, INITIAL_DISPLAY_COUNT)));
 </script>
 
 <template>
     <Head title="Alumni Birthdays" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="px-4 py-6 max-w-7xl mx-auto">
+        <div class="mx-auto max-w-7xl px-4 py-6">
             <div class="mb-6">
                 <HeadingSmall title="Alumni Birthdays" description="Birthday calendar for all alumni" />
             </div>
@@ -103,7 +88,7 @@ const displayedMonth = computed(() =>
                         </CardContent>
                     </Card>
                 </template>
-                
+
                 <Card v-if="(today ?? []).length > 0" class="mb-6 border-primary/30 bg-primary/5 dark:bg-primary/10">
                     <CardHeader class="pb-4">
                         <CardTitle class="flex items-center gap-2">
@@ -116,20 +101,22 @@ const displayedMonth = computed(() =>
                         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             <Dialog v-for="alumnus in displayedToday" :key="alumnus.id">
                                 <DialogTrigger as-child>
-                                    <Card class="hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer border-primary/30">
+                                    <Card class="cursor-pointer border-primary/30 transition-all hover:scale-[1.02] hover:shadow-lg">
                                         <CardContent class="p-6">
                                             <div class="flex items-center gap-4">
-                                                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 dark:bg-primary/30 overflow-hidden shrink-0">
-                                                    <img 
-                                                        v-if="alumnus.photo_url" 
-                                                        :src="alumnus.photo_url" 
+                                                <div
+                                                    class="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/20 dark:bg-primary/30"
+                                                >
+                                                    <img
+                                                        v-if="alumnus.photo_url"
+                                                        :src="alumnus.photo_url"
                                                         :alt="`${alumnus.name}'s photo`"
                                                         class="h-full w-full object-cover"
                                                     />
                                                     <span v-else class="text-lg font-semibold text-foreground/70">{{ alumnus.initials }}</span>
                                                 </div>
-                                                <div class="flex-1 min-w-0">
-                                                        <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>
+                                                <div class="min-w-0 flex-1">
+                                                    <h3 class="truncate font-semibold">{{ alumnus.name }}</h3>
                                                     <p class="text-sm text-muted-foreground">{{ alumnus.dept || 'Alumni' }}</p>
                                                 </div>
                                             </div>
@@ -145,7 +132,7 @@ const displayedMonth = computed(() =>
                                         <DialogDescription>Happy Birthday! Contact details below.</DialogDescription>
                                     </DialogHeader>
                                     <div class="space-y-4 pt-4">
-                                        <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                                        <div class="flex items-center gap-3 rounded-lg bg-muted p-3">
                                             <Cake class="h-5 w-5 text-primary" />
                                             <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
                                         </div>
@@ -154,17 +141,25 @@ const displayedMonth = computed(() =>
                                             <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
                                         </div>
                                         <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
-                                            <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
+                                            <Phone class="mt-0.5 h-5 w-5 text-muted-foreground" />
                                             <div class="space-y-1">
-                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
+                                                <a
+                                                    v-for="phone in alumnus.phones"
+                                                    :key="phone"
+                                                    :href="`tel:${phone}`"
+                                                    class="block hover:underline"
+                                                    >{{ formatPhoneNumber(phone) }}</a
+                                                >
                                             </div>
                                         </div>
-                                        <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
+                                        <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">
+                                            No contact information available.
+                                        </p>
                                     </div>
                                     <DialogFooter>
                                         <Link :href="show(alumnus.id).url" class="w-full">
                                             <Button variant="outline" class="w-full">
-                                                <ExternalLink class="h-4 w-4 mr-2" />
+                                                <ExternalLink class="mr-2 h-4 w-4" />
                                                 View Full Details
                                             </Button>
                                         </Link>
@@ -172,9 +167,9 @@ const displayedMonth = computed(() =>
                                 </DialogContent>
                             </Dialog>
                         </div>
-                        <div v-if="(today ?? []).length > INITIAL_DISPLAY_COUNT" class="text-center mt-4">
+                        <div v-if="(today ?? []).length > INITIAL_DISPLAY_COUNT" class="mt-4 text-center">
                             <Button variant="ghost" @click="showAllToday = !showAllToday">
-                                <component :is="showAllToday ? ChevronUp : ChevronDown" class="h-4 w-4 mr-2" />
+                                <component :is="showAllToday ? ChevronUp : ChevronDown" class="mr-2 h-4 w-4" />
                                 {{ showAllToday ? 'Show less' : `Show all ${(today ?? []).length} birthdays` }}
                             </Button>
                         </div>
@@ -184,7 +179,7 @@ const displayedMonth = computed(() =>
                 <!-- No birthdays today -->
                 <Card v-else class="mb-6 border-dashed">
                     <CardContent class="py-12 text-center">
-                        <Cake class="mx-auto h-16 w-16 text-muted-foreground/30 mb-4" />
+                        <Cake class="mx-auto mb-4 h-16 w-16 text-muted-foreground/30" />
                         <p class="text-muted-foreground">No birthdays today</p>
                     </CardContent>
                 </Card>
@@ -212,7 +207,7 @@ const displayedMonth = computed(() =>
                                     <CardContent class="p-6">
                                         <div class="flex items-center gap-4">
                                             <Skeleton class="h-12 w-12 rounded-full" />
-                                            <div class="space-y-2 flex-1">
+                                            <div class="flex-1 space-y-2">
                                                 <Skeleton class="h-4 w-3/4" />
                                                 <Skeleton class="h-3 w-1/2" />
                                             </div>
@@ -222,8 +217,8 @@ const displayedMonth = computed(() =>
                             </div>
                         </template>
 
-                        <div v-if="thisWeekFiltered.length === 0" class="text-center py-12 text-muted-foreground">
-                            <Cake class="mx-auto h-16 w-16 mb-4 opacity-30" />
+                        <div v-if="thisWeekFiltered.length === 0" class="py-12 text-center text-muted-foreground">
+                            <Cake class="mx-auto mb-4 h-16 w-16 opacity-30" />
                             <p>No upcoming birthdays this week</p>
                         </div>
 
@@ -231,20 +226,22 @@ const displayedMonth = computed(() =>
                             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                                 <Dialog v-for="alumnus in displayedWeek" :key="alumnus.id">
                                     <DialogTrigger as-child>
-                                        <Card class="hover:shadow-md hover:border-primary/50 transition-all cursor-pointer">
+                                        <Card class="cursor-pointer transition-all hover:border-primary/50 hover:shadow-md">
                                             <CardContent class="p-6">
                                                 <div class="flex items-center gap-4">
-                                                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted overflow-hidden shrink-0">
-                                                        <img 
-                                                            v-if="alumnus.photo_url" 
-                                                            :src="alumnus.photo_url" 
+                                                    <div
+                                                        class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted"
+                                                    >
+                                                        <img
+                                                            v-if="alumnus.photo_url"
+                                                            :src="alumnus.photo_url"
                                                             :alt="`${alumnus.name}'s photo`"
                                                             class="h-full w-full object-cover"
                                                         />
                                                         <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
                                                     </div>
-                                                    <div class="flex-1 min-w-0">
-                                                        <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>
+                                                    <div class="min-w-0 flex-1">
+                                                        <h3 class="truncate font-semibold">{{ alumnus.name }}</h3>
                                                         <p class="text-sm text-muted-foreground">{{ formatDate(alumnus.birth_date) }}</p>
                                                     </div>
                                                 </div>
@@ -257,7 +254,7 @@ const displayedMonth = computed(() =>
                                             <DialogDescription>Contact details</DialogDescription>
                                         </DialogHeader>
                                         <div class="space-y-4 pt-4">
-                                            <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                                            <div class="flex items-center gap-3 rounded-lg bg-muted p-3">
                                                 <Cake class="h-5 w-5 text-primary" />
                                                 <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
                                             </div>
@@ -266,17 +263,25 @@ const displayedMonth = computed(() =>
                                                 <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
                                             </div>
                                             <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
-                                                <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
+                                                <Phone class="mt-0.5 h-5 w-5 text-muted-foreground" />
                                                 <div class="space-y-1">
-                                                    <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
+                                                    <a
+                                                        v-for="phone in alumnus.phones"
+                                                        :key="phone"
+                                                        :href="`tel:${phone}`"
+                                                        class="block hover:underline"
+                                                        >{{ formatPhoneNumber(phone) }}</a
+                                                    >
                                                 </div>
                                             </div>
-                                            <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
+                                            <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">
+                                                No contact information available.
+                                            </p>
                                         </div>
                                         <DialogFooter>
                                             <Link :href="show(alumnus.id).url" class="w-full">
                                                 <Button variant="outline" class="w-full">
-                                                    <ExternalLink class="h-4 w-4 mr-2" />
+                                                    <ExternalLink class="mr-2 h-4 w-4" />
                                                     View Full Details
                                                 </Button>
                                             </Link>
@@ -284,9 +289,9 @@ const displayedMonth = computed(() =>
                                     </DialogContent>
                                 </Dialog>
                             </div>
-                            <div v-if="thisWeekFiltered.length > INITIAL_DISPLAY_COUNT" class="text-center mt-6">
+                            <div v-if="thisWeekFiltered.length > INITIAL_DISPLAY_COUNT" class="mt-6 text-center">
                                 <Button variant="ghost" @click="showAllWeek = !showAllWeek">
-                                    <component :is="showAllWeek ? ChevronUp : ChevronDown" class="h-4 w-4 mr-2" />
+                                    <component :is="showAllWeek ? ChevronUp : ChevronDown" class="mr-2 h-4 w-4" />
                                     {{ showAllWeek ? 'Show less' : `Show all ${thisWeekFiltered.length}` }}
                                 </Button>
                             </div>
@@ -303,7 +308,7 @@ const displayedMonth = computed(() =>
                                     <CardContent class="p-6">
                                         <div class="flex items-center gap-4">
                                             <Skeleton class="h-12 w-12 rounded-full" />
-                                            <div class="space-y-2 flex-1">
+                                            <div class="flex-1 space-y-2">
                                                 <Skeleton class="h-4 w-3/4" />
                                                 <Skeleton class="h-3 w-1/2" />
                                             </div>
@@ -313,8 +318,8 @@ const displayedMonth = computed(() =>
                             </div>
                         </template>
 
-                        <div v-if="thisMonthFiltered.length === 0" class="text-center py-12 text-muted-foreground">
-                            <Cake class="mx-auto h-16 w-16 mb-4 opacity-30" />
+                        <div v-if="thisMonthFiltered.length === 0" class="py-12 text-center text-muted-foreground">
+                            <Cake class="mx-auto mb-4 h-16 w-16 opacity-30" />
                             <p>No upcoming birthdays this month</p>
                         </div>
 
@@ -322,20 +327,22 @@ const displayedMonth = computed(() =>
                             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                                 <Dialog v-for="alumnus in displayedMonth" :key="alumnus.id">
                                     <DialogTrigger as-child>
-                                        <Card class="hover:shadow-md hover:border-primary/50 transition-all cursor-pointer">
+                                        <Card class="cursor-pointer transition-all hover:border-primary/50 hover:shadow-md">
                                             <CardContent class="p-6">
                                                 <div class="flex items-center gap-4">
-                                                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted overflow-hidden shrink-0">
-                                                        <img 
-                                                            v-if="alumnus.photo_url" 
-                                                            :src="alumnus.photo_url" 
+                                                    <div
+                                                        class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted"
+                                                    >
+                                                        <img
+                                                            v-if="alumnus.photo_url"
+                                                            :src="alumnus.photo_url"
                                                             :alt="`${alumnus.name}'s photo`"
                                                             class="h-full w-full object-cover"
                                                         />
                                                         <span v-else class="text-sm font-semibold text-muted-foreground">{{ alumnus.initials }}</span>
                                                     </div>
-                                                    <div class="flex-1 min-w-0">
-                                                        <h3 class="font-semibold truncate">{{ alumnus.name }}</h3>
+                                                    <div class="min-w-0 flex-1">
+                                                        <h3 class="truncate font-semibold">{{ alumnus.name }}</h3>
                                                         <p class="text-sm text-muted-foreground">{{ formatDate(alumnus.birth_date) }}</p>
                                                     </div>
                                                 </div>
@@ -348,7 +355,7 @@ const displayedMonth = computed(() =>
                                             <DialogDescription>Contact details</DialogDescription>
                                         </DialogHeader>
                                         <div class="space-y-4 pt-4">
-                                            <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                                            <div class="flex items-center gap-3 rounded-lg bg-muted p-3">
                                                 <Cake class="h-5 w-5 text-primary" />
                                                 <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
                                             </div>
@@ -357,17 +364,25 @@ const displayedMonth = computed(() =>
                                                 <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
                                             </div>
                                             <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
-                                                <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
+                                                <Phone class="mt-0.5 h-5 w-5 text-muted-foreground" />
                                                 <div class="space-y-1">
-                                                    <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
+                                                    <a
+                                                        v-for="phone in alumnus.phones"
+                                                        :key="phone"
+                                                        :href="`tel:${phone}`"
+                                                        class="block hover:underline"
+                                                        >{{ formatPhoneNumber(phone) }}</a
+                                                    >
                                                 </div>
                                             </div>
-                                            <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
+                                            <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">
+                                                No contact information available.
+                                            </p>
                                         </div>
                                         <DialogFooter>
                                             <Link :href="show(alumnus.id).url" class="w-full">
                                                 <Button variant="outline" class="w-full">
-                                                    <ExternalLink class="h-4 w-4 mr-2" />
+                                                    <ExternalLink class="mr-2 h-4 w-4" />
                                                     View Full Details
                                                 </Button>
                                             </Link>
@@ -375,9 +390,9 @@ const displayedMonth = computed(() =>
                                     </DialogContent>
                                 </Dialog>
                             </div>
-                            <div v-if="thisMonthFiltered.length > INITIAL_DISPLAY_COUNT" class="text-center mt-6">
+                            <div v-if="thisMonthFiltered.length > INITIAL_DISPLAY_COUNT" class="mt-6 text-center">
                                 <Button variant="ghost" @click="showAllMonth = !showAllMonth">
-                                    <component :is="showAllMonth ? ChevronUp : ChevronDown" class="h-4 w-4 mr-2" />
+                                    <component :is="showAllMonth ? ChevronUp : ChevronDown" class="mr-2 h-4 w-4" />
                                     {{ showAllMonth ? 'Show less' : `Show all ${thisMonthFiltered.length}` }}
                                 </Button>
                             </div>
@@ -392,22 +407,22 @@ const displayedMonth = computed(() =>
                             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                                 <Card v-for="i in 8" :key="i">
                                     <CardHeader class="pb-3">
-                                         <Skeleton class="h-6 w-32" />
+                                        <Skeleton class="h-6 w-32" />
                                     </CardHeader>
                                     <CardContent class="pt-0">
-                                         <div class="space-y-4">
-                                              <div v-for="j in 3" :key="j" class="flex items-center justify-between">
-                                                  <Skeleton class="h-4 w-24" />
-                                                  <Skeleton class="h-3 w-16" />
-                                              </div>
-                                         </div>
+                                        <div class="space-y-4">
+                                            <div v-for="j in 3" :key="j" class="flex items-center justify-between">
+                                                <Skeleton class="h-4 w-24" />
+                                                <Skeleton class="h-3 w-16" />
+                                            </div>
+                                        </div>
                                     </CardContent>
                                 </Card>
                             </div>
                         </template>
 
-                        <div v-if="sortedMonths.length === 0" class="text-center py-12 text-muted-foreground">
-                            <Cake class="mx-auto h-16 w-16 mb-4 opacity-30" />
+                        <div v-if="sortedMonths.length === 0" class="py-12 text-center text-muted-foreground">
+                            <Cake class="mx-auto mb-4 h-16 w-16 opacity-30" />
                             <p>No birthdays recorded yet</p>
                         </div>
 
@@ -415,10 +430,7 @@ const displayedMonth = computed(() =>
                             <Card
                                 v-for="month in sortedMonths"
                                 :key="month"
-                                :class="[
-                                    'hover:shadow-md transition-shadow',
-                                    month === currentMonth ? 'ring-2 ring-primary' : ''
-                                ]"
+                                :class="['transition-shadow hover:shadow-md', month === currentMonth ? 'ring-2 ring-primary' : '']"
                             >
                                 <CardHeader class="pb-3">
                                     <CardTitle class="flex items-center justify-between text-base">
@@ -436,12 +448,12 @@ const displayedMonth = computed(() =>
                                         <li
                                             v-for="alumnus in allByMonth[month]"
                                             :key="alumnus.id"
-                                            class="flex items-center justify-between text-sm py-2 border-b border-border/50 last:border-0"
+                                            class="flex items-center justify-between border-b border-border/50 py-2 text-sm last:border-0"
                                         >
                                             <Dialog>
                                                 <DialogTrigger as-child>
-                                                    <button 
-                                                        class="font-medium text-left hover:text-primary transition-colors cursor-pointer truncate flex-1"
+                                                    <button
+                                                        class="flex-1 cursor-pointer truncate text-left font-medium transition-colors hover:text-primary"
                                                         :class="isBirthdayToday(alumnus.birth_date) ? 'font-bold' : ''"
                                                     >
                                                         {{ alumnus.name }}
@@ -454,7 +466,7 @@ const displayedMonth = computed(() =>
                                                         <DialogDescription>Contact details</DialogDescription>
                                                     </DialogHeader>
                                                     <div class="space-y-4 pt-4">
-                                                        <div class="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                                                        <div class="flex items-center gap-3 rounded-lg bg-muted p-3">
                                                             <Cake class="h-5 w-5 text-primary" />
                                                             <span class="font-medium">{{ formatDate(alumnus.birth_date) }}</span>
                                                         </div>
@@ -463,24 +475,32 @@ const displayedMonth = computed(() =>
                                                             <a :href="`mailto:${alumnus.email}`" class="hover:underline">{{ alumnus.email }}</a>
                                                         </div>
                                                         <div v-if="alumnus.phones?.length" class="flex items-start gap-3">
-                                                            <Phone class="h-5 w-5 text-muted-foreground mt-0.5" />
+                                                            <Phone class="mt-0.5 h-5 w-5 text-muted-foreground" />
                                                             <div class="space-y-1">
-                                                                <a v-for="phone in alumnus.phones" :key="phone" :href="`tel:${phone}`" class="block hover:underline">{{ formatPhoneNumber(phone) }}</a>
+                                                                <a
+                                                                    v-for="phone in alumnus.phones"
+                                                                    :key="phone"
+                                                                    :href="`tel:${phone}`"
+                                                                    class="block hover:underline"
+                                                                    >{{ formatPhoneNumber(phone) }}</a
+                                                                >
                                                             </div>
                                                         </div>
-                                                        <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">No contact information available.</p>
+                                                        <p v-if="!alumnus.email && !alumnus.phones?.length" class="text-muted-foreground italic">
+                                                            No contact information available.
+                                                        </p>
                                                     </div>
                                                     <DialogFooter>
                                                         <Link :href="show(alumnus.id).url" class="w-full">
                                                             <Button variant="outline" class="w-full">
-                                                                <ExternalLink class="h-4 w-4 mr-2" />
+                                                                <ExternalLink class="mr-2 h-4 w-4" />
                                                                 View Full Details
                                                             </Button>
                                                         </Link>
                                                     </DialogFooter>
                                                 </DialogContent>
                                             </Dialog>
-                                            <span class="text-muted-foreground text-xs ml-2">
+                                            <span class="ml-2 text-xs text-muted-foreground">
                                                 {{ formatDate(alumnus.birth_date) }}
                                             </span>
                                         </li>

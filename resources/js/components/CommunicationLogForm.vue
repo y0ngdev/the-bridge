@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import { store } from '@/actions/App/Http/Controllers/CommunicationLogController';
+import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import InputError from '@/components/InputError.vue';
 import { useForm } from '@inertiajs/vue3';
 import { MessageSquarePlus } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
@@ -49,14 +43,14 @@ function submit() {
 <template>
     <Card>
         <CardHeader>
-            <CardTitle class="text-lg flex items-center gap-2">
+            <CardTitle class="flex items-center gap-2 text-lg">
                 <MessageSquarePlus class="h-5 w-5" />
                 Log Interaction
             </CardTitle>
         </CardHeader>
         <CardContent>
             <form @submit.prevent="submit" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div class="space-y-2">
                         <Label>Type</Label>
                         <Select v-model="form.type">
@@ -103,7 +97,12 @@ function submit() {
 
                 <div class="space-y-2">
                     <Label>Notes</Label>
-                    <Textarea v-model="form.notes" placeholder="Details about the conversation..." rows="3" :class="form.errors.notes && 'border-destructive'" />
+                    <Textarea
+                        v-model="form.notes"
+                        placeholder="Details about the conversation..."
+                        rows="3"
+                        :class="form.errors.notes && 'border-destructive'"
+                    />
                     <InputError :message="form.errors.notes" />
                 </div>
 

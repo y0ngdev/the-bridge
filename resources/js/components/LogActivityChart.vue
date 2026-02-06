@@ -25,7 +25,7 @@ const y = (d: any) => d.count;
 <template>
     <ChartContainer :config="chartConfig" class="h-[200px] w-full">
         <VisXYContainer :data="data" :height="200">
-            <VisStackedBar :x="x" :y="y"  />
+            <VisStackedBar :x="x" :y="y" />
             <VisAxis
                 type="x"
                 :num-ticks="data.length"

@@ -1,28 +1,30 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
+import { distribution, exportMethod, index, show } from '@/actions/App/Http/Controllers/AlumnusController';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { type BreadcrumbItem, type Tenure, type EnumOption, type AlumnusSummary, type SimplePaginatedResponse, type PaginationLink } from '@/types';
-import { Head, Link, router, Deferred } from '@inertiajs/vue3';
 import { Skeleton } from '@/components/ui/skeleton';
-import { index, distribution, exportMethod, show } from '@/actions/App/Http/Controllers/AlumnusController';
-import { MapPin, Search, Download, Eye, Filter, Check, Globe } from 'lucide-vue-next';
-import { ref, computed } from 'vue';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { type AlumnusSummary, type BreadcrumbItem, type EnumOption, type PaginationLink, type SimplePaginatedResponse } from '@/types';
+import { Deferred, Head, Link, router } from '@inertiajs/vue3';
+import { Download, Eye, Filter, Globe, MapPin, Search } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
 
 type PaginatedAlumni = SimplePaginatedResponse<AlumnusSummary>;
@@ -57,13 +59,36 @@ const showOverseas = ref(props.filters.overseas === 'true');
 const isExportDialogOpen = ref(false);
 
 // Export field selection
-type ExportFieldKey = 'name' | 'email' | 'phones' | 'state' | 'unit' | 'department' | 'gender' | 'birth_date' | 'tenure' | 'current_exco_office' | 'past_exco_offices' | 'is_futa_staff' | 'address';
+type ExportFieldKey =
+    | 'name'
+    | 'email'
+    | 'phones'
+    | 'state'
+    | 'unit'
+    | 'department'
+    | 'gender'
+    | 'birth_date'
+    | 'tenure'
+    | 'current_exco_office'
+    | 'past_exco_offices'
+    | 'is_futa_staff'
+    | 'address';
 
 // Array of selected field keys (all selected by default)
 const selectedExportFields = ref<ExportFieldKey[]>([
-    'name', 'email', 'phones', 'state', 'unit', 'department', 
-    'gender', 'birth_date', 'tenure', 'current_exco_office', 
-    'past_exco_offices', 'is_futa_staff', 'address'
+    'name',
+    'email',
+    'phones',
+    'state',
+    'unit',
+    'department',
+    'gender',
+    'birth_date',
+    'tenure',
+    'current_exco_office',
+    'past_exco_offices',
+    'is_futa_staff',
+    'address',
 ]);
 
 const availableExportFields: Array<{ key: ExportFieldKey; label: string }> = [
@@ -87,7 +112,7 @@ const isFieldSelected = (field: ExportFieldKey) => selectedExportFields.value.in
 const toggleField = (field: ExportFieldKey, value?: boolean) => {
     const index = selectedExportFields.value.indexOf(field);
     const shouldBeSelected = value !== undefined ? value : index === -1;
-    
+
     if (shouldBeSelected && index === -1) {
         selectedExportFields.value.push(field);
     } else if (!shouldBeSelected && index > -1) {
@@ -97,13 +122,13 @@ const toggleField = (field: ExportFieldKey, value?: boolean) => {
 
 // Pre-created computed models for each export field to work with reka-ui Checkbox
 const exportFieldModels = Object.fromEntries(
-    availableExportFields.map(field => [
+    availableExportFields.map((field) => [
         field.key,
         computed({
             get: () => selectedExportFields.value.includes(field.key),
-            set: (value: boolean) => toggleField(field.key, value)
-        })
-    ])
+            set: (value: boolean) => toggleField(field.key, value),
+        }),
+    ]),
 ) as Record<ExportFieldKey, ReturnType<typeof computed<boolean>>>;
 
 const totalAlumni = computed(() => {
@@ -126,7 +151,7 @@ const applyFilters = () => {
         {
             preserveState: true,
             preserveScroll: true,
-        }
+        },
     );
 };
 
@@ -159,18 +184,16 @@ const handleExport = () => {
 
     // Build query parameters - use availableExportFields order to maintain consistent header order
     const params = new URLSearchParams();
-    const orderedFields = availableExportFields
-        .filter(f => selectedExportFields.value.includes(f.key))
-        .map(f => f.key);
-    orderedFields.forEach(field => params.append('fields[]', field));
-    
+    const orderedFields = availableExportFields.filter((f) => selectedExportFields.value.includes(f.key)).map((f) => f.key);
+    orderedFields.forEach((field) => params.append('fields[]', field));
+
     if (selectedState.value) params.append('state', selectedState.value);
     if (selectedUnit.value) params.append('unit', selectedUnit.value);
     if (selectedTenure.value) params.append('tenure_id', String(selectedTenure.value));
 
     // Redirect to export endpoint
     window.location.href = `${exportMethod().url}?${params.toString()}`;
-    
+
     isExportDialogOpen.value = false;
     toast.success('Export started! Download will begin shortly.');
 };
@@ -191,7 +214,7 @@ const paginationLinks = computed(() => {
             <!-- Sidebar with state distribution -->
             <Deferred data="stateDistribution">
                 <template #fallback>
-                    <Card class="w-80 h-fit sticky top-6">
+                    <Card class="sticky top-6 h-fit w-80">
                         <CardHeader>
                             <CardTitle class="flex items-center gap-2">
                                 <MapPin class="h-5 w-5" />
@@ -207,7 +230,7 @@ const paginationLinks = computed(() => {
                     </Card>
                 </template>
 
-                <Card class="w-80 h-fit sticky top-6">
+                <Card class="sticky top-6 h-fit w-80">
                     <CardHeader>
                         <CardTitle class="flex items-center gap-2">
                             <MapPin class="h-5 w-5" />
@@ -227,12 +250,7 @@ const paginationLinks = computed(() => {
                                     <span>All States</span>
                                     <span class="text-muted-foreground">{{ totalAlumni }}</span>
                                 </Button>
-                                <Button
-                                    variant="ghost"
-                                    class="w-full justify-between"
-                                    :class="{ 'bg-accent': showOverseas }"
-                                    @click="selectOverseas"
-                                >
+                                <Button variant="ghost" class="w-full justify-between" :class="{ 'bg-accent': showOverseas }" @click="selectOverseas">
                                     <span class="flex items-center gap-2">
                                         <Globe class="h-4 w-4" />
                                         Overseas
@@ -262,9 +280,7 @@ const paginationLinks = computed(() => {
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1 space-y-1">
                         <HeadingSmall title="Alumni Distribution" />
-                        <p class="text-sm text-muted-foreground">
-                            View and filter alumni by state and unit. Export filters by selected state.
-                        </p>
+                        <p class="text-sm text-muted-foreground">View and filter alumni by state and unit. Export filters by selected state.</p>
                     </div>
                     <Dialog v-model:open="isExportDialogOpen">
                         <DialogTrigger as-child>
@@ -276,9 +292,7 @@ const paginationLinks = computed(() => {
                         <DialogContent class="max-w-md">
                             <DialogHeader>
                                 <DialogTitle>Customize Export</DialogTitle>
-                                <DialogDescription>
-                                    Select the fields you want to include in your export
-                                </DialogDescription>
+                                <DialogDescription> Select the fields you want to include in your export </DialogDescription>
                             </DialogHeader>
                             <ScrollArea class="h-[400px] pr-4">
                                 <div class="space-y-4">
@@ -318,7 +332,7 @@ const paginationLinks = computed(() => {
                             <div class="flex-1 space-y-2">
                                 <Label for="search">Search</Label>
                                 <div class="relative">
-                                    <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                     <Input
                                         id="search"
                                         v-model="searchQuery"
@@ -339,28 +353,24 @@ const paginationLinks = computed(() => {
                                             {{ unit.label }}
                                         </SelectItem>
                                     </SelectContent>
-                                    </Select>
-                                </div>
-                                <div class="flex-1 space-y-2">
-                                    <Label for="tenure">Tenure</Label>
-                                    <Select v-model="selectedTenure">
-                                        <SelectTrigger id="tenure">
-                                            <SelectValue placeholder="All Tenures" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem v-for="tenure in tenures" :key="tenure.value" :value="tenure.value">
-                                                {{ tenure.label }}
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div class="flex items-end gap-2">
-                                <Button @click="applyFilters">
-                                    Apply Filters
-                                </Button>
-                                <Button variant="outline" @click="clearFilters">
-                                    Clear
-                                </Button>
+                                </Select>
+                            </div>
+                            <div class="flex-1 space-y-2">
+                                <Label for="tenure">Tenure</Label>
+                                <Select v-model="selectedTenure">
+                                    <SelectTrigger id="tenure">
+                                        <SelectValue placeholder="All Tenures" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="tenure in tenures" :key="tenure.value" :value="tenure.value">
+                                            {{ tenure.label }}
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div class="flex items-end gap-2">
+                                <Button @click="applyFilters"> Apply Filters </Button>
+                                <Button variant="outline" @click="clearFilters"> Clear </Button>
                             </div>
                         </div>
                     </CardContent>
@@ -378,9 +388,7 @@ const paginationLinks = computed(() => {
                                 <template v-if="alumni?.data?.length">
                                     Showing {{ alumni.from }}-{{ alumni.to }} of {{ filteredAlumniCount }} alumni
                                 </template>
-                                <template v-else>
-                                    No alumni found
-                                </template>
+                                <template v-else> No alumni found </template>
                             </CardDescription>
                         </Deferred>
                     </CardHeader>
@@ -406,11 +414,11 @@ const paginationLinks = computed(() => {
                                 </TableHeader>
                                 <TableBody>
                                     <TableRow v-if="(alumni?.data ?? []).length === 0">
-                                        <TableCell colspan="6" class="text-center py-8 text-muted-foreground">
+                                        <TableCell colspan="6" class="py-8 text-center text-muted-foreground">
                                             No alumni found matching your filters
                                         </TableCell>
                                     </TableRow>
-                                    <TableRow v-for="alumnus in (alumni?.data ?? [])" :key="alumnus.id">
+                                    <TableRow v-for="alumnus in alumni?.data ?? []" :key="alumnus.id">
                                         <TableCell class="font-medium">{{ alumnus.name }}</TableCell>
                                         <TableCell>{{ alumnus.email || '-' }}</TableCell>
                                         <TableCell>{{ alumnus.state || '-' }}</TableCell>
@@ -429,55 +437,26 @@ const paginationLinks = computed(() => {
 
                             <!-- Pagination -->
                             <div v-if="alumni?.last_page && alumni.last_page > 1" class="mt-6 flex justify-center gap-2">
-                                <Link 
-                                    v-if="alumni?.prev_page_url"
-                                    :href="alumni.first_page_url || '#'"
-                                    preserve-state
-                                    preserve-scroll
-                                >
+                                <Link v-if="alumni?.prev_page_url" :href="alumni.first_page_url || '#'" preserve-state preserve-scroll>
                                     <Button variant="outline" size="sm">First</Button>
                                 </Link>
-                                <Link 
-                                    v-if="alumni?.prev_page_url"
-                                    :href="alumni.prev_page_url"
-                                    preserve-state
-                                    preserve-scroll
-                                >
+                                <Link v-if="alumni?.prev_page_url" :href="alumni.prev_page_url" preserve-state preserve-scroll>
                                     <Button variant="outline" size="sm">Previous</Button>
                                 </Link>
-                                
+
                                 <template v-for="(link, index) in paginationLinks" :key="index">
                                     <span v-if="link.label === '...'" class="px-3 py-2 text-sm text-muted-foreground">...</span>
-                                    <Link
-                                        v-else
-                                        :href="link.url || '#'"
-                                        preserve-state
-                                        preserve-scroll
-                                    >
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            :class="{ 'bg-accent': link.active }"
-                                        >
+                                    <Link v-else :href="link.url || '#'" preserve-state preserve-scroll>
+                                        <Button variant="outline" size="sm" :class="{ 'bg-accent': link.active }">
                                             {{ link.label }}
                                         </Button>
                                     </Link>
                                 </template>
 
-                                <Link 
-                                    v-if="alumni?.next_page_url"
-                                    :href="alumni.next_page_url"
-                                    preserve-state
-                                    preserve-scroll
-                                >
+                                <Link v-if="alumni?.next_page_url" :href="alumni.next_page_url" preserve-state preserve-scroll>
                                     <Button variant="outline" size="sm">Next</Button>
                                 </Link>
-                                <Link 
-                                    v-if="alumni?.next_page_url"
-                                    :href="alumni.last_page_url || '#'"
-                                    preserve-state
-                                    preserve-scroll
-                                >
+                                <Link v-if="alumni?.next_page_url" :href="alumni.last_page_url || '#'" preserve-state preserve-scroll>
                                     <Button variant="outline" size="sm">Last</Button>
                                 </Link>
                             </div>
