@@ -17,7 +17,7 @@ return new class extends Migration
             // REMOVE UNIQUE EMAILS
             $table->string('email')->nullable()->unique();
             $table->json('phones')->nullable();
-            $table->foreignId('department_id')->nullable()->after('phones')->constrained()->nullOnDelete();
+            $table->foreignId('department_id')->nullable()->constrained()->nullOnDelete();
             $table->enum('gender', ['M', 'F'])->nullable();
 
             $table->boolean('is_futa_staff')->default(false);
