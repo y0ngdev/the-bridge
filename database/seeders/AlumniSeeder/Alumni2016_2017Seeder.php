@@ -2066,17 +2066,7 @@ class Alumni2016_2017Seeder extends Seeder
                 'state' => null,
                 'address' => null,
             ],
-            [
-                'name' => 'ONIBI ABISOLA',
-                'email' => 'onibiabisola1@yahoo.com',
-                'phones' => ['07062427374'],
-                'department_id' => 43,
-                'gender' => 'F',
-                'birth_date' => '2000-08-27',
-                'unit' => null,
-                'state' => null,
-                'address' => null,
-            ],
+          
             [
                 'name' => 'ALUFA SOLA',
                 'email' => null,
