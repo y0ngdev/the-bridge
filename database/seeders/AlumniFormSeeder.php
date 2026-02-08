@@ -323,7 +323,7 @@ class AlumniFormSeeder extends Seeder
                 'department' => 'Agricultural and Environmental Engineering',
                 'unit' => null,
                 'year' => '2017-2018',
-                'is_overseas' => true,
+                'state' => Overseas,
             ],
             [
                 'name' => 'Dada Boluwatife',
