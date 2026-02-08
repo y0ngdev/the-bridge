@@ -205,7 +205,7 @@ const attendancePercentage = computed(() => {
             <!-- Tabs for each event day -->
             <Tabs v-model="activeTab" class="w-full">
                 <TabsList class="mb-4 flex w-full flex-wrap justify-start gap-1">
-                    <TabsTrigger v-for="day in eventDays" :key="day.value" :value="day.value" class="flex-shrink-0">
+                    <TabsTrigger v-for="day in eventDays" :key="day.value" :value="day.value" class="shrink-0">
                         {{ day.label }}
                         <Badge variant="secondary" class="ml-2">
                             {{ attendanceByDay[day.value]?.count ?? 0 }}

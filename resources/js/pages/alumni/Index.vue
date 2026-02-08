@@ -665,7 +665,7 @@ onMounted(() => {
                                                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent class="max-h-[400px] !w-full p-0">
+                                        <PopoverContent class="max-h-[400px] w-full! p-0">
                                             <Command>
                                                 <CommandInput placeholder="Search department..." />
                                                 <CommandEmpty>No department found.</CommandEmpty>
@@ -740,7 +740,7 @@ onMounted(() => {
                                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent class="!w-full p-0">
+                                            <PopoverContent class="w-full! p-0">
                                                 <Command>
                                                     <CommandInput placeholder="Search tenure..." />
                                                     <CommandEmpty>No tenure found.</CommandEmpty>
@@ -785,7 +785,7 @@ onMounted(() => {
                                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent class="!w-full p-0">
+                                            <PopoverContent class="w-full! p-0">
                                                 <Command>
                                                     <CommandInput placeholder="Search unit..." />
                                                     <CommandEmpty>No unit found.</CommandEmpty>
@@ -832,7 +832,7 @@ onMounted(() => {
                                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent class="!w-full p-0">
+                                            <PopoverContent class="w-full! p-0">
                                                 <Command>
                                                     <CommandInput placeholder="Search state..." />
                                                     <CommandEmpty>No state found.</CommandEmpty>
@@ -1162,7 +1162,7 @@ onMounted(() => {
                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent class="max-h-[400px] !w-full p-0">
+                            <PopoverContent class="max-h-[400px] w-full! p-0">
                                 <Command>
                                     <CommandInput placeholder="Search department..." />
                                     <CommandEmpty>No department found.</CommandEmpty>
@@ -1233,7 +1233,7 @@ onMounted(() => {
                                         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent class="!w-full p-0">
+                                <PopoverContent class="w-full! p-0">
                                     <Command>
                                         <CommandInput placeholder="Search tenure..." />
                                         <CommandEmpty>No tenure found.</CommandEmpty>
@@ -1278,7 +1278,7 @@ onMounted(() => {
                                         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent class="!w-full p-0">
+                                <PopoverContent class="w-full! p-0">
                                     <Command>
                                         <CommandInput placeholder="Search unit..." />
                                         <CommandEmpty>No unit found.</CommandEmpty>
@@ -1322,7 +1322,7 @@ onMounted(() => {
                                         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent class="!w-full p-0">
+                                <PopoverContent class="w-full! p-0">
                                     <Command>
                                         <CommandInput placeholder="Search state..." />
                                         <CommandEmpty>No state found.</CommandEmpty>

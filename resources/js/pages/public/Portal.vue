@@ -339,7 +339,7 @@ function resetToLookup() {
             <!-- Hero Section -->
             <div class="mb-8 max-w-2xl space-y-4 text-center">
                 <h1
-                    class="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent lg:text-5xl"
+                    class="bg-linear-to-r from-primary to-blue-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent lg:text-5xl"
                 >
                     The Bridge
                 </h1>
