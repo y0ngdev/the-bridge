@@ -433,40 +433,38 @@ function resetToLookup() {
                 </Card>
 
                 <!-- Disambiguation -->
-                <Card v-else-if="mode === 'disambiguation'" class="w-full max-w-lg shadow-lg">
+                <Card v-else-if="mode === 'disambiguation'" class="w-full max-w-md border-t-4 border-t-primary shadow-xl">
                     <CardHeader>
                         <CardTitle>Multiple Matches Found</CardTitle>
                         <CardDescription>Select your profile from the list below.</CardDescription>
                     </CardHeader>
-                    <CardContent class="grid gap-3">
+                    <CardContent class="grid gap-2">
                         <div
                             v-for="match in possibleMatches"
                             :key="match.id"
-                            class="group flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-all hover:scale-[1.01] hover:bg-accent/50 hover:shadow-sm"
+                            class="group flex cursor-pointer items-center justify-between rounded-lg border p-3 transition-all hover:bg-accent/50 hover:shadow-sm"
                             @click="selectMatch(match)"
                         >
-                            <div class="min-w-0 flex-1 pr-4">
-                                <p class="truncate text-lg font-bold">{{ match.name }}</p>
-                                <div class="mt-1 flex flex-col gap-1 text-sm text-muted-foreground sm:flex-row sm:items-center sm:gap-4">
-                                    <span class="truncat flex items-center gap-1.5">
-                                        <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-primary/40"></span>
+                            <div class="min-w-0 flex-1 pr-3">
+                                <p class="truncate font-semibold">{{ match.name }}</p>
+                                <div class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+                                    <span class="flex items-center gap-1">
+                                        <span class="h-1 w-1 shrink-0 rounded-full bg-primary/50"></span>
                                         <span class="truncate">{{ match.department?.name || 'No Dept' }}</span>
                                     </span>
-                                    <span class="hidden text-muted-foreground/30 sm:inline">•</span>
-                                    <span class="flex items-center gap-1.5 truncate">
-                                        <span class="truncate">{{ match.tenure?.name || 'Unknown Tenure' }}</span>
-                                    </span>
+                                    <span class="text-muted-foreground/30">•</span>
+                                    <span class="truncate">{{ match.tenure?.name || 'Unknown' }}</span>
                                 </div>
                             </div>
                             <div
-                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary"
+                                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary"
                             >
-                                <CheckCircle2 class="h-6 w-6" />
+                                <CheckCircle2 class="h-4 w-4" />
                             </div>
                         </div>
 
-                        <div class="pt-4 text-center">
-                            <Button variant="link" @click="proceedToCreate">None of these are me</Button>
+                        <div class="pt-3 text-center">
+                            <Button variant="link" size="sm" @click="proceedToCreate">None of these are me</Button>
                         </div>
                     </CardContent>
                 </Card>
