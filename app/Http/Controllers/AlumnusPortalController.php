@@ -21,12 +21,12 @@ class AlumnusPortalController extends Controller
         return Inertia::render('public/Portal', [
             'tenures' => Tenure::orderBy('start_date')->get(),
             'departments' => Department::orderBy('name')->get(),
-            'units' => collect(\App\Enums\Unit::cases())->map(fn ($case) => [
+            'units' => collect(\App\Enums\Unit::cases())->map(fn($case) => [
                 'value' => $case->value,
                 'label' => $case->value === "President's Unit" ? "President's Unit (Non Worker)" : $case->value,
             ]),
-            'states' => collect(\App\Enums\NigerianState::cases())->map(fn ($case) => ['value' => $case->value, 'label' => $case->value]),
-            'pastExcoOffices' => collect(\App\Enums\PastExcoOffice::cases())->map(fn ($case) => ['value' => $case->value, 'label' => $case->value]),
+            'states' => collect(\App\Enums\NigerianState::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
+            'pastExcoOffices' => collect(\App\Enums\PastExcoOffice::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
         ]);
     }
 
@@ -92,7 +92,7 @@ class AlumnusPortalController extends Controller
             'address' => 'nullable|string|max:1000',
             'current_employer' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
-            'unit' => 'nullable|string|max:255',
+            'unit' => 'required|string|max:255',
             'gender' => 'required|string|in:M,F',
             'birth_date' => 'required|date',
             'past_exco_office' => 'nullable|string|max:255',
@@ -128,7 +128,7 @@ class AlumnusPortalController extends Controller
             'address' => 'nullable|string|max:1000',
             'current_employer' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
-            'unit' => 'nullable|string|max:255',
+            'unit' => 'required|string|max:255',
             'gender' => 'required|string|in:M,F',
             'birth_date' => 'required|date',
             'past_exco_office' => 'nullable|string|max:255',

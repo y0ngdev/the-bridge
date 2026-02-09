@@ -686,7 +686,7 @@ function resetToLookup() {
                                 <h3 class="border-b pb-2 text-lg font-semibold">Unit Details</h3>
                                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
-                                        <Label>Unit</Label>
+                                        <Label>Unit *</Label>
                                         <Combobox v-model="updateForm.unit" :options="units" placeholder="Select Unit" />
                                         <p v-if="updateForm.errors.unit" class="text-xs text-destructive">{{ updateForm.errors.unit }}</p>
                                     </div>
@@ -932,7 +932,7 @@ function resetToLookup() {
                                 <h3 class="border-b pb-2 text-lg font-semibold">Unit Details</h3>
                                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div class="space-y-2">
-                                        <Label>Unit</Label>
+                                        <Label>Unit *</Label>
                                         <Combobox v-model="createForm.unit" :options="units" placeholder="Select Unit" />
                                         <p v-if="createForm.errors.unit" class="text-xs text-destructive">{{ createForm.errors.unit }}</p>
                                     </div>
