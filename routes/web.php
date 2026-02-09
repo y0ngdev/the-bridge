@@ -11,8 +11,14 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return redirect('/portal');
-});
+    return \Inertia\Inertia::render('public/Landing', [
+        'stats' => [
+            'totalAlumni' => \App\Models\Alumnus::count(),
+            'totalTenures' => \App\Models\Tenure::count(),
+            'activeYear' => (int) date('Y') - 1985, // Fellowship started ~1985
+        ],
+    ]);
+})->name('home.landing');
 
 // Public Alumni Portal (no auth required)
 Route::prefix('portal')->group(function () {
