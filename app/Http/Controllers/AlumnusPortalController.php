@@ -101,6 +101,10 @@ class AlumnusPortalController extends Controller
             'marital_status' => 'nullable|string|max:255',
             'occupation' => 'nullable|string|max:255',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [], [
+            'tenure_id' => 'tenure',
+            'department_id' => 'department',
+            'birth_date' => 'date of birth',
         ]);
 
         // Handle photo upload
@@ -137,6 +141,10 @@ class AlumnusPortalController extends Controller
             'marital_status' => 'nullable|string|max:255',
             'occupation' => 'nullable|string|max:255',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [], [
+            'tenure_id' => 'tenure',
+            'department_id' => 'department',
+            'birth_date' => 'date of birth',
         ]);
 
         // Handle photo upload - only include if a file was actually uploaded
