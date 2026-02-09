@@ -121,6 +121,8 @@ class AlumnusController extends Controller
 
     public function birthdays(): Response
     {
+        $isSqlite = config('database.default') === 'sqlite';
+
         return Inertia::render('alumni/Birthdays', [
             'today' => Inertia::defer(function () {
                 $today = now();
@@ -131,7 +133,7 @@ class AlumnusController extends Controller
                     ->whereDay('birth_date', $today->day)
                     ->get();
             }),
-            'thisWeek' => Inertia::defer(function () {
+            'thisWeek' => Inertia::defer(function () use ($isSqlite) {
                 $today = now();
                 $startOfWeek = $today->copy()->startOfWeek();
                 $endOfWeek = $today->copy()->endOfWeek();
@@ -142,10 +144,13 @@ class AlumnusController extends Controller
                     ->all();
 
                 $placeholders = implode(',', array_fill(0, count($dates), '?'));
+                $dateExpr = $isSqlite
+                    ? "strftime('%m-%d', birth_date)"
+                    : "DATE_FORMAT(birth_date, '%m-%d')";
 
                 return Alumnus::select(['id', 'name', 'email', 'phones', 'birth_date', 'photo'])
                     ->whereNotNull('birth_date')
-                    ->whereRaw("DATE_FORMAT(birth_date, '%m-%d') IN ($placeholders)", $dates)
+                    ->whereRaw("$dateExpr IN ($placeholders)", $dates)
                     ->get();
             }),
             'thisMonth' => Inertia::defer(function () {
@@ -156,11 +161,15 @@ class AlumnusController extends Controller
                     ->whereMonth('birth_date', $today->month)
                     ->get();
             }),
-            'allByMonth' => Inertia::defer(function () {
+            'allByMonth' => Inertia::defer(function () use ($isSqlite) {
+                $orderExpr = $isSqlite
+                    ? "cast(strftime('%m', birth_date) as integer), cast(strftime('%d', birth_date) as integer)"
+                    : 'MONTH(birth_date), DAYOFMONTH(birth_date)';
+
                 $rows = \Illuminate\Support\Facades\DB::table('alumni')
                     ->select(['id', 'name', 'email', 'phones', 'birth_date', 'photo'])
                     ->whereNotNull('birth_date')
-                    ->orderByRaw('MONTH(birth_date), DAYOFMONTH(birth_date)')
+                    ->orderByRaw($orderExpr)
                     ->get();
 
                 $months = [
