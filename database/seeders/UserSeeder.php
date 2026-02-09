@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 
         // Normal member user (for logging calls)
         User::factory()->create([
-            'name' => 'Call Logger',
+            'name' => 'Unit Member',
             'email' => 'member@rcffuta.com',
             'password' => Hash::make('member123'),
         ]);
