@@ -2066,7 +2066,7 @@ class Alumni2016_2017Seeder extends Seeder
                 'state' => null,
                 'address' => null,
             ],
-          
+
             [
                 'name' => 'ALUFA SOLA',
                 'email' => null,

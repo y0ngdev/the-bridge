@@ -21,12 +21,12 @@ class AlumnusPortalController extends Controller
         return Inertia::render('public/Portal', [
             'tenures' => Tenure::orderBy('start_date')->get(),
             'departments' => Department::orderBy('name')->get(),
-            'units' => collect(\App\Enums\Unit::cases())->map(fn($case) => [
+            'units' => collect(\App\Enums\Unit::cases())->map(fn ($case) => [
                 'value' => $case->value,
                 'label' => $case->value === "President's Unit" ? "President's Unit (Non Worker)" : $case->value,
             ]),
-            'states' => collect(\App\Enums\NigerianState::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
-            'pastExcoOffices' => collect(\App\Enums\PastExcoOffice::cases())->map(fn($case) => ['value' => $case->value, 'label' => $case->value]),
+            'states' => collect(\App\Enums\NigerianState::cases())->map(fn ($case) => ['value' => $case->value, 'label' => $case->value]),
+            'pastExcoOffices' => collect(\App\Enums\PastExcoOffice::cases())->map(fn ($case) => ['value' => $case->value, 'label' => $case->value]),
         ]);
     }
 
