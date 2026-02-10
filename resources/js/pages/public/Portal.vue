@@ -360,13 +360,13 @@ function resetToLookup() {
             >
                 <!-- Success State -->
                 <div v-if="successMessage" class="w-full max-w-md">
-                    <Card class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/10">
+                    <Card class="border-green-200 bg-green-50">
                         <CardContent class="space-y-4 pt-6 text-center">
-                            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 p-3 dark:bg-green-900/20">
-                                <CheckCircle2 class="h-6 w-6 text-green-600 dark:text-green-400" />
+                            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 p-3">
+                                <CheckCircle2 class="h-6 w-6 text-green-600" />
                             </div>
-                            <h2 class="text-2xl font-bold text-green-800 dark:text-green-400">Success!</h2>
-                            <p class="text-green-700 dark:text-green-300">{{ successMessage }}</p>
+                            <h2 class="text-2xl font-bold text-green-800">Success!</h2>
+                            <p class="text-green-700">{{ successMessage }}</p>
                             <Button class="mt-4 w-full" @click="resetToLookup">Return to Home</Button>
                         </CardContent>
                     </Card>
@@ -730,7 +730,7 @@ function resetToLookup() {
                                 <AlertDescription>Please fix the highlighted errors below.</AlertDescription>
                             </Alert>
 
-                            <div class="mb-6 rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
+                            <div class="mb-6 rounded-lg bg-blue-50 p-4 text-sm text-blue-800">
                                 Please fill in as much information as possible to help us keep in touch with you.
                             </div>
 

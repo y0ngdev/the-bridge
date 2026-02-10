@@ -36,7 +36,7 @@ defineProps<Props>();
                     <div class="mx-auto max-w-4xl space-y-8">
                         <!-- Welcome badge -->
                         <div
-                            class="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-5 py-2 text-sm text-amber-600 dark:text-amber-400"
+                            class="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-5 py-2 text-sm text-amber-600"
                         >
                             <Heart class="h-4 w-4 fill-current" />
                             <span>Welcome Home, Family</span>
@@ -83,7 +83,7 @@ defineProps<Props>();
                 <div class="container mx-auto px-4">
                     <div class="grid grid-cols-1 gap-8 sm:grid-cols-3">
                         <div class="text-center">
-                            <div class="text-4xl font-bold text-amber-600 dark:text-amber-400 md:text-5xl">
+                            <div class="text-4xl font-bold text-amber-600 md:text-5xl">
                                 {{ stats.totalAlumni.toLocaleString() }}+
                             </div>
                             <p class="mt-2 text-muted-foreground">Alumni Connected</p>
@@ -104,7 +104,7 @@ defineProps<Props>();
             <section id="memories" class="py-24">
                 <div class="container mx-auto px-4">
                     <div class="mx-auto max-w-3xl text-center">
-                        <div class="mb-6 inline-flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                        <div class="mb-6 inline-flex items-center gap-2 text-amber-600">
                             <Sparkles class="h-5 w-5" />
                             <span class="text-sm font-medium uppercase tracking-wider">Our Story</span>
                         </div>
@@ -131,7 +131,7 @@ defineProps<Props>();
                         <Card class="group border-none bg-card/50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl">
                             <CardContent class="flex flex-col items-center p-6 text-center">
                                 <div class="mb-4 rounded-full bg-amber-500/10 p-4 transition-colors group-hover:bg-amber-500/20">
-                                    <Users class="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                                    <Users class="h-6 w-6 text-amber-600" />
                                 </div>
                                 <h3 class="mb-2 font-semibold">Update Profile</h3>
                                 <p class="text-sm text-muted-foreground">Keep your info current so friends can find you.</p>
@@ -177,7 +177,7 @@ defineProps<Props>();
                     <div
                         class="mx-auto max-w-3xl overflow-hidden rounded-3xl bg-linear-to-br from-amber-500/10 via-primary/5 to-blue-500/10 p-10 text-center md:p-14"
                     >
-                        <div class="mb-4 inline-flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                        <div class="mb-4 inline-flex items-center gap-2 text-amber-600">
                             <Heart class="h-5 w-5 fill-current" />
                         </div>
                         <h2 class="text-2xl font-bold md:text-3xl">Once RCFFUTA, Always Family</h2>
