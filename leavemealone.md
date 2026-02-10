@@ -3,13 +3,6 @@
 - Allow subunit alumni coordinatoer to access the-bridge and manage their alumnus data.
 
 
+- put  ict logo, alumni and rcf on the header.
 
-- make unit composory.
-
-
-
-sudo chown -R www-data:www-data /var/www/html/the-bridge
-sudo chmod -R 755 /var/www/html/the-bridge
-sudo chmod -R 775 /var/www/html/the-bridge/storage
-sudo chmod -R 775 /var/www/html/the-bridge/bootstrap/cache
-
+Brought to by Alumni relations unit, Powered by RCF FUTA ICT Team.
